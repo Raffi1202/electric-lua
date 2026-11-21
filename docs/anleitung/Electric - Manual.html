@@ -48,7 +48,7 @@
 <body>
 
 <h1>Electric</h1>
-<div class="unter">Display for electric planes · Manual · Version 0.6.0 · 21 Nov 2026</div>
+<div class="unter">Display for electric planes · Manual · Version 0.6.1 · 21 Nov 2026</div>
 
 <div class="bild schmal"><img src="../bilder-simulator/Electric - Sim 800x480 12 Englisch.png" alt="Electric on the radio"></div>
 
@@ -69,7 +69,7 @@ display except where noted; the English display uses the same layout.</p>
   <li>An electric model with telemetry, sensors already discovered (Model › Telemetry › Discover sensors). At least the pack
       voltage is needed; current, consumption, RPM, temperature, altitude, speed and a cell sensor are optional.</li>
   <li>A computer with FrSky Suite and a USB cable.</li>
-  <li>The file <code>Electric-0.6.0.zip</code>. It is inside <code>Electric-0.6.0-share.zip</code>. Unzip only the outer ZIP, not the inner one.</li>
+  <li>The file <code>Electric-0.6.1.zip</code>. It is inside <code>Electric-0.6.1-share.zip</code>. Unzip only the outer ZIP, not the inner one.</li>
 </ul>
 
 <h2>2. Install</h2>
@@ -78,7 +78,7 @@ display except where noted; the English display uses the same layout.</p>
   <li>The radio shows a choice. Select <b>Ethos Suite</b>.</li>
   <li>Open <b>FrSky Suite</b> on the computer. The radio appears at the top.</li>
   <li>Click <b>Lua library</b>, then <b>Install from local ZIP</b>.</li>
-  <li>Select <code>Electric-0.6.0.zip</code>. The Suite copies everything to the right place.</li>
+  <li>Select <code>Electric-0.6.1.zip</code>. The Suite copies everything to the right place.</li>
   <li>Unplug the cable and restart the radio.</li>
 </ol>
 <p class="klein">Without the Suite: connect the radio as «USB storage» and copy the folder <code>electric</code> from the ZIP into
@@ -334,7 +334,7 @@ extra line (MIN, MAX or Ø over the flight). Settings and limits per model come 
 
 <h2>10. Update and remove</h2>
 <p><b>Update:</b> install the new ZIP exactly as in chapter 2. Your settings, sensors, flights and counters are kept.</p>
-<p><b>Upgrading from Elektro (up to 0.5.0):</b> from 0.6.0 the widget is called <b>Electric</b> (folder <code>scripts/electric</code>, Studio file <code>….electric.lua</code>). After installing, add the widget again in every model and set it up again; re-transfer Studio files from Lua-Studio. An old <code>….elektro.lua</code> is still read for now. Delete the folder <code>scripts/elektro</code> afterwards.</p>
+<p><b>Upgrading from Elektro (up to 0.5.0):</b> from 0.6.0 the widget is called <b>Electric</b> (folder <code>scripts/electric</code>, Studio file <code>….electric.lua</code>). After installing, add the widget again in every model (assign sensors and switches again; settings, counters and flights from <code>scripts/elektro/daten</code> are taken over automatically); re-transfer Studio files from Lua-Studio. An old <code>….elektro.lua</code> is still read for now. Delete the folder <code>scripts/elektro</code> afterwards.</p>
 <p><b>Remove:</b> first take the widget off the screen (Model › Screens), then uninstall it in FrSky Suite under Lua library.</p>
 
 <h2>11. Which radios</h2>
@@ -345,7 +345,7 @@ extra line (MIN, MAX or Ø over the flight). Settings and limits per model come 
   <tr><td>480 × 320, touch</td><td>X18, X18S, X18SE, Twin X Lite, Twin X Lite S</td><td>simulated</td></tr>
   <tr><td>480 × 272, no touch</td><td>X10, X10S, X10 Express, X12S with Ethos</td><td>simulated</td></tr>
 </table>
-<p class="klein">Electric version 0.6.0 · 21 Nov 2026</p>
+<p class="klein">Electric version 0.6.1 · 21 Nov 2026</p>
 
 </body>
 </html>

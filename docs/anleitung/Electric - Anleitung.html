@@ -48,7 +48,7 @@
 <body>
 
 <h1>Electric</h1>
-<div class="unter">Anzeige für Elektroflieger · Anleitung · Version 0.6.0 · Stand 21.11.2026</div>
+<div class="unter">Anzeige für Elektroflieger · Anleitung · Version 0.6.1 · Stand 21.11.2026</div>
 
 <div class="bild schmal">
   <img src="../bilder-simulator/Electric - Sim 800x480 04 Normal.png" alt="Electric auf dem Sender">
@@ -71,7 +71,7 @@ Elektrofliegers. Sie überwacht die Werte in zwei Stufen, sagt Alarme und den Ak
   <li>Ein Elektromodell mit Telemetrie, die Sensoren schon gesucht (Modell › Telemetrie › Sensoren suchen).
       Nötig ist mindestens die Akkuspannung; Strom, Verbrauch, Drehzahl, Temperatur, Höhe, Speed und Zellensensor sind freiwillig.</li>
   <li>Einen Computer mit der FrSky Suite und ein USB-Kabel.</li>
-  <li>Die Datei <code>Electric-0.6.0.zip</code>. Sie liegt neben dieser Anleitung in <code>Electric-0.6.0-share.zip</code>. Entpacke nur die äussere ZIP, die innere nicht.</li>
+  <li>Die Datei <code>Electric-0.6.1.zip</code>. Sie liegt neben dieser Anleitung in <code>Electric-0.6.1-share.zip</code>. Entpacke nur die äussere ZIP, die innere nicht.</li>
 </ul>
 
 <h2>2. Installieren</h2>
@@ -80,7 +80,7 @@ Elektrofliegers. Sie überwacht die Werte in zwei Stufen, sagt Alarme und den Ak
   <li>Am Sender erscheint eine Auswahl. Wähle <b>Ethos Suite</b>.</li>
   <li>Öffne am Computer die <b>FrSky Suite</b>. Der Sender wird oben angezeigt.</li>
   <li>Klicke auf <b>Lua-Bibliothek</b>, dann auf <b>Von lokaler ZIP installieren</b>.</li>
-  <li>Wähle die Datei <code>Electric-0.6.0.zip</code>. Die Suite kopiert alles an den richtigen Ort.</li>
+  <li>Wähle die Datei <code>Electric-0.6.1.zip</code>. Die Suite kopiert alles an den richtigen Ort.</li>
   <li>Ziehe das Kabel ab und starte den Sender neu.</li>
 </ol>
 <p class="klein">Ohne Suite: Sender als «USB-Speicher» anschliessen und den Ordner <code>electric</code> aus der ZIP in den
@@ -342,7 +342,7 @@ beim Laden des Modells.</p>
 
 <h2>10. Aktualisieren und Entfernen</h2>
 <p><b>Aktualisieren:</b> Die neue ZIP genau wie in Kapitel 2 installieren. Deine Einstellungen, Sensoren, Flüge und Zähler bleiben erhalten.</p>
-<p><b>Umstieg von Elektro (bis 0.5.0):</b> Ab 0.6.0 heisst das Widget <b>Electric</b> (Ordner <code>scripts/electric</code>, Studio-Datei <code>….electric.lua</code>). Nach dem Installieren das Widget in jedem Modell neu wählen und die Einstellungen neu machen; Studio-Dateien aus Lua-Studio neu übertragen. Eine alte <code>….elektro.lua</code> liest Electric übergangsweise noch. Den Ordner <code>scripts/elektro</code> danach löschen.</p>
+<p><b>Umstieg von Elektro (bis 0.5.0):</b> Ab 0.6.0 heisst das Widget <b>Electric</b> (Ordner <code>scripts/electric</code>, Studio-Datei <code>….electric.lua</code>). Nach dem Installieren das Widget in jedem Modell neu wählen (Sensoren und Schalter neu zuweisen; Einstellungen, Zähler und Flüge aus <code>scripts/elektro/daten</code> übernimmt Electric selbst); Studio-Dateien aus Lua-Studio neu übertragen. Eine alte <code>….elektro.lua</code> liest Electric übergangsweise noch. Den Ordner <code>scripts/elektro</code> danach löschen.</p>
 <p><b>Entfernen:</b> Zuerst das Widget vom Bildschirm nehmen (Modell › Bildschirme), dann in der FrSky Suite unter Lua-Bibliothek deinstallieren.</p>
 
 <h2>11. Welche Sender</h2>
@@ -357,7 +357,7 @@ beim Laden des Modells.</p>
   <div><img src="../bilder-simulator/Electric - Sim 480x320 06 Alarm.png" alt="480x320"><div class="t">480 × 320 (X18): gekürzte Titel</div></div>
   <div><img src="../bilder-simulator/Electric - Sim 800x480 12 Englisch.png" alt="Englisch"><div class="t">Englisch: Sprache im Menü oder wie der Sender</div></div>
 </div>
-<p class="klein">Electric Version 0.6.0 · 21.11.2026</p>
+<p class="klein">Electric Version 0.6.1 · 21.11.2026</p>
 
 </body>
 </html>

@@ -3,6 +3,14 @@
 The version number is in `src/electric/main.lua` (`local VERSION`). It is the same in the manual, the Suite package and here.
 The top section appears in the FrSky Suite as version note. From 0.5.0 on in English; older entries in German.
 
+## 0.6.1 (21 Nov 2026, pre-release)
+
+- Upgrade from Elektro: if there is no `daten/<model>.txt` in `scripts/electric`, Electric reads the old one from
+  `scripts/elektro/daten/` (settings, counters, flight list), writes «settings taken over from scripts/elektro/…» to the
+  log and saves it in the new folder. The old folder is never changed or deleted.
+- The widget storage format is unchanged since 0.5.0 (FORMAT 1, 18 sources in the same order): a model whose widget key
+  is converted from `elektro` to `elec` keeps its sensors and switches. Test: `test/format050-test.lua`.
+
 ## 0.6.0 (21 Nov 2026, pre-release)
 
 - **Renamed from Elektro – breaking: old models must re-add the widget; Studio files must be renamed or re-transferred.**

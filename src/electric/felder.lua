@@ -357,6 +357,14 @@ function M.lies(w)
   end
   -- Zahlen, dauerhafte Werte und Flüge aus der Datei
   local text = liesDatei(M.datei())
+  w.datenAlt = nil
+  if not text then                                 -- Umbenennung 0.6.0: Datei noch im alten Ordner (Elektro), nur lesen
+    text = liesDatei("SCRIPTS:/elektro/" .. M.datei())
+    if text then
+      w.datenAlt = true
+      print(tostring(w.name) .. ": settings taken over from scripts/elektro/" .. M.datei())
+    end
+  end
   w.dauer, w.liste, w.offen = {}, {}, nil
   if text then
     gefunden = true

@@ -1245,6 +1245,7 @@ end
 function K.lies(w)
   local F = lade("felder.lua")
   w.gelesen = F.lies(w)
+  if w.datenAlt then w.dateiOffen = true end      -- aus scripts/elektro übernommen: gleich in den neuen Ordner schreiben
   -- Die Studio-Datei gilt über den gelesenen Einstellungen: nach jedem Lesen neu anwenden
   w.studio, w.studioFertig, w.studioJob = nil, false, nil
   symFrei(w)

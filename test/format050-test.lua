@@ -57,6 +57,15 @@ F.schreibe(w)
 pruefe(SP.fmt == 1 and SP.ende == 1 and SP.q1 and SP.q1.n == "Q-uGes" and SP.q3 == 0 and SP.q18 == 0 and SP.q19 == nil,
   "Schreiben bleibt im Format von 0.5.0 (fmt 1, q1..q18)")
 
+-- 0.6.1: keine Datei im neuen Ordner, aber im alten scripts/elektro/daten: wird gelesen, nie gelöscht
+assert(os.execute("mkdir -p '" .. tmp .. "/SCRIPTS:/elektro/daten' && mv '" .. tmp .. "/" .. F.datei() .. "' '" .. tmp .. "/SCRIPTS:/elektro/" .. F.datei() .. "'"))
+print = function() end
+local w2 = { name = "Electric" }
+local da = F.lies(w2)
+print = _G.druck or io.write and function(...) io.write(table.concat({ ... }, "\t") .. "\n") end
+pruefe(da and w2.datenAlt and w2.cfg.kapaz == 3300 and #w2.liste == 1, "alte Datei aus scripts/elektro/daten übernommen")
+pruefe(alt(tmp .. "/SCRIPTS:/elektro/" .. F.datei(), "r") ~= nil, "alte Datei bleibt stehen (nie gelöscht)")
+pruefe(F.schreibeDatei(w2) and alt(tmp .. "/" .. F.datei(), "r") ~= nil, "Schreiben geht in den neuen Ordner")
 os.execute("rm -rf '" .. tmp .. "'")
 print(fehler == 0 and "ERGEBNIS: kein Fehler" or ("ERGEBNIS: " .. fehler .. " Fehler"))
 os.exit(fehler == 0 and 0 or 1)

@@ -31,7 +31,7 @@ follows. Use at your own risk. License: GPL-3.0, see below.
 
 ## Quick start
 
-1. Download `Electric-0.6.0.zip` from the latest **release**.
+1. Download `Electric-0.6.1.zip` from the latest **release**.
 2. Connect the radio by USB, choose **Ethos Suite** on the radio and open the **FrSky Suite** on the computer.
 3. Suite › **Lua library** › **Install from local ZIP** › choose the ZIP. Then restart the radio.
 4. Model › Screens › **+** › layout **Full screen** (or with bars) › tap the field › widget **Electric**.

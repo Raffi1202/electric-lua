@@ -150,8 +150,6 @@ nicht Teil dieses Repos.
 | [Glider](https://github.com/Raffi1202/glider-lua) | Ethos-Widget für Segler (Vario, Thermik) |
 | [Gas Engine ECU / Carb](https://github.com/Raffi1202/gas-engine-lua) | Ethos-Widgets für Verbrennungsmotoren |
 | [Lua-Studio](https://github.com/Raffi1202/lua-studio) | PC-Programm zum Einrichten der Widgets (Mac/Windows) |
-| [Telemetrie-Simulator](https://github.com/Raffi1202/telemetrie-simulator) | ESP32-S3, der FrSky-Telemetriesensoren nachbildet |
-| [Ethos-Modell-Konverter](https://github.com/Raffi1202/ethos-modell-konverter) | Modelle zwischen Ethos-Sendern umziehen |
 | [Ethos-Sensor-IDs](https://github.com/Raffi1202/ethos-sensor-ids) | Welchen Sensor Ethos zu jeder AppID anlegt |
 
 ## Lizenz

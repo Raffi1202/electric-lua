@@ -1,0 +1,37 @@
+{
+ "skripte": [
+  [
+   "src/elektro",
+   "elektro"
+  ]
+ ],
+ "widget": "elektro",
+ "abbild": false,
+ "ersetze": [
+  [
+   "scripts/elektro/kern.lua",
+   "local TEST = nil",
+   "local TEST = { modell = \"ELEKTRO DEMO\", zustand = true }"
+  ]
+ ],
+ "schritte": [
+  {
+   "zustand": {
+    "gelesen": true,
+    "dauer": {
+     "fluege": 8
+    },
+    "cfg": {
+     "zellenzahl": 6
+    },
+    "extra": {
+     "nListe": 8
+    }
+   }
+  },
+  {
+   "bild": "docs/bilder-simulator/Elektro - Sim 800x480 10 nach Neustart.png"
+  }
+ ],
+ "grundstand": "test/stand-mit-werten"
+}

@@ -1,0 +1,37 @@
+{
+ "skripte": [
+  [
+   "src/elektro",
+   "elektro"
+  ]
+ ],
+ "widget": "elektro",
+ "abbild": true,
+ "ersetze": [
+  [
+   "scripts/elektro/kern.lua",
+   "local TEST = nil",
+   "local TEST = { modell = \"ELEKTRO DEMO\", zustand = true, v = { u = 11.84, t = 62 }, cfg = { uWarn = 110, uAlarm = 105, tWarn = 90, tAlarm = 110, sprache = 1 } }"
+  ],
+  [
+   "scripts/elektro/main.lua",
+   "    local f, e = loadfile(\"kern.lua\")",
+   "    collectgarbage() print(\"SPEICHER vor Laden frei\", system.getMemoryUsage().luaRamAvailable)\n    local f, e = loadfile(\"kern.lua\")"
+  ],
+  [
+   "scripts/elektro/kern.lua",
+   "  Z.kopf(w, L)\n",
+   "  Z.kopf(w, L)\n  NPAINT=(NPAINT or 0)+1 if NPAINT==10 then collectgarbage() print(\"SPEICHER nach 10 Bildern frei\", system.getMemoryUsage().luaRamAvailable) end\n"
+  ]
+ ],
+ "schritte": [
+  {
+   "zustand": {
+    "zustand": "ok"
+   }
+  },
+  {
+   "warte": 3000
+  }
+ ]
+}

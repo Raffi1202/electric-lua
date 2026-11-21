@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Elektro – Manual</title>
+<!--
+  ANLEITUNG zum Ausdrucken (A4). Aufbau und Stil sind in jedem Lua gleich (bauplan.md, Abschnitt Anleitung):
+  Kapitel in dieser Reihenfolge lassen, Beispieltexte ersetzen, nichts Leeres stehen lassen.
+  PDF erzeugen: im Browser drucken («Als PDF sichern», ohne Kopf- und Fusszeilen)
+  Danach jede Seite der PDF ansehen (Umbrüche, Bilder, Tabellen).
+  Nummern auf einem Bild: <span class="nr" style="left:12%;top:30%">1</span> innerhalb von <div class="bild">.
+-->
+<style>
+  @page { size: A4; margin: 16mm; }
+  * { box-sizing: border-box; }
+  body { font-family: "Helvetica Neue", Arial, sans-serif; font-size: 10.5pt; line-height: 1.42; color: #1a1f2b; margin: 0; }
+  h1 { font-size: 24pt; margin: 0 0 2mm; }
+  h2 { font-size: 14.5pt; margin: 7mm 0 2.5mm; padding-bottom: 1mm; border-bottom: 1.5pt solid #1f4f96; color: #12305e; break-after: avoid; }
+  h3 { font-size: 11.5pt; margin: 4mm 0 1.5mm; break-after: avoid; }
+  p { margin: 0 0 2.5mm; }
+  ol, ul { margin: 0 0 2.5mm; padding-left: 6mm; }
+  li { margin-bottom: 1.2mm; break-inside: avoid; }
+  .unter { color: #56607a; font-size: 11pt; margin-bottom: 5mm; }
+  .bild { position: relative; width: 100%; margin: 3mm 0; break-inside: avoid; }
+  .bild img { width: 100%; display: block; border-radius: 2mm; border: 0.5pt solid #99a; }
+  .bild .t, .halb .t { font-size: 9pt; color: #56607a; margin-top: 1mm; }
+  .schmal { width: 72%; margin-left: auto; margin-right: auto; }
+  .halb { display: flex; gap: 5mm; break-inside: avoid; margin: 3mm 0; }
+  .halb > div { flex: 1; }
+  .halb img { width: 100%; display: block; border-radius: 1.5mm; border: 0.5pt solid #99a; }
+  .nr { position: absolute; width: 6.2mm; height: 6.2mm; margin: -3.1mm 0 0 -3.1mm; border-radius: 50%; background: #e11d48;
+        color: #fff; font-weight: 700; font-size: 9.5pt; line-height: 6.2mm; text-align: center; border: 0.6pt solid #fff; }
+  .n { display: inline-block; min-width: 5mm; height: 5mm; border-radius: 50%; background: #e11d48; color: #fff; font-weight: 700;
+       font-size: 8.5pt; line-height: 5mm; text-align: center; margin-right: 1mm; }
+  table { border-collapse: collapse; width: 100%; margin: 2mm 0 3mm; font-size: 9.6pt; }
+  tr { break-inside: avoid; }
+  th, td { border: 0.5pt solid #b6bccb; padding: 1.3mm 2mm; text-align: left; vertical-align: top; }
+  th { background: #e9eef8; }
+  .kasten { border: 1pt solid #d99a00; background: #fff7df; border-radius: 2mm; padding: 2.5mm 3.5mm; margin: 3mm 0; break-inside: avoid; }
+  .kasten.blau { border-color: #1f4f96; background: #eef3fb; }
+  .gruen { color: #15803d; font-weight: 700; } .orange { color: #b45309; font-weight: 700; } .rot { color: #b91c1c; font-weight: 700; }
+  .haken { list-style: none; padding-left: 0; }
+  .haken li::before { content: "☐  "; font-size: 12pt; }
+  .neu { break-before: page; }
+  .klein { font-size: 9pt; color: #56607a; }
+</style>
+</head>
+<body>
+
+<h1>Elektro</h1>
+<div class="unter">Display for electric planes · Manual · Version 0.5.0 · 21 Nov 2026</div>
+
+<div class="bild schmal"><img src="../bilder-simulator/Elektro - Sim 800x480 12 Englisch.png" alt="Elektro on the radio"></div>
+
+<p><b>Elektro</b> is a display (a «widget») for FrSky radios running Ethos. On a full screen it shows the flight battery,
+cells, current, RPM, ESC temperature, power, altitude, speed and signal of your electric plane. It watches the values in two
+stages, announces alarms and the battery level and keeps a list of your flights. The pictures in this manual show the German
+display except where noted; the English display uses the same layout.</p>
+
+<div class="kasten">
+  <b>Test status:</b> Tested in the Ethos simulator 26.2.0 (X18RS) with 19 test runs, 800 × 480 directly, 640 × 360,
+  480 × 320 and 480 × 272 simulated. Tested on a real X18RS (Ethos 26.2.0, 20 Nov 2026): display and automatic sensor
+  search with 48 sensors, compact view and throttle %, with version 0.3.0 the Lua-Studio settings file (without telemetry: no file, demo file, changes in the .funke.lua, broken file, transfer from Lua-Studio); with telemetry (0.3.1) display, sensor search, motor switch, an alarm with the switch armed and off, flight detection and flight list; with version 0.4.0 a full format-2 file (16 symbols, bold unit, decoration) and 10 model changes without errors, a layout with symbols from Lua-Studio; not yet checked: compact view and English with a settings file. Version 0.5.0 (memory freed on model change, «Alarm also with motor off», «Loading Studio file» display) so far only checked in the simulator and on the Mac. The voice announcements were checked with version 0.1.2. Not yet flown, not every menu item checked one by one, other radios only in the simulator.
+</div>
+
+<h2>1. What you need</h2>
+<ul class="haken">
+  <li>A FrSky radio with Ethos 26.2 (tested) and a colour display (list at the end).</li>
+  <li>An electric model with telemetry, sensors already discovered (Model › Telemetry › Discover sensors). At least the pack
+      voltage is needed; current, consumption, RPM, temperature, altitude, speed and a cell sensor are optional.</li>
+  <li>A computer with FrSky Suite and a USB cable.</li>
+  <li>The file <code>Elektro-0.5.0.zip</code>. It is inside <code>Elektro-0.5.0-zum-Teilen.zip</code>. Unzip only the outer ZIP, not the inner one.</li>
+</ul>
+
+<h2>2. Install</h2>
+<ol>
+  <li>Switch the radio on and connect it to the computer with the USB cable.</li>
+  <li>The radio shows a choice. Select <b>Ethos Suite</b>.</li>
+  <li>Open <b>FrSky Suite</b> on the computer. The radio appears at the top.</li>
+  <li>Click <b>Lua library</b>, then <b>Install from local ZIP</b>.</li>
+  <li>Select <code>Elektro-0.5.0.zip</code>. The Suite copies everything to the right place.</li>
+  <li>Unplug the cable and restart the radio.</li>
+</ol>
+<p class="klein">Without the Suite: connect the radio as «USB storage» and copy the folder <code>elektro</code> from the ZIP into
+<code>scripts</code>. If your radio loads scripts from the SD card (System › General › Storage location), it belongs in
+<code>scripts</code> on the SD card. Overwrite an existing folder, do not delete it.</p>
+
+<h2>3. Set up the screen</h2>
+<ol>
+  <li>Tap the <b>Screens</b> icon at the bottom (two rectangles).</li>
+  <li>Tap <b>+</b> at the top right.</li>
+  <li>Swipe down to the layout <b>Full screen</b> (one large field) and tap it. To keep the Ethos top and bottom
+  bars, choose the layout with <b>one field and the bars</b> instead (bottom centre of the layout grid); Elektro then shows the compact view (chapter 5).</li>
+  <li>Tap the empty field, then <b>Widget</b>.</li>
+  <li>Swipe to the bottom of the list and select <b>Elektro</b>. The display appears at once.</li>
+</ol>
+<p>You reach the widget menu any time through Model › Screens › select the screen › tap the widget.</p>
+
+<h2>4. Sensors and battery</h2>
+<ol>
+  <li>Switch the model on so telemetry runs. The first time, Elektro finds the sensors itself; a short blue note «… sensors assigned automatically» appears.</li>
+  <li>Open the menu and the group <b>Sensors</b>. Check every line and select missing or wrong ones by hand. An empty line is allowed; the field then shows a dash.</li>
+  <li><b>Find sensors (empty only)</b> › <b>Search</b> later fills only empty lines; your own choices stay. If you deleted sensors in Ethos and searched again, first reload the model (select another model and back), otherwise the values stay at 0. Then the search binds each line to the matching sensor (same ID and name); lines whose sensor is no longer in the sensor list, including ones you chose yourself, are searched again.</li>
+  <li>The group <b>Check assignment</b> shows each chosen sensor with physical ID and AppID (e.g. «ESC Current  P04 / 0B50»). If several identical sensors matched, a line «n sensors match, chosen: … - please check» follows.</li>
+  <li>Open the group <b>Battery</b> and set <b>Battery type</b>, <b>Cell count</b> and <b>Capacity</b> of your flight pack.</li>
+</ol>
+<table>
+  <tr><th>Menu line</th><th>Which sensor belongs there</th></tr>
+  <tr><td>Pack voltage</td><td>Voltage of the whole flight pack, e.g. «VFAS», «ESC Voltage», «Volt». Not the receiver voltage.</td></tr>
+  <tr><td>Cells (cell sensor)</td><td>Only if you have a cell sensor (e.g. FLVSS, shown as «Cells» or «LiPo»). Otherwise leave empty.</td></tr>
+  <tr><td>Current</td><td>ESC current, e.g. «Current», «ESC Current».</td></tr>
+  <tr><td>Used (mAh)</td><td>Consumed capacity, e.g. «Consumption».</td></tr>
+  <tr><td>Battery % (ESC)</td><td>Only if your ESC sends the battery level in %, e.g. «Fuel», «Bat%».</td></tr>
+  <tr><td>RPM, ESC temperature, BEC voltage</td><td>The matching values of the ESC.</td></tr>
+  <tr><td>Altitude, Vario, Speed</td><td>From a vario or GPS (e.g. «Alt», «VSpd», «GSpd»).</td></tr>
+  <tr><td>RSSI, LQ</td><td>Signal strength «RSSI»; with ELRS and similar the link quality «LQ».</td></tr>
+</table>
+<div class="kasten blau"><b>Cells with and without a cell sensor.</b> With a cell sensor the field «CELL LOWEST» shows the weakest
+cell, below it a small bar per cell (the weakest in yellow) and «Δ» = difference between strongest and weakest cell. Without a
+cell sensor «CELL Ø» shows the average cell = pack voltage ÷ cell count, with a bar for the pack voltage. For this the
+<b>Cell count</b> must be set; Elektro never guesses it from the voltage. If it is 0 (auto) and there is no cell sensor, the
+field shows «Cell count?» in orange and the battery gauge «Set cell count».</div>
+<div class="halb">
+  <div><img src="../bilder-simulator/Elektro - Sim 800x480 20 Zellensensor.png" alt="cell sensor"><div class="t">With cell sensor: bar per cell</div></div>
+  <div><img src="../bilder-simulator/Elektro - Sim 800x480 11 nur ein Teil der Sensoren.png" alt="cell count missing"><div class="t">No cell sensor, no cell count: «Set cell count»</div></div>
+</div>
+
+<h2 class="neu">5. The display</h2>
+<div class="bild">
+  <img src="../bilder-simulator/Elektro - Sim 800x480 12 Englisch.png" alt="Display with numbers">
+  <span class="nr" style="left:2%;top:12%">1</span>
+  <span class="nr" style="left:50%;top:5%">2</span>
+  <span class="nr" style="left:79%;top:5%">3</span>
+  <span class="nr" style="left:93%;top:5%">4</span>
+  <span class="nr" style="left:3%;top:17%">5</span>
+  <span class="nr" style="left:3%;top:60%">6</span>
+  <span class="nr" style="left:3%;top:93%">7</span>
+  <span class="nr" style="left:52%;top:62%">8</span>
+  <span class="nr" style="left:66%;top:75%">9</span>
+  <span class="nr" style="left:97%;top:62%">10</span>
+  <span class="nr" style="left:52%;top:80%">11</span>
+  <span class="nr" style="left:75%;top:80%">12</span>
+  <span class="nr" style="left:97%;top:80%">13</span>
+</div>
+<p class="klein">This picture shows an alarm (red top bar and frames); in normal operation the top bar is dark.</p>
+<table>
+  <tr><th style="width:9mm">No.</th><th>What you see</th><th>What it means</th></tr>
+  <tr><td><span class="n">1</span></td><td>Model name, top bar</td><td>Name of the model in the radio. The top bar turns <span class="orange">orange</span> on a warning and <span class="rot">red</span> on an alarm.</td></tr>
+  <tr><td><span class="n">2</span></td><td>Flight time</td><td>Duration of the current flight in minutes:seconds. It runs only while the motor is on.</td></tr>
+  <tr><td><span class="n">3</span></td><td>ARMED / MOTOR OFF</td><td>Position of the motor switch (only if one is set). To its left your own switches appear as green pills while switched on (e.g. «GEAR»). If there is not enough room, the front one is left out.</td></tr>
+  <tr><td><span class="n">4</span></td><td>Bars, battery icon</td><td>Signal strength (RSSI) in four steps and the radio's own battery.</td></tr>
+  <tr><td><span class="n">5</span></td><td>Four gauges</td><td>By default BATTERY (level in %, below it cell count and pack voltage), CURRENT in amps, MOTOR in RPM and ESC TEMP in °C. «MAX» below is the highest value measured with this pack, not a limit.</td></tr>
+  <tr><td><span class="n">6</span></td><td>THROTTLE</td><td>Throttle in % from the throttle channel, below it the current at that moment («at 46 A») and a bar. If it shows «Select throttle» in orange, choose the <b>Throttle channel</b> in the menu under Flight. In the menu (Fields › Large field) you can also choose another content.</td></tr>
+  <tr><td><span class="n">7</span></td><td>«8 flights»</td><td>Number of flights of this model, the current one included once it counts (chapter 7). Tap to open the flight list.</td></tr>
+  <tr><td><span class="n">8</span></td><td>CELL Ø or CELL LOWEST</td><td>Voltage per cell under load (box in chapter 4). «LOW» is the lowest value with this pack.</td></tr>
+  <tr><td><span class="n">9</span></td><td>USED, button RESET</td><td>mAh used since plugging in or since «RESET». You only need the button if your ESC does not start at 0 after a pack change.</td></tr>
+  <tr><td><span class="n">10</span></td><td>POWER</td><td>Pack voltage × current in watts, below it the energy used with this pack in Wh.</td></tr>
+  <tr><td><span class="n">11</span></td><td>ALTITUDE</td><td>Altitude in metres, below it climb ↑ or sink ↓ in m/s and in yellow the highest altitude with this pack.</td></tr>
+  <tr><td><span class="n">12</span></td><td>SPEED</td><td>Speed in km/h, below it the highest value.</td></tr>
+  <tr><td><span class="n">13</span></td><td>SIGNAL</td><td>RSSI in dB, below it LQ in % and the lowest RSSI («LOW»). If your receiver sends RSSI in dBm (negative, e.g. ELRS, Crossfire), it is shown as in the sensor menu, e.g. «-80 dBm».</td></tr>
+</table>
+<p>A short grey dash instead of a number means: this value is not arriving or has no sensor. You choose what each gauge and
+field shows in the menu (chapter 8, group Fields).</p>
+<p><b>Battery %</b> comes from the ESC if it sends it and «Battery % from» is «ESC, else calculated». Otherwise Elektro
+calculates: when the model rests 2 seconds without current, it takes the start value from the resting voltage (curve of the
+battery type) and then counts down with the used mAh and the capacity. «REST» then appears below the gauge. The menu line
+«Battery % from» shows what applies.</p>
+<p><b>New pack:</b> if telemetry is gone for more than 30 seconds (pack unplugged), MAX and LOW values, Wh and battery % start again.</p>
+
+<h3>Compact view</h3>
+<p>If you choose the layout with top and bottom bars (chapter 3), Elektro notices it and shows a compact view: a narrow
+bar with flight time, ARMED / MOTOR OFF and signal (model name and radio battery are in the Ethos top bar), below it the
+four gauges and eight fields: the large field (THROTTLE by default, here without bar), fields 1 to 6 and FLIGHTS. Tap FLIGHTS to open the
+flight list. Everything else works as in the full screen.</p>
+<div class="bild"><img src="../bilder-simulator/Elektro - Sim 784x316 30 Kompakt Normal mit Gas.png" alt="compact view"></div>
+<p class="klein">Compact view on X20 and X18RS (784 × 316). On X14 and X18 / Twin X Lite it is smaller accordingly.</p>
+
+<h2>6. Warnings and alarms</h2>
+<p>Every monitored value has two limits: warning (orange, display only) and alarm (red, frame, tone and announcement).
+Set both in the menu group <b>Limits</b>; 0 switches a limit off. Defaults:</p>
+<table>
+  <tr><th>Value</th><th>Warning (orange)</th><th>Alarm (red, tone, voice)</th></tr>
+  <tr><td>Battery %</td><td>below 30 %</td><td>below 20 %, «Warning! Battery» and the number</td></tr>
+  <tr><td>Cell (average or lowest)</td><td>below 3.50 V</td><td>below 3.30 V, «Warning! Cell voltage» and the number</td></tr>
+  <tr><td>Cell difference (cell sensor only)</td><td>above 0.10 V</td><td>above 0.20 V, «Warning! Cells unbalanced» and the number</td></tr>
+  <tr><td>ESC temperature</td><td>above 70 °C</td><td>above 85 °C, «Warning! ESC temperature» and the number</td></tr>
+  <tr><td>Current</td><td>above 80 A</td><td>above 100 A, «Warning! Current» and the number</td></tr>
+  <tr><td>Used (% of capacity)</td><td>above 70 %</td><td>above 80 %, «Warning! Capacity» and the number</td></tr>
+  <tr><td>BEC voltage</td><td>off</td><td>off</td></tr>
+  <tr><td>Altitude</td><td>above 110 m</td><td>above 120 m, «Altitude» and the number</td></tr>
+  <tr><td>RSSI (for dBm values: limit = dBm + 120, e.g. 40 = -80 dBm)</td><td>below 45 dB</td><td>below 40 dB, «Warning! Signal» and the number</td></tr>
+  <tr><td>LQ</td><td>below 70 %</td><td>below 50 %, «Warning! Signal» and the number</td></tr>
+</table>
+<p class="klein">The cell limits are for LiPo and LiHV. If you choose another battery type while the cell limits are still at
+their defaults, Elektro changes them: LiFe 3.00/2.80 V, Li-Ion 3.20/3.00 V, NiMH 1.10/1.00 V.</p>
+<div class="halb">
+  <div><img src="../bilder-simulator/Elektro - Sim 800x480 05 Warnung.png" alt="warning"><div class="t">Warning: top bar and value orange, no tone</div></div>
+  <div><img src="../bilder-simulator/Elektro - Sim 800x480 12 Englisch.png" alt="alarm"><div class="t">Alarm: top bar red, red frame, tone and voice</div></div>
+</div>
+<p>A warning appears when the value is beyond the limit for 1 second and disappears when it is good again for 3 seconds. An
+alarm beeps, announces the value and repeats every 10 seconds («Repeat alarm every») as long as it lasts. There are always at
+least 3 seconds between two announcements.</p>
+<p><b>Alarm also with motor off</b> (from version 0.5.0): by default all warnings and alarms also come when the motor
+switch is set to «off». In the menu group <b>Alarm also with motor off</b> you can turn this off per value. That value
+then stays silent while the motor switch is set to «off»: no message, no tone, no announcement, no vibration. The colour
+of the value still shows the limit. As soon as you arm the motor, the alarm comes back. Without a motor switch set, this
+setting never applies.</p>
+
+<h2 class="neu">7. Operation</h2>
+<h3>Detecting flights</h3>
+<p>By default Elektro detects a flight by the <b>motor switch</b>: «Motor off at» is <b>SF↑</b>. Arm the motor and the
+flight time starts; switch it off and the radio says «Motor off», the time stops and the question «Flight ended?» appears.</p>
+<ul>
+  <li><b>YES, ENDED</b>: the flight goes into the list.</li>
+  <li><b>NO, JUST PAUSE</b>: the flight stays open. Arm the motor again and it continues.</li>
+  <li>A paused flight ends by itself when you unplug the pack (telemetry gone for over 30 s, «Battery change ends flight»).</li>
+</ul>
+<p>A flight counts only after 30 seconds of motor time («Flight counts from»); shorter runs on the ground are dropped. Without a
+motor switch, or with «Detect flight by» = «Current or throttle», the flight starts as soon as the current is above 3 A or the
+throttle above 10 %, and the pause with the question comes after 20 seconds below.</p>
+
+<h3>Flight list (page 2)</h3>
+<p>Swipe left or tap «8 flights». The flights are on the right, newest first, the current one in blue with «running» or
+«paused». Tap a flight and its values appear on the left. The rotary encoder also selects flights.</p>
+<div class="bild schmal"><img src="../bilder-simulator/Elektro - Sim 800x480 13 Englisch Flugliste.png" alt="flight list"></div>
+<ol>
+  <li>Delete one flight: tap it, <b>DELETE FLIGHT n</b>, then <b>YES, DELETE</b>. The later numbers move up.</li>
+  <li>Delete all flights: <b>CLEAR LIST</b>, then <b>YES, DELETE</b>. The counter starts at 1 again.</li>
+  <li>Back to the display: <b>&lt; BACK</b> or swipe right.</li>
+</ol>
+<p class="klein">The list keeps the last 20 flights. It survives switching off. A paused flight is closed at the next switch-on and goes into the list (if «Battery change ends flight» is on).</p>
+
+<h3>Used capacity to 0</h3>
+<p>Tap <b>RESET</b> in the USED field and confirm with <b>YES, RESET</b>. <b>CANCEL</b> leaves everything as it is.</p>
+
+<h3>Announcement on a switch</h3>
+<p>Switch <b>SG↓</b> on («Announce at») and the radio announces battery level and flight time. Choose what is announced in the
+group Announcements. In addition Elektro announces the battery level every 10 % while discharging («Announce battery % every»).</p>
+
+<h3>Radios without touch (X14, X10, X12)</h3>
+<p>At the top of the menu there are <b>Reset capacity</b>, <b>Delete flight</b> (first choose the number at «Flight no. to
+delete») and <b>Delete whole list</b>, each with a question. The rotary encoder takes you to the flight list and selects
+flights; turning back before the first flight returns to the display.</p>
+
+<h2 class="neu">8. All settings</h2>
+<p>Open the menu: Model › Screens › select the screen › tap the widget. Every change applies at once and is saved.</p>
+<table>
+  <tr><th>Group</th><th>Setting</th><th>Default</th><th>Effect</th></tr>
+  <tr><td>top</td><td>Battery % from</td><td>–</td><td>Shows where the battery level comes from now: ESC, calculated or no value.</td></tr>
+  <tr><td>Sensors</td><td>13 lines</td><td>empty</td><td>See chapter 4.</td></tr>
+  <tr><td rowspan="5">Battery</td><td>Battery type</td><td>LiPo</td><td>LiPo, LiHV, LiFe, Li-Ion or NiMH. Sets the curve for battery % and the bars.</td></tr>
+  <tr><td>Cell count (0 = auto)</td><td>0</td><td>Cells in series. 0 = from the cell sensor; without one please set it.</td></tr>
+  <tr><td>Capacity</td><td>4500 mAh</td><td>Capacity of the flight pack, for battery % and the «Used» limit. 0 = battery % from voltage only.</td></tr>
+  <tr><td>Battery % from</td><td>ESC, else calculated</td><td>«always calculated» ignores the ESC value.</td></tr>
+  <tr><td>Divide RPM by</td><td>1</td><td>For ESCs sending electrical RPM: enter the number of pole pairs.</td></tr>
+  <tr><td>Limits</td><td>warning and alarm per value</td><td>see chapter 6</td><td>0 = off.</td></tr>
+  <tr><td>Alarm also with motor off</td><td>on/off per value (10 lines)</td><td>on</td><td>Off = this value stays silent while the motor is off (chapter 6).</td></tr>
+  <tr><td rowspan="4">Switches</td><td>Motor off at</td><td>SF↑</td><td>Switch position in which the motor is off.</td></tr>
+  <tr><td>Announce at</td><td>SG↓</td><td>Switch position for the announcement.</td></tr>
+  <tr><td>Switch 1 and 2</td><td>empty</td><td>Own switches shown in the top bar while switched on.</td></tr>
+  <tr><td>Switch 1 and 2 name</td><td>SCHALTER 1 / 2</td><td>Your own name, up to 12 characters, e.g. STABI or GEAR.</td></tr>
+  <tr><td rowspan="7">Flight</td><td>Detect flight by</td><td>Motor switch</td><td>Or «Current or throttle».</td></tr>
+  <tr><td>Throttle channel</td><td>empty</td><td>Throttle channel: for the THROTTLE field and for detection by throttle.</td></tr>
+  <tr><td>Flight from current</td><td>3 A</td><td>From this current the flight runs.</td></tr>
+  <tr><td>Flight from throttle</td><td>10 %</td><td>From this throttle position the flight runs.</td></tr>
+  <tr><td>Pause after</td><td>20 s</td><td>Time without current and throttle until «Flight ended?» appears.</td></tr>
+  <tr><td>Flight counts from</td><td>30 s</td><td>Shorter runs do not go into the list.</td></tr>
+  <tr><td>Battery change ends flight</td><td>on</td><td>A paused flight ends when telemetry is gone for over 30 s.</td></tr>
+  <tr><td rowspan="11">Announcements</td><td>Announce alarms</td><td>on</td><td>Off: on alarm only tone and display.</td></tr>
+  <tr><td>Announce warnings too</td><td>off</td><td>On: the orange warning is announced too.</td></tr>
+  <tr><td>Repeat alarm every</td><td>10 s</td><td>3 to 300 s.</td></tr>
+  <tr><td>Announce battery % every</td><td>10 %</td><td>off, 5 %, 10 % or 20 %.</td></tr>
+  <tr><td>Announce «motor off»</td><td>on</td><td>Announcement when the motor is switched off.</td></tr>
+  <tr><td>Announce: battery %</td><td>on</td><td rowspan="4">What the announce switch says.</td></tr>
+  <tr><td>Announce: flight time</td><td>on</td></tr>
+  <tr><td>Announce: altitude</td><td>off</td></tr>
+  <tr><td>Announce: used</td><td>off</td></tr>
+  <tr><td>Tone on alarm</td><td>on</td><td>Beep before the alarm announcement.</td></tr>
+  <tr><td>Vibration on alarm</td><td>off</td><td>The radio vibrates on every alarm.</td></tr>
+  <tr><td rowspan="3">Fields</td><td>Gauge 1 to 4, Field 1 to 6</td><td>as in the picture</td><td>Content: Battery %, Current, RPM, ESC temp., Cell, Pack voltage, Used, Power, Altitude, Vario, Speed, Signal, BEC, Flight time, Throttle % or empty.</td></tr>
+  <tr><td>Large field (left)</td><td>Throttle %</td><td>The large field at the bottom left; in the compact view the first of the eight fields. After an update from 0.1.x it shows what was in field 7, if the plane picture was off.</td></tr>
+  <tr><td>Current / RPM / Temp. gauge up to</td><td>120 A / 12000 / 100 °C</td><td>End value of the arc.</td></tr>
+  <tr><td>Display</td><td>Sprache / Language</td><td>as the radio</td><td>German or English for display, menu and announcements. The menu changes the next time it is opened.</td></tr>
+</table>
+
+<h3>Settings file from Lua-Studio</h3>
+<p>With the PC program <b>Lua-Studio</b> you design the display freely for each model: for every box you choose the
+value, the display type (number, gauge, horizontal or vertical bar, graph, status), title, range, colours and an
+extra line (MIN, MAX or Ø over the flight). Settings and limits per model come with it. Lua-Studio writes the file
+<code>scripts/studio/modelname.elektro.lua</code> to the SD card. In the file name, only the letters A–Z and digits of the model name are kept, everything else becomes <code>_</code> («Möwe 2» becomes <code>M__we_2</code>); Lua-Studio does this itself. Elektro reads it when the model is loaded.</p>
+<ul>
+  <li><b>Without this file</b> Elektro works exactly as before, without any message.</li>
+  <li><b>With the file</b> its layout applies only to the window size it was made for (e.g. full screen 800 × 480 or
+  with bars 784 × 316). For other sizes Elektro draws its built-in display.</li>
+  <li><b>After a model change</b> Elektro reads the file in small steps, which can take a moment. If the file has a
+  layout for this window size, it shows «Loading Studio file ...» meanwhile instead of the built-in display; otherwise
+  Elektro shows its built-in display right away.</li>
+  <li><b>Symbols, bold unit and decoration</b> (from version 0.4.0, Lua-Studio 0.3.0 or newer): a box can show a
+  symbol at the top left (e.g. battery, clock, altitude) and the unit in bold. Freely placed symbols, texts, lines and
+  frames can sit under the boxes. Lua-Studio writes the images to <code>scripts/studio/symbole/</code>. If an image is
+  missing or broken, Elektro shows the box without the symbol and briefly «Studio: n symbols missing» at the bottom.
+  Symbols and decoration never change a limit or an alarm.</li>
+  <li><b>Limits</b> apply per value, whether and however it is shown. If a value is missing in the file, the factory
+  limit applies. An alarm is only switched off if the file says so explicitly. If an entry does not fit the value (e.g. wrong direction), the factory limit applies as well, with a message.
+  «Also with motor off» can be set per limit in Lua-Studio too (from version 0.5.0, also for sensors and channels).
+  The radio menu only lists Elektro's own 10 values; limits for sensors and channels from the file are set in Lua-Studio.</li>
+  <li><b>If you change</b> battery, limits or other settings in the menu on the radio, Elektro writes this to its own
+  file <code>…elektro.funke.lua</code>. The Lua-Studio file stays unchanged. Lua-Studio shows the differences and takes
+  them over on request.</li>
+  <li><b>Menu › Studio file › Reset:</b> with a file «Back to Studio settings» (your changes on the radio are
+  deleted), without a file «Back to defaults» (factory settings and limits; sensors and flights stay). Both ask first.</li>
+  <li><b>Messages:</b> if the file is broken, too new or contains invalid entries, a band at the bottom shows it for
+  8 seconds (e.g. «Studio file broken - default»), then an orange «!» stays at the top right. Elektro always keeps
+  running, if in doubt with the built-in display.</li>
+  <li>Elektro also writes <code>…elektro.info.json</code> with model name, radio and sensor list. Only Lua-Studio reads it.</li>
+</ul>
+
+<h2>9. Troubleshooting</h2>
+<table>
+  <tr><th>What you see</th><th>Cause</th><th>What to do</th></tr>
+  <tr><td>Dashes everywhere, flight time 0:00</td><td>No telemetry</td><td>Switch the model on. Check that the receiver is bound.</td></tr>
+  <tr><td>«Set cell count» or «Cell count?»</td><td>No cell sensor and cell count 0</td><td>Menu › Battery › set Cell count.</td></tr>
+  <tr><td>Battery % is wrong</td><td>Wrong capacity or battery type, or pack plugged in under load</td><td>Check Menu › Battery. Plug the pack in before giving throttle.</td></tr>
+  <tr><td>No «ARMED / MOTOR OFF» at the top, flights do not count</td><td>Motor switch not found</td><td>Menu › Switches › «Motor off at»: choose the position, e.g. SF↑.</td></tr>
+  <tr><td>An alarm does not come with the motor off</td><td>«Alarm also with motor off» is off for this value (menu or Lua-Studio)</td><td>Menu › Alarm also with motor off › switch the value on.</td></tr>
+  <tr><td>RPM far too high</td><td>ESC sends electrical RPM</td><td>Menu › Battery › «Divide RPM by» = pole pairs of the motor.</td></tr>
+  <tr><td>On alarm only a beep and the number</td><td>Voice files missing on the radio (folder <code>audio</code>)</td><td>Repeat chapter 2.</td></tr>
+  <tr><td>A single value shows a dash</td><td>Sensor not assigned or sends nothing</td><td>Menu › Sensors: check the line (chapter 4).</td></tr>
+  <tr><td>THROTTLE shows a dash and «Select throttle»</td><td>No throttle channel set</td><td>Menu › Flight › Throttle channel (chapter 8).</td></tr>
+  <tr><td>Red text at the bottom left</td><td>Script error. The radio keeps working.</td><td>Take a photo of the text and report it: on GitHub under Issues, template «Fehler / Bug» (see TESTLEITFADEN.md in the repository).</td></tr>
+  <tr><td>At the bottom «Studio file broken - default», «too new» or «n errors», then «!» at the top right</td><td>The Lua-Studio file is broken, made for a newer Elektro version or contains invalid entries</td><td>Transfer it again from Lua-Studio or update Elektro. What exactly is wrong is in the log (one line per error).</td></tr>
+  <tr><td>The widget is missing from the list</td><td>Not installed or radio not restarted</td><td>Repeat chapter 2, restart the radio.</td></tr>
+</table>
+
+<h2>10. Update and remove</h2>
+<p><b>Update:</b> install the new ZIP exactly as in chapter 2. Your settings, sensors, flights and counters are kept.</p>
+<p><b>Remove:</b> first take the widget off the screen (Model › Screens), then uninstall it in FrSky Suite under Lua library.</p>
+
+<h2>11. Which radios</h2>
+<table>
+  <tr><th>Display</th><th>Radios</th><th>Status</th></tr>
+  <tr><td>800 × 480, touch</td><td>X20, X20S, X20HD, X20 Pro, X20R, X20RS, X18R, X18RS</td><td>X18RS tested on the real radio, the others in the simulator</td></tr>
+  <tr><td>640 × 360, no touch</td><td>Twin X14, X14S</td><td>simulated</td></tr>
+  <tr><td>480 × 320, touch</td><td>X18, X18S, X18SE, Twin X Lite, Twin X Lite S</td><td>simulated</td></tr>
+  <tr><td>480 × 272, no touch</td><td>X10, X10S, X10 Express, X12S with Ethos</td><td>simulated</td></tr>
+</table>
+<p class="klein">Elektro version 0.5.0 · 21 Nov 2026</p>
+
+</body>
+</html>

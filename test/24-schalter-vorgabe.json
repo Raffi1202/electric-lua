@@ -1,0 +1,30 @@
+{
+ "skripte": [
+  [
+   "src/elektro",
+   "elektro"
+  ]
+ ],
+ "widget": "elektro",
+ "abbild": false,
+ "ersetze": [
+  [
+   "scripts/elektro/kern.lua",
+   "local TEST = nil",
+   "local TEST = { modell = \"ELEKTRO DEMO\", zustand = true }"
+  ]
+ ],
+ "schritte": [
+  {
+   "zustand": {
+    "cfg": {
+     "swMotor": "SF↑",
+     "swAnsage": "SG↓"
+    },
+    "extra": {
+     "schalter": true
+    }
+   }
+  }
+ ]
+}

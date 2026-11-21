@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Elektro – Konzept</title>
+<style>
+  body { font-family: "Helvetica Neue", Arial, sans-serif; background: #f3f4f7; color: #1a1f2b; margin: 24px; width: 1500px; }
+  h1 { font-size: 26px; margin: 0 0 4px; }
+  .unter { color: #56607a; margin-bottom: 18px; font-size: 14px; }
+  h2 { font-size: 17px; margin: 24px 0 8px; border-bottom: 2px solid #1f4f96; padding-bottom: 3px; }
+  .reihe { display: flex; gap: 22px; align-items: flex-start; }
+  .schirm { font-size: 12px; color: #56607a; }
+  .schirm svg { display: block; border-radius: 6px; box-shadow: 0 1px 4px rgba(0,0,0,.35); margin-bottom: 4px; }
+  table { border-collapse: collapse; font-size: 13px; margin: 6px 0 4px; background: #fff; }
+  th, td { border: 1px solid #b6bccb; padding: 4px 9px; text-align: left; vertical-align: top; }
+  th { background: #e9eef8; }
+  .hinweis { background: #fff7df; border: 1px solid #d99a00; border-radius: 6px; padding: 8px 12px; font-size: 13px; width: 1100px; }
+  .frage { background: #e8f1ff; border: 1px solid #1f4f96; border-radius: 6px; padding: 8px 12px; font-size: 13px; width: 1100px; margin-top: 10px; }
+  ul { margin: 4px 0; padding-left: 20px; } li { margin: 2px 0; }
+</style>
+</head>
+<body>
+<h1>Elektro – Konzept (Elektro-Flieger-Lua)</h1>
+<div class="unter">Stand 19.11.2026 · Entwurf, noch kein Lua · Alle Zahlen sind Beispiele (6S LiPo, 4500 mAh) · Aufbau und Aussehen wie Heli RF</div>
+
+<div class="hinweis"><b>Bitte ansehen und freigeben:</b> Was wird gezeigt, wo steht es, was passiert bei Warnung und
+Alarm, wie sieht es auf 800 × 480 (X18RS, X20) und 480 × 320 (X18, Twin X Lite) aus. Erst nach der Freigabe wird das
+Lua geschrieben. 640 × 360 und 480 × 272 bekommen dieselbe Aufteilung verkleinert und werden beim Bauen gezeigt.</div>
+
+<h2>Grundlagen (aus deinen Antworten vom 19.11.2026)</h2>
+<ul>
+  <li><b>Name «Elektro»</b>, Widget im Vollbild, Seite 1 Anzeige, Seite 2 Flugliste (wischen oder PAGE), alles deutsch und englisch, auch die Ansagen.</li>
+  <li>Für alle Elektroflieger, keine Modell- oder Funkennamen. Oben links steht der Modellname aus dem Sender.</li>
+  <li><b>Akku %:</b> Wert vom Regler hat Vorrang; fehlt er, rechnet das Lua aus Ruhespannung beim Anstecken und verbrauchten mAh (Kapazität im Menü). Akkuart wählbar: LiPo, LiHV, LiFe, Li-Ion, NiMH. Zellenzahl automatisch oder fest.</li>
+  <li><b>Flug erkennen</b>, im Menü wählbar: <b>Motorschalter</b> (Werk: SF; SF↑ = Motor aus) oder <b>Strom-/Gasschwelle</b> (Flug beginnt über z. B. 3 A, Pause nach 20 s darunter). Ein Flug zählt ab 30 s.</li>
+  <li><b>Ansagen:</b> alle Alarme, Akku % in 10-%-Schritten beim Entladen, «Motor aus» bei SF↑, auf <b>SG</b> (einstellbar) Akku % und Flugzeit.</li>
+  <li>Je überwachtem Wert <b>zwei Schwellen</b> im Menü: orange nur Anzeige, rot mit Rahmen, Ton und Ansage (alle 10 s wiederholt, solange der Alarm anhält).</li>
+</ul>
+
+<h2>Was es zeigt und macht</h2>
+<table>
+  <tr><th>Feld</th><th>Zeigt</th><th>Warnung (orange)</th><th>Alarm (rot, Rahmen, Ton, Ansage)</th><th>Antippen</th></tr>
+  <tr><td>Kopfzeile</td><td>Modellname · Flugzeit des laufenden Flugs · Motor «SCHARF» grün / «MOTOR AUS» grau · Empfangsbalken · Akkusymbol</td><td>Kopf orange</td><td>Kopf rot</td><td>–</td></tr>
+  <tr><td>AKKU (Tacho)</td><td>Akku in %, darunter Zellenzahl und Gesamtspannung</td><td>unter 30 %</td><td>unter 20 % «Akku 20 Prozent»</td><td>–</td></tr>
+  <tr><td>STROM (Tacho)</td><td>Strom in A, darunter MAX = gemessener Höchstwert dieses Flugs</td><td>über 80 A</td><td>über 100 A «Strom hoch»</td><td>–</td></tr>
+  <tr><td>DREHZAHL (Tacho)</td><td>Motordrehzahl U/min, darunter MAX</td><td>–</td><td>– (nur Anzeige)</td><td>–</td></tr>
+  <tr><td>REGLERTEMP. (Tacho)</td><td>Reglertemperatur °C, darunter MAX</td><td>über 70 °C</td><td>über 85 °C «Regler heiss»</td><td>–</td></tr>
+  <tr><td>Fliegerbild + «n Flüge»</td><td>Zeichnung Modellflugzeug, Anzahl beendeter Flüge (der laufende zählt erst nach dem Ende)</td><td>–</td><td>–</td><td>öffnet Flugliste</td></tr>
+  <tr><td>ZELLE, Fall 1: nur Gesamtspannung<br>(kein Zellensensor, häufigster Fall)</td><td>Titel «ZELLE Ø»: mittlere Zelle = Gesamtspannung ÷ Zellenzahl (Zellenzahl automatisch beim Anstecken oder fest im Menü).
+  Darunter ein Balken mit der Gesamtspannung (leer bis voll je Akkuart) und TIEF = tiefster Mittelwert</td><td>mittlere Zelle unter 3,5 V (LiPo)</td><td>mittlere Zelle unter 3,3 V «Zelle tief»</td><td>–</td></tr>
+  <tr><td>ZELLE, Fall 2: Zellensensor vorhanden<br>(z. B. FLVSS, oder Regler mit Einzelzellen)</td><td>Titel «ZELLE TIEFST»: tiefste Einzelzelle, darunter ein kleiner Balken je Zelle und Δ = Differenz höchste − tiefste Zelle</td>
+  <td>tiefste Zelle unter 3,5 V · Δ über 0,10 V</td><td>tiefste Zelle unter 3,3 V «Zelle tief» · Δ über 0,20 V «Zellen ungleich»</td><td>–</td></tr>
+  <tr><td>VERBRAUCHT</td><td>verbrauchte mAh, Knopf «AUF 0»</td><td>über 70 % der Kapazität</td><td>über 80 % «Kapazität»</td><td>AUF 0 → Rückfrage</td></tr>
+  <tr><td>LEISTUNG</td><td>W (Spannung × Strom), darunter Wh dieses Flugs</td><td>–</td><td>–</td><td>–</td></tr>
+  <tr><td>HÖHE</td><td>Höhe m, Vario ↑/↓ m/s, MAX = Höchsthöhe</td><td>über 110 m</td><td>über 120 m «Höhe»</td><td>–</td></tr>
+  <tr><td>SPEED</td><td>Geschwindigkeit km/h (GPS oder Staurohr), MAX</td><td>–</td><td>–</td><td>–</td></tr>
+  <tr><td>EMPFANG</td><td>RSSI in dB gross, darunter LQ in % und TIEF = tiefster RSSI des Flugs (was der Empfänger liefert)</td><td>unter 45 dB / 70 %</td><td>unter 40 dB / 50 % «Empfang»</td><td>–</td></tr>
+  <tr><td>Flugliste (Seite 2)</td><td>links die Werte des gewählten Flugs, rechts die Liste</td><td>–</td><td>–</td><td>Zeile wählt Flug; «FLUG n LÖSCHEN», «LISTE LÖSCHEN» je mit Rückfrage</td></tr>
+</table>
+<p style="font-size:13px;width:1100px"><b>Fall 1 oder 2 wählt das Lua automatisch:</b> Ist im Menü ein Zellensensor zugewiesen und liefert er Werte, gilt Fall 2, sonst Fall 1. Fällt der Zellensensor im Flug aus, wechselt es auf Fall 1 weiter mit Alarm auf die mittlere Zelle. Im Fall 1 gibt es keine Zellendifferenz.</p>
+<p style="font-size:13px;width:1100px">Werte, für die kein Sensor da ist, zeigen einen grauen Strich. Alle Schwellen sind Werkwerte und im Menü einstellbar,
+jede einzeln abschaltbar. Ohne Berührung (X14, X10) gibt es «Kapazität auf 0», «Flug n löschen» und «Liste löschen» als Knöpfe im Widget-Menü.</p>
+
+<div id="blatt"></div>
+
+<h2>Widget-Menü: so viel wie möglich einstellbar (zugeklappte Gruppen, Werkwerte in Klammern)</h2>
+<table>
+  <tr><th>Gruppe</th><th>Einstellungen (Werkwert)</th></tr>
+  <tr><td>oben</td><td>Sensoren suchen · Version · Kapazität auf 0 · Flug löschen (Nummer wählen, Rückfrage) · Liste löschen (Rückfrage)</td></tr>
+  <tr><td>Sensoren</td><td>je eine freie Zuweisung: Gesamtspannung, Zellen (Zellensensor, leer = keiner), Strom, Verbraucht, Akku % (Regler), Drehzahl, Reglertemp., BEC-Spannung, Höhe, Vario, Speed, RSSI, LQ.
+    «Sensoren suchen» füllt sie mit den üblichen Namen (FrSky, Regler, Flybarless), jede lässt sich von Hand ändern oder leer lassen (dann Strich)</td></tr>
+  <tr><td>Akku</td><td>Akkuart (LiPo; LiHV, LiFe, Li-Ion, NiMH) · Zellenzahl (Auto; 1–14) · Kapazität (4500 mAh) · Akku-%-Quelle (Regler mit Vorrang, sonst berechnet; oder immer berechnet) ·
+    Ruhespannung = voll ab (4,15 V je Zelle LiPo, je Akkuart eigener Werkwert) · Drehzahl-Teiler bzw. Polpaare (1)</td></tr>
+  <tr><td>Grenzwerte</td><td>je Wert Warnung und Alarm, jede Schwelle einzeln «aus» möglich: Akku % (30/20) · Zelle (3,5/3,3 V, je Akkuart; gilt für die mittlere bzw. tiefste Zelle) · Zellendifferenz (0,10/0,20 V, nur mit Zellensensor) · Reglertemp. (70/85 °C) · Strom (80/100 A) ·
+    Kapazität (70/80 %) · BEC (aus/aus) · Höhe (110/120 m) · RSSI (45/40 dB) · LQ (70/50 %)</td></tr>
+  <tr><td>Schalter</td><td>Motorschalter (SF) + Stellung «aus» (↑) · Ansageschalter (SG) · zwei weitere Schalter frei wählbar mit <b>eigenem Namen</b> (höchstens 12 Zeichen),
+    die in der Kopfzeile als grüne Pille erscheinen, solange sie eingeschaltet sind (Werk: aus; Beispiel SB «STABI», SD «FAHRWERK»)</td></tr>
+  <tr><td>Flug</td><td>Erkennung (Motorschalter; Strom-/Gasschwelle) · Stromschwelle (3 A) · Gaskanal (CH3) + Gasschwelle (10 %) · Pause nach (20 s) · Flug zählt ab (30 s) · Flug beendet nach Akkuwechsel (ein)</td></tr>
+  <tr><td>Ansagen</td><td>Alarm-Ansagen (ein) + Wiederholung (10 s) · Akku-%-Schritte (10 %; aus, 5, 10, 20 %) · «Motor aus» (ein) · Ansage auf SG: Akku % (ein), Flugzeit (ein), Höhe (aus), Verbraucht (aus) ·
+    Ton bei Alarm (ein) · Vibration bei Alarm (aus)</td></tr>
+  <tr><td>Felder</td><td>jeder der 4 Tachos und jedes der 6 Felder einzeln wählbar aus: Akku %, Strom, Drehzahl, Reglertemp., Zelle, Gesamtspannung, Verbraucht, Leistung, Höhe, Vario, Speed, Empfang, BEC, Flugzeit, leer.
+    Werk wie im Bild. Tacho-Endwerte einstellbar (Strom 120 A, Drehzahl 12000 U/min, Temp. 100 °C)</td></tr>
+  <tr><td>Anzeige</td><td>Sprache (wie Sender; Deutsch, Englisch) · Fliegerbild (ein; aus = zwei weitere Felder)</td></tr>
+</table>
+<p style="font-size:13px;width:1100px">Einstellungen und Flugliste bleiben beim Aus- und Einschalten erhalten. Was du selbst eintippst (Schalternamen), wird nie übersetzt.</p>
+
+<div class="frage"><b>Offen zur Freigabe:</b>
+<ul>
+  <li>Sind die Werkschwellen (Akku 30/20 %, Zelle 3,5/3,3 V, Regler 70/85 °C, Strom 80/100 A, Kapazität 70/80 %, Höhe 110/120 m, Empfang) so recht?</li>
+  <li>Die Flugzeit steht etwas links der Mitte, damit zwei eigene Schalter-Pillen Platz haben; bei langen Namen fällt die vordere weg statt etwas zu überdecken. Recht so?</li>
+  <li>Sechs kleine Felder statt vier wie beim Heli: auf 480 × 320 werden Titel gekürzt («VERBR.», «LEIST.»). Passt das, oder lieber Höhe/Speed/Empfang auf eine eigene Seite?</li>
+</ul></div>
+
+<script>
+// Farben wie Heli RF (kern.lua, farben())
+const C = { bg: "#081022", kachel: "#15223e", rand: "#2c3e64", linie: "#243458", weiss: "#ffffff", titel: "#d6deec",
+  grau: "#96a4be", spur: "#265296", gelb: "#f5c518", hblau: "#a8d4f2", blau: "#4096f0", orange: "#f28c1e",
+  rot: "#ef3c3c", gruen: "#40dc6e", akzent: "#becce2", dunkel: "#000000" };
+
+const DISPLAYS = [
+  { b: 800, h: 480, name: "800 × 480 · X20-Reihe, X18R, X18RS · Berührung" },
+  { b: 480, h: 320, name: "480 × 320 · X18, X18S, X18SE, Twin X Lite · Berührung" },
+];
+
+const NORMAL = { kopf: null, zeit: "04:12", motor: "SCHARF", akku: 59, akkuU: "6S 23,1V", strom: 46, stromMax: "MAX 92A",
+  rpm: 7850, rpmMax: "MAX 9620", temp: 52, tempMax: "MAX 58°C", fluege: 7, zelle: "3,85V", zelleT: "TIEF 3,71V",
+  mah: "1830", leistung: "1060", wh: "42,1 Wh", hoehe: "84", vario: "↑ 2,1 m/s", hoeheMax: "MAX 102 m",
+  speed: "96", speedMax: "MAX 142", rssi: "78", rssiE: "LQ 100%  TIEF 62", st: {} };
+
+const ZUSTAENDE = [
+  { titel: "Seite 1 · Normal (Flug läuft) · Fall 1: nur Gesamtspannung, Zelle Ø = 23,1 V ÷ 6", ...NORMAL },
+  { titel: "Seite 1 · Warnung (nur Anzeige: Akku 27 %, Regler 74 °C)", ...NORMAL, kopf: "orange", akku: 27, akkuU: "6S 21,7V",
+    temp: 74, tempMax: "MAX 76°C", zelle: "3,62V", zelleT: "TIEF 3,55V", mah: "3280", st: { akku: 1, temp: 1, mah: 1 } },
+  { titel: "Seite 1 · Alarm (Rahmen rot, Ton, Ansage «Zelle tief», «Akku 18 Prozent»)", ...NORMAL, kopf: "rot", akku: 18, akkuU: "6S 19,6V",
+    zelle: "3,27V", zelleT: "TIEF 3,27V", mah: "3690", temp: 74, tempMax: "MAX 76°C", st: { akku: 2, zelle: 2, mah: 2, temp: 1 } },
+  { titel: "Seite 1 · eigene Einstellungen: Schalter SB «STABI» und SD «FAHRWERK» eingeschaltet, Feld SPEED durch BEC ersetzt (Modell ohne GPS)", ...NORMAL,
+    pillen: ["STABI", "FAHRWERK"], ersatz: ["BEC", "5,4V", "TIEF 5,2V"] },
+  { titel: "Seite 1 · Fall 2: Zellensensor vorhanden (tiefste Zelle 3,83 V, Δ 0,04 V; gelb = tiefste Zelle)", ...NORMAL,
+    zellen: [3.86, 3.85, 3.87, 3.83, 3.86, 3.85], zelle: "3,83V", zelleT: "Δ 0,04V" },
+  { titel: "Seite 1 · Fall 2: Warnung Zellendifferenz (Zelle 4 hängt nach, Δ 0,14 V)", ...NORMAL, kopf: "orange",
+    zellen: [3.80, 3.79, 3.80, 3.66, 3.79, 3.80], akkuU: "6S 22,6V", zelle: "3,66V", zelleT: "Δ 0,14V", st: { zelle: 1, diff: 1 } },
+  { titel: "Seite 1 · ohne Telemetrie (Modell aus oder Empfänger aus)", ...NORMAL, keine: true, zeit: "00:00", motor: "MOTOR AUS" },
+  { titel: "Seite 1 · Motor aus, nur ein Teil der Sensoren (kein Vario, kein GPS)", ...NORMAL, motor: "MOTOR AUS", strom: 0, rpm: 0,
+    hoehe: null, vario: null, hoeheMax: null, speed: null, speedMax: null, leistung: "0" },
+  { titel: "Rückfrage nach SF↑ bzw. Strom 20 s unter Schwelle", ...NORMAL, motor: "MOTOR AUS", strom: 0, rpm: 0, leistung: "0",
+    dialog: ["Flug beendet?", "Dieser Flug: 6:48, 2950 mAh, 66,7 Wh", "NEIN, NUR PAUSE", "JA, BEENDET"] },
+  { titel: "Rückfrage «AUF 0»", ...NORMAL, motor: "MOTOR AUS", strom: 0, rpm: 0, leistung: "0",
+    dialog: ["Kapazität auf 0?", "Für einen frisch geladenen Akku.", "ABBRECHEN", "JA, AUF 0"] },
+  { titel: "Seite 2 · Flugliste (Flug 6 angetippt)", ...NORMAL, liste: true },
+  { titel: "Seite 2 · Rückfrage «Flug 6 löschen?»", ...NORMAL, liste: true,
+    dialog: ["Flug 6 löschen?", "Die Nummern danach rücken nach.", "ABBRECHEN", "JA, LÖSCHEN"] },
+  { titel: "Seite 2 · Flugliste leer (Knöpfe grau, ohne Wirkung)", ...NORMAL, liste: true, leer: true, zeit: "00:00", motor: "MOTOR AUS", fluege: 0 },
+  { titel: "Frisch angesteckt (Akku % aus der Ruhespannung, weil der Regler keinen %-Wert liefert; Kapazität im Menü 4500 mAh)", ...NORMAL,
+    zeit: "00:00", motor: "MOTOR AUS", akku: 100, akkuU: "6S 25,1V RUHE", strom: 0, stromMax: "MAX 0A", rpm: 0, rpmMax: "MAX 0", temp: 21, tempMax: "MAX 21°C",
+    zelle: "4,18V", zelleT: "TIEF 4,18V", mah: "0", leistung: "0", wh: "0,0 Wh", hoehe: "0", vario: "↑ 0,0 m/s", hoeheMax: "MAX 0 m", speed: "0", speedMax: "MAX 0" },
+  { titel: "Englisch (Sprache des Senders) · Seite 1", ...NORMAL, en: true },
+  { titel: "Englisch · Seite 2 mit Rückfrage", ...NORMAL, en: true, liste: true,
+    dialog: ["Delete flight 6?", "The following numbers move up.", "CANCEL", "YES, DELETE"] },
+  { titel: "Englisch · Rückfrage «Flight ended?»", ...NORMAL, en: true, motor: "MOTOR AUS", strom: 0, rpm: 0, leistung: "0",
+    dialog: ["Flight ended?", "This flight: 6:48, 2950 mAh, 66.7 Wh", "NO, JUST PAUSE", "YES, ENDED"] },
+];
+
+const EN = { "AKKU": "BATTERY", "STROM": "CURRENT", "DREHZAHL": "MOTOR", "REGLERTEMP.": "ESC TEMP", "ZELLE": "CELL", "ZELLE Ø": "CELL Ø", "ZELLE TIEFST": "CELL LOWEST", "ZELLE MIN": "CELL MIN",
+  "VERBRAUCHT": "USED", "VERBR.": "USED", "LEISTUNG": "POWER", "LEIST.": "POWER", "HÖHE": "ALTITUDE", "SPEED": "SPEED", "EMPFANG": "SIGNAL",
+  "AMPERE": "AMPS", "U/MIN": "RPM", "AUF 0": "RESET", "Flüge": "flights", "SCHARF": "ARMED", "TIEF": "LOW" };
+
+let aus = [], EN_AN = false;
+const tr = t => { if (!EN_AN || t == null) return t; let r = EN[t]; if (r) return r;
+  return String(t).replace("TIEF", "LOW").replace("Flüge", "flights").replace("fertig", "done").replace(/(\d),(\d)/g, "$1.$2"); };
+const rect = (x, y, b, h, f, r, rand, d) => aus.push(`<rect x="${x}" y="${y}" width="${b}" height="${h}" rx="${r || 0}" fill="${f}"` +
+  (rand ? ` stroke="${rand}" stroke-width="${d || 1}"` : "") + "/>");
+const text = (x, y, t, gr, f, anker, fett) => aus.push(`<text x="${x}" y="${y}" font-size="${Math.max(gr, 11)}" fill="${f}" text-anchor="${anker || "start"}"` +
+  ` dominant-baseline="central" font-family="Helvetica Neue, Arial, sans-serif"${fett ? ' font-weight="600"' : ""}>${tr(t)}</text>`);
+const strich = (x, y, gr, anker) => { const b = gr * 0.7; rect(anker === "end" ? x - b : anker === "start" ? x : x - b / 2, y - gr * 0.05, b, Math.max(2, gr * 0.1), C.grau); };
+const wert = (x, y, t, gr, f, anker) => t == null ? strich(x, y, gr, anker) : text(x, y, t, gr, f, anker, true);
+const stufe = (st, sonst) => st === 2 ? C.rot : st === 1 ? C.orange : sonst;
+
+function bogen(cx, cy, r, a0, a1, farbe, d) {   // Winkel in Grad, 0 = oben, im Uhrzeigersinn
+  const p = a => [cx + r * Math.sin(a * Math.PI / 180), cy - r * Math.cos(a * Math.PI / 180)];
+  const [x0, y0] = p(a0), [x1, y1] = p(a1);
+  aus.push(`<path d="M${x0} ${y0} A${r} ${r} 0 ${a1 - a0 > 180 ? 1 : 0} 1 ${x1} ${y1}" fill="none" stroke="${farbe}" stroke-width="${d}" stroke-linecap="butt"/>`);
+}
+
+function kachel(x, y, b, h, s, alarm, akzent) {
+  rect(x, y, b, h, C.kachel, 8 * s, alarm ? C.rot : C.rand, alarm ? Math.max(2, 3 * s) : 1);
+  if (akzent) rect(x + 8 * s, y, b - 16 * s, Math.max(2, 3 * s), akzent);
+}
+
+function ring(x, y, b, h, s, titel, akzent, w, einheit, anteil, farbe, unten, uFarbe, st, keine) {
+  kachel(x, y, b, h, s, st === 2, akzent);
+  text(x + b / 2, y + 18 * s, titel, 16 * s, st === 2 ? C.rot : C.titel, "middle");
+  const cx = x + b / 2, cy = y + h * 0.48, r = Math.min(b, h) * 0.30, d = 14 * s;
+  bogen(cx, cy, r, -135, 135, C.spur, d);
+  if (!keine && anteil > 0) bogen(cx, cy, r, -135, -135 + 270 * Math.min(1, anteil), farbe, d);
+  wert(cx, cy - 2 * s, keine ? null : w, (String(w).length > 3 ? 32 : 40) * s, st ? stufe(st) : C.weiss, "middle");
+  text(cx, cy + 28 * s, einheit, 11 * s, C.titel, "middle", true);
+  if (keine) strich(cx, y + h - 20 * s, 16 * s, "middle"); else text(cx, y + h - 20 * s, unten, 15 * s, uFarbe, "middle", true);
+}
+
+function feld(x, y, b, h, s, titel, w, wFarbe, zusatz, st, knopf, keine) {
+  kachel(x, y, b, h, s, st === 2);
+  rect(x, y + 6 * s, Math.max(2, 4 * s), h - 12 * s, st ? stufe(st) : C.akzent);
+  text(x + 14 * s, y + 16 * s, titel, 14 * s, st === 2 ? C.rot : C.titel);
+  wert(x + b - 10 * s, y + h * 0.50, keine ? null : w, 34 * s, st ? stufe(st) : wFarbe, "end");
+  if (knopf) { const kb = Math.max(54 * s, 46), kh = Math.max(20 * s, 16); rect(x + 10 * s, y + h - 12 * s - kh, kb, kh, C.bg, kh / 2, C.akzent, 1.5);
+    text(x + 10 * s + kb / 2, y + h - 12 * s - kh / 2, knopf, 10 * s, C.weiss, "middle", true); }
+  if (zusatz != null) { if (keine) strich(x + b - 10 * s, y + h - 16 * s, 13 * s, "end"); else text(x + b - 10 * s, y + h - 16 * s, zusatz, 12 * s, C.titel, "end"); }
+}
+
+function flieger(x, y, b, h, s) {   // Modell-Elektroflieger von oben, weisse Linien
+  const cx = x + b / 2, cy = y + h / 2, m = Math.min(b / 260, h / 150) * 1.0, L = (px, py) => `${cx + px * m},${cy + py * m}`;
+  const st = `fill="none" stroke="${C.weiss}" stroke-width="${Math.max(1.5, 2.2 * s)}" stroke-linejoin="round"`;
+  aus.push(`<polygon points="${[[-6,-62],[6,-62],[9,-40],[8,40],[4,62],[-4,62],[-8,40],[-9,-40]].map(p => L(...p)).join(" ")}" ${st}/>`);   // Rumpf
+  aus.push(`<polygon points="${[[-8,-22],[-118,-10],[-120,6],[-8,8],[8,8],[120,6],[118,-10],[8,-22]].map(p => L(...p)).join(" ")}" ${st}/>`); // Flügel
+  aus.push(`<polygon points="${[[-4,44],[-42,52],[-42,62],[42,62],[42,52],[4,44]].map(p => L(...p)).join(" ")}" ${st}/>`);          // Höhenleitwerk
+  aus.push(`<line x1="${cx - 30 * m}" y1="${cy - 66 * m}" x2="${cx + 30 * m}" y2="${cy - 66 * m}" ${st}/>`);                          // Propeller
+  aus.push(`<circle cx="${cx}" cy="${cy - 66 * m}" r="${4 * m}" ${st}/>`);
+  aus.push(`<line x1="${cx - 104 * m}" y1="${cy + 2 * m}" x2="${cx - 64 * m}" y2="${cy + 4 * m}" ${st}/>`);                            // Querruder
+  aus.push(`<line x1="${cx + 104 * m}" y1="${cy + 2 * m}" x2="${cx + 64 * m}" y2="${cy + 4 * m}" ${st}/>`);
+}
+
+function kopf(k, z) {
+  const s = k.s, W = k.b, kh = 56 * s;
+  const bgk = z.kopf === "rot" ? C.rot : z.kopf === "orange" ? C.orange : C.bg;
+  rect(0, 0, W, kh, bgk);
+  rect(0, kh, W, 1, C.linie);
+  text(12 * s, kh / 2, z.en ? "MODEL NAME" : "MODELLNAME", 30 * s, C.weiss, "start", true);
+  text(W * 0.42, kh / 2 + 2 * s, z.zeit, 34 * s, C.weiss, "middle");
+  const sch = z.motor === "SCHARF";
+  const mt = z.en ? (sch ? "ARMED" : "MOTOR OFF") : z.motor, pb = (mt.length * 10 + 20) * s, ph = 26 * s;
+  const px = W - 96 * s - pb;
+  rect(px, kh / 2 - ph / 2, pb, ph, sch ? C.gruen : C.kachel, ph / 2, sch ? null : C.grau, 1.5);
+  aus.push(`<text x="${px + pb / 2}" y="${kh / 2}" font-size="${14 * s}" fill="${sch ? C.dunkel : C.grau}" text-anchor="middle" dominant-baseline="central" font-family="Helvetica Neue, Arial" font-weight="700">${mt}</text>`);
+  if (z.pillen) {                       // frei benannte Schalter, rechts nach links vor der Motor-Pille
+    let xr = px - 8 * s;
+    for (const n of z.pillen.slice().reverse()) {
+      const fs = Math.max(13 * s, 11), b = n.length * fs * 0.68 + 14 * s;
+      if (xr - b < W * 0.42 + 55 * s) break;   // kein Platz: weglassen statt überdecken
+      rect(xr - b, kh / 2 - ph / 2, b, ph, C.gruen, ph / 2);
+      aus.push(`<text x="${xr - b / 2}" y="${kh / 2}" font-size="${fs}" fill="${C.dunkel}" text-anchor="middle" dominant-baseline="central" font-family="Helvetica Neue, Arial" font-weight="700">${n}</text>`);
+      xr -= b + 6 * s;
+    }
+  }
+  for (let i = 0; i < 4; i++) {        // Empfangsbalken
+    const bh = (8 + i * 6) * s, bx = W - 84 * s + i * 9 * s;
+    rect(bx, kh / 2 + 12 * s - bh, 6 * s, bh, z.keine ? C.rand : i < 3 ? C.gruen : C.rand);
+  }
+  const ax = W - 36 * s, ay = kh / 2 - 15 * s;  // Akkusymbol
+  rect(ax + 6 * s, ay - 3 * s, 10 * s, 4 * s, C.gruen);
+  rect(ax, ay, 22 * s, 32 * s, "none", 3 * s, z.keine ? C.grau : C.gruen, 2.5 * s);
+  if (!z.keine) { const f = z.akku / 100; rect(ax + 3 * s, ay + 3 * s + 26 * s * (1 - f), 16 * s, 26 * s * f, stufe(z.st.akku, C.gruen)); }
+}
+
+// Zelle: Fall 1 nur Gesamtspannung (Balken), Fall 2 Zellensensor (Balken je Zelle + Differenz)
+function zellFeld(x, y, b, h, s, z, kn, lang) {
+  const st = z.st.zelle, zellen = z.zellen;
+  feld(x, y, b, h, s, zellen ? (lang ? "ZELLE TIEFST" : "ZELLE MIN") : "ZELLE Ø", z.zelle, C.gruen, lang ? z.zelleT : z.zelleT.replace("TIEF ", "↓"), st, null, kn);
+  if (kn) return;
+  const by = y + h - 22 * s, bh = Math.max(10 * s, 7), bx = x + 14 * s, bb = b * (lang ? 0.40 : 0.34);
+  const anteil = u => Math.max(0, Math.min(1, (u - 3.3) / 0.9));
+  if (!zellen) {                              // Gesamtspannung als Balken
+    const u = parseFloat(z.akkuU.replace(/^\d+S /, "").replace(",", ".")), n = parseInt(z.akkuU);
+    rect(bx, by, bb, bh, C.spur, 2 * s);
+    rect(bx, by, bb * anteil(u / n), bh, st ? stufe(st) : C.gruen, 2 * s);
+    text(bx, by - Math.max(9 * s, 7), z.akkuU.split(" ")[1], 11 * s, C.titel);
+  } else {                                    // je Zelle ein Balken
+    const n = zellen.length, sb = bb / n, ph = Math.max(22 * s, 14), tief = Math.min(...zellen);
+    zellen.forEach((u, i) => { const hh = ph * (0.25 + 0.75 * anteil(u));
+      rect(bx + i * sb, by + bh - ph, sb - 2 * s, ph, C.spur, 1);
+      rect(bx + i * sb, by + bh - hh, sb - 2 * s, hh, u === tief ? (z.st.diff ? stufe(z.st.diff) : C.gelb) : C.gruen, 1); });
+  }
+}
+
+function seite1(k, z) {
+  const s = k.s, W = k.b, H = k.h, g = 8 * s, y1 = 62 * s, h1 = 198 * s, b1 = (W - 5 * g) / 4;
+  const kn = z.keine, st = z.st;
+  ring(g, y1, b1, h1, s, "AKKU", C.gruen, z.akku, "%", z.akku / 100, stufe(st.akku, C.gruen), z.akkuU, C.weiss, st.akku, kn);
+  ring(2 * g + b1, y1, b1, h1, s, "STROM", C.blau, z.strom, "AMPERE", z.strom / 120, stufe(st.strom, C.blau), z.stromMax, C.gelb, st.strom, kn);
+  ring(3 * g + 2 * b1, y1, b1, h1, s, "DREHZAHL", C.hblau, z.rpm, "U/MIN", z.rpm / 12000, C.hblau, z.rpmMax, C.gelb, 0, kn);
+  ring(4 * g + 3 * b1, y1, b1, h1, s, "REGLERTEMP.", stufe(st.temp, C.gruen), z.temp, "°C", z.temp / 100, stufe(st.temp, C.gruen), z.tempMax, C.gelb, st.temp, kn);
+  const y2 = y1 + h1 + g, h2 = H - y2 - g, bb = 232 * s, fh = 40 * s;
+  kachel(g, y2, bb, h2 - fh - g, s);
+  flieger(g, y2, bb, h2 - fh - g, s);
+  kachel(g, H - g - fh, bb, fh, s);
+  text(g + bb / 2, H - g - fh / 2, z.en ? `${z.fluege} flights` : `${z.fluege} Flüge`, 16 * s, C.weiss, "middle", true);
+  const x0 = 2 * g + bb, bf = (W - x0 - 3 * g) / 3, hf = (h2 - g) / 2;
+  const P = (c, r) => [x0 + c * (bf + g), y2 + r * (hf + g)];
+  const lang = !k.klein;
+  zellFeld(...P(0, 0), bf, hf, s, z, kn, !k.klein);
+  feld(...P(1, 0), bf, hf, s, lang ? "VERBRAUCHT" : "VERBR.", z.mah, C.weiss, kn ? null : "mAh", st.mah, z.en ? "RESET" : "AUF 0", kn);
+  feld(...P(2, 0), bf, hf, s, lang ? "LEISTUNG" : "LEIST.", z.leistung == null ? null : z.leistung + " W", C.weiss, z.wh, 0, null, kn);
+  feld(...P(0, 1), bf, hf, s, "HÖHE", z.hoehe == null ? null : z.hoehe + " m", C.weiss, z.hoehe == null ? null : `${z.vario}`, 0, null, kn);
+  if (!kn && z.hoeheMax && lang) text(P(0, 1)[0] + 14 * s, P(0, 1)[1] + hf - 16 * s, z.hoeheMax, 12 * s, C.gelb, "start", true);
+  if (z.ersatz) feld(...P(1, 1), bf, hf, s, z.ersatz[0], z.ersatz[1], C.weiss, z.ersatz[2], 0, null, kn); else
+  feld(...P(1, 1), bf, hf, s, "SPEED", z.speed == null ? null : z.speed + (lang ? " km/h" : ""), C.weiss, z.speedMax, 0, null, kn);
+  feld(...P(2, 1), bf, hf, s, "EMPFANG", z.rssi + " dB", C.gruen, z.rssiE, 0, null, kn);
+}
+
+function seite2(k, z) {
+  const s = k.s, W = k.b, H = k.h, g = 8 * s, y0 = 62 * s, kh = 40 * s, h = H - y0 - kh - 2 * g, bl = (W - 3 * g) / 2;
+  kachel(g, y0, bl, h, s); kachel(2 * g + bl, y0, bl, h, s);
+  if (z.leer) { text(g + bl / 2, y0 + h / 2, z.en ? "Tap a flight in the list" : "Flug in der Liste antippen", 16 * s, C.grau, "middle"); }
+  else text(g + 14 * s, y0 + 20 * s, z.en ? "FLIGHT 6" : "FLUG 6", 17 * s, C.gelb, "start", true);
+  const D = z.en ? [["Duration", "6:48"], ["Used", "2950 mAh"], ["Energy", "66,7 Wh"], ["Max. current", "92 A"], ["Max. power", "2010 W"],
+      ["Max. ESC temp", "61 °C"], ["Lowest cell", "3,58 V"], ["Max. altitude", "98 m"], ["Max. speed", "142 km/h"], ["Battery at end", "34 %"]]
+    : [["Flugdauer", "6:48"], ["Verbrauch", "2950 mAh"], ["Energie", "66,7 Wh"], ["Max. Strom", "92 A"], ["Max. Leistung", "2010 W"],
+      ["Max. Reglertemp.", "61 °C"], ["Tiefste Zelle", "3,58 V"], ["Max. Höhe", "98 m"], ["Max. Speed", "142 km/h"], ["Akku am Ende", "34 %"]];
+  const zh = (h - 40 * s) / 5;
+  if (!z.leer) D.forEach((d, i) => { const cx = g + 14 * s + (i % 2) * (bl / 2), cy = y0 + 40 * s + Math.floor(i / 2) * zh;
+    text(cx, cy + zh * 0.28, d[0], 12 * s, C.grau); text(cx, cy + zh * 0.66, d[1], 22 * s, C.weiss, "start", true); });
+  const xl = 2 * g + bl;
+  text(xl + 14 * s, y0 + 20 * s, z.en ? "FLIGHTS" : "FLÜGE", 17 * s, C.gelb, "start", true);
+  text(xl + bl - 12 * s, y0 + 20 * s, z.leer ? (z.en ? "0 done" : "0 fertig") : (z.en ? "7 done" : "7 fertig"), 13 * s, C.grau, "end");
+  const sp = [xl + 14 * s, xl + bl * 0.50, xl + bl * 0.74, xl + bl - 12 * s];
+  ["Nr", z.en ? "Time" : "Dauer", "mAh", "Max m"].forEach((t, i) => text(sp[i], y0 + Math.max(42 * s, 33), t, 12 * s, C.grau, i ? "end" : "start"));
+  rect(xl + 10 * s, y0 + Math.max(52 * s, 41), bl - 20 * s, 1, C.linie);
+  const R = [["8 " + (z.en ? "running" : "läuft"), "4:12", "1830", "102", C.hblau], ["7", "7:02", "3110", "96"], ["6", "6:48", "2950", "98"],
+    ["5", "5:55", "2620", "88"], ["4", "7:20", "3240", "105"], ["3", "6:10", "2780", "92"]];
+  const ys = y0 + Math.max(52 * s, 41) + 4 * s, rh = (y0 + h - 4 * s - ys) / 6;
+  if (z.leer) { text(xl + bl / 2, y0 + h / 2, z.en ? "No flights yet" : "Noch keine Flüge", 18 * s, C.grau, "middle"); return knoepfe(k, z, kh); }
+  R.forEach((r, i) => { const yy = ys + i * rh;
+    if (i === 2) rect(xl + 6 * s, yy, bl - 12 * s, rh, "#2a3e66", 4 * s);
+    r.slice(0, 4).forEach((t, j) => text(sp[j], yy + rh / 2, t, 20 * s, r[4] || C.weiss, j ? "end" : "start", i === 2)); });
+  knoepfe(k, z, kh);
+}
+
+function knoepfe(k, z, kh) {
+  const s = k.s, W = k.b, H = k.h, g = 8 * s, kb = (W - 4 * g) / 3, ky = H - g - kh, aus_ = z.leer;
+  const kn = [[z.en ? "< BACK" : "< ZURÜCK", C.akzent, C.weiss], [aus_ ? (z.en ? "DELETE FLIGHT" : "FLUG LÖSCHEN") : (z.en ? "DELETE FLIGHT 6" : "FLUG 6 LÖSCHEN"), aus_ ? C.rand : C.orange, aus_ ? C.grau : C.orange], [z.en ? "CLEAR LIST" : "LISTE LÖSCHEN", aus_ ? C.rand : C.akzent, aus_ ? C.grau : C.weiss]];
+  kn.forEach((d, i) => { rect(g + i * (kb + g), ky, kb, kh, C.kachel, 6 * s, d[1], 1.5);
+    text(g + i * (kb + g) + kb / 2, ky + kh / 2, d[0], 15 * s, d[2], "middle", true); });
+}
+
+function dialog(k, d) {
+  const s = k.s, W = k.b, H = k.h;
+  rect(0, 0, W, H, "rgba(0,0,0,0.55)");
+  const b = Math.min(W - 16, Math.max(470 * s, 400)), h = Math.max(200 * s, 140), x = (W - b) / 2, y = (H - h) / 2;
+  rect(x, y, b, h, "#0b1426", 12 * s, C.hblau, Math.max(1.5, 2 * s));
+  text(W / 2, y + 44 * s, d[0], 28 * s, C.weiss, "middle", true);
+  text(W / 2, y + 84 * s, d[1], 16 * s, C.titel, "middle");
+  const kb = (b - 66 * s) / 2, kh = Math.max(46 * s, 32), ky = y + h - kh - 20 * s;
+  rect(x + 22 * s, ky, kb, kh, C.kachel, 6 * s, C.akzent, 2);
+  text(x + 22 * s + kb / 2, ky + kh / 2, d[2], Math.min(16 * s, kb / d[2].length * 1.5), C.weiss, "middle", true);
+  rect(x + 44 * s + kb, ky, kb, kh, C.gruen, 6 * s);
+  text(x + 44 * s + kb * 1.5, ky + kh / 2, d[3], Math.min(16 * s, kb / d[3].length * 1.5), C.dunkel, "middle", true);
+}
+
+let html = "";
+const ZOOM = 0.84;
+for (const z of ZUSTAENDE) {
+  html += `<h2>${z.titel}</h2><div class="reihe">`;
+  for (const d of DISPLAYS) {
+    const k = { ...d, s: Math.min(d.b / 800, d.h / 480), klein: d.b < 640 };
+    aus = []; EN_AN = !!z.en;
+    rect(0, 0, k.b, k.h, C.bg);
+    if (z.liste) seite2(k, z); else seite1(k, z);
+    kopf(k, z);
+    if (z.dialog) { EN_AN = false; dialog(k, z.dialog); }
+    html += `<div class="schirm"><svg width="${k.b * ZOOM}" height="${k.h * ZOOM}" viewBox="0 0 ${k.b} ${k.h}">${aus.join("")}</svg>${d.name}</div>`;
+  }
+  html += "</div>";
+}
+document.getElementById("blatt").innerHTML = html;
+</script>
+</body>
+</html>

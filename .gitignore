@@ -17,5 +17,5 @@ docs/* ENTWURF.pdf
 # Zwischenstände der Simulator-Abläufe
 test/stand-*/
 
-# Übergabedatei nur lokal (Regel des Autors, 20.11.2026)
+# local working notes
 STAND.md

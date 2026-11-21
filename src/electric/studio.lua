@@ -7,6 +7,8 @@ local M = {}
 local floor = math.floor
 
 M.ORDNER = "SCRIPTS:/studio/"
+-- 0.7.0: Suchorte der Studio-Datei, in dieser Reihenfolge. .funke.lua und Info-Datei bleiben in M.ORDNER.
+M.ORTE = { "SCRIPTS:/studio/", "SD:/scripts/studio/", "RADIO:/scripts/studio/" }
 M.LUA = "electric"
 M.LUA_ALT = "elektro"   -- Name bis 0.5.0: eine Studio-Datei <Kennung>.elektro.lua wird noch gelesen (Übergang)
 M.FORMAT = 2           -- höchstes Format, das diese Version liest (Format 2 seit 0.4.0)
@@ -425,13 +427,27 @@ function M.schritt(w, F)
     w.studioJob = J                                      -- gleich weiter mit Stufe 1 (ein Schritt weniger)
   end
   J.n = J.n + 1                                          -- Zahl der Schritte, für die Log-Zeile nach dem Laden
-  if J.stufe == 1 then                                   -- Studio-Datei laden
-    local d, grund = studioLaden(J.basis .. ".lua", M.FORMAT)
-    if not d and grund == "fehlt" then                   -- Übergang 0.6.0: Datei noch unter dem alten Namen (Elektro)
-      local alt = J.k .. "." .. M.LUA_ALT .. ".lua"
-      d, grund = studioLaden(M.ORDNER .. alt, M.FORMAT)
-      if d then print("Electric: old studio file found (" .. alt .. "), please re-transfer from Lua-Studio") end
-      if not d and grund ~= "fehlt" then J.datei = alt end
+  if J.stufe == 1 then                                   -- Studio-Datei suchen und laden, ein Ort je Aufruf
+    local d, grund
+    local lay = type(w.lay) == "string" and w.lay or ""
+    if lay ~= "" and not J.oi then                       -- Wahl im Menü gewinnt (R2.3)
+      J.wahl, J.quelle, J.datei = "menue", lay, lay:match("[^/]+$") or lay
+      d, grund = studioLaden(lay, M.FORMAT)
+      if grund == "fehlt" then print("Electric: chosen studio file missing: " .. lay) J.gewaehltFehlt = true end
+    else
+      J.wahl = "auto"
+      J.oi = (J.oi or 0) + 1
+      local ort = M.ORTE[J.oi]
+      if ort then
+        d, grund = studioLaden(ort .. J.datei, M.FORMAT)
+        if grund == "fehlt" then return nil end           -- nächster Ort im nächsten Aufruf
+        J.quelle = ort .. J.datei
+      else                                                -- Übergang 0.6.0: Datei noch unter dem alten Namen (Elektro)
+        local alt = J.k .. "." .. M.LUA_ALT .. ".lua"
+        d, grund = studioLaden(M.ORDNER .. alt, M.FORMAT)
+        if d then print("Electric: old studio file found (" .. alt .. "), please re-transfer from Lua-Studio") end
+        if grund ~= "fehlt" then J.datei, J.quelle = alt, M.ORDNER .. alt end
+      end
     end
     if not d then
       J.zustand = grund
@@ -689,8 +705,12 @@ function M.infoSchritt(w, version, formate)
     .. ',\n "funke": ' .. jtext(ver.board) .. ',\n "ethos": ' .. jtext(ver.version)
     .. ',\n "fenster": [' .. table.concat(fenster, ", ") .. '],\n "studioDatei": ' .. jtext(st)
     .. ((w.studioFehler and w.studioFehler > 0) and (',\n "fehler": ' .. w.studioFehler) or "")
-    .. ',\n "sensoren": [\n  ' .. table.concat(I.s, ",\n  ") .. '\n ]\n}\n'
+    .. ',\n "sensoren": [\n  ' .. table.concat(I.s, ",\n  ") .. '\n ]'
+    .. ',\n "studioQuelle": ' .. jtext(w.studioQuelle or "") .. ',\n "studioWahl": ' .. jtext(w.studioWahl or "auto")
+    .. ',\n "ansichtGenutzt": ' .. jtext(w.ansichtGenutzt or "") .. ',\n "angepasst": ' .. tostring(w.angepasst == true)
+    .. ',\n "hinweis": ' .. jtext(w.sGrund or w.sAngepasst or "") .. '\n}\n'
   w.infoJob = nil
+  if w.testKennung and t ~= w.infoAlt then print("ZUSTAND INFO " .. t:gsub("\n", " ")) end   -- nur Testbilder
   if t == w.infoAlt then return true end               -- nichts geändert: nicht schreiben (SD-Karte schonen)
   pcall(os.mkdir, "SCRIPTS:/studio")
   local ok, f = pcall(io.open, M.ORDNER .. (w.testKennung or M.kennung()) .. "." .. M.LUA .. ".info.json", "w")
@@ -770,6 +790,100 @@ function M.anwenden(w, J, F)
   end
   for key in pairs(schl) do S.offen[#S.offen + 1] = key end
   w.studio = S
+end
+
+-- ===== 0.7.0: Liste für das Menü «Studio-Layout» (nur beim Öffnen des Menüs, R2.4) =====
+-- Alle *.electric.lua der Suchorte ohne .funke.lua; gleicher Name an einem späteren Ort nur einmal (SCRIPTS: kann
+-- derselbe Ordner sein wie SD:/scripts). Rückgabe: { { pfad, name, ort }, ... }
+function M.liste()
+  local r, schon = {}, {}
+  local ende = "." .. M.LUA .. ".lua"
+  for _, ort in ipairs(M.ORTE) do
+    local ok, l = pcall(system.listFiles, ort)
+    if ok and type(l) == "table" then
+      for _, n in ipairs(l) do
+        if type(n) == "string" and n:sub(-#ende) == ende and not n:find("%.funke%.lua$") and not schon[n] and #r < 40 then
+          schon[n] = true
+          r[#r + 1] = { ort .. n, n, ort:match("^(%u+):") or ort }
+        end
+      end
+    end
+  end
+  return r
+end
+
+-- ===== 0.7.0: Ansicht auf eine andere Fenstergrösse umrechnen (R3), einmal je Grösse, im wakeup =====
+-- Kopfzeile wie Z.layout (zeichnen.lua): Plätze bleiben darunter.
+local function kopfH(W, H)
+  local kompakt = H < W * 0.5 or W < 400 or H < 250
+  local sk = kompakt and math.min(W / 784, H / 316) * 0.72 or math.min(W / 800, H / 480)
+  return floor((kompakt and 47 or 56) * sk)
+end
+
+-- Ansicht mit dem ähnlichsten Seitenverhältnis, bei Gleichstand die grössere Fläche
+function M.besteAnsicht(ansichten, W, H)
+  local best, bd, bf = nil, nil, nil
+  for _, a in pairs(ansichten) do
+    if not a.angepasst then
+      local d = math.abs(math.log((a.breite / a.hoehe) / (W / H)))
+      local f = a.breite * a.hoehe
+      if best == nil or d < bd - 1e-9 or (math.abs(d - bd) <= 1e-9 and f > bf) then best, bd, bf = a, d, f end
+    end
+  end
+  return best
+end
+
+function M.umrechnen(w, W, H)
+  local S = w.studio
+  local a = S and M.besteAnsicht(S.ansichten, W, H)
+  if a == nil then return nil end
+  local kq, kz = kopfH(a.breite, a.hoehe), kopfH(W, H)
+  local fx, fy = W / a.breite, (H - kz) / math.max(1, a.hoehe - kq)
+  local function px(x) return floor(x * fx + 0.5) end
+  local function py(y) return kz + floor(math.max(0, y - kq) * fy + 0.5) end
+  local n = { breite = W, hoehe = H, plaetze = {}, angepasst = true, von = a.breite .. "x" .. a.hoehe, weg = 0 }
+  for _, q in ipairs(a.plaetze) do
+    local x, y = px(q.x), py(q.y)
+    local b, h = math.min(W - x, px(q.x + q.b) - x), math.min(H - y, py(q.y + q.h) - y)
+    local darst = q.darst
+    local function passt(d) return b >= floor(M.DARST[d][1] * W / 800 + 0.5) and h >= floor(M.DARST[d][2] * W / 800 + 0.5) end
+    if not passt(darst) then darst = "zahl" end
+    if b >= 1 and h >= 1 and passt(darst) then
+      local q2 = {}
+      for k, v in pairs(q) do q2[k] = v end
+      q2.x, q2.y, q2.b, q2.h, q2.darst = x, y, b, h, darst
+      if q.roh then
+        local r = {}
+        for k, v in pairs(q.roh) do r[k] = v end
+        r.x, r.y, r.b, r.h = x, y, b, h
+        if darst ~= q.darst then r.darstellung = darst end
+        q2.roh = r
+      end
+      n.plaetze[#n.plaetze + 1] = q2
+    else
+      n.weg = n.weg + 1
+    end
+  end
+  if a.roh then                                          -- Format 2: Schmuck mit umrechnen (studio_symbole.lua)
+    n.roh = { breite = W, hoehe = H }
+    local SY = w.sym
+    if SY and SY.dekoUmrechnen then
+      local ok, _, weg = pcall(SY.dekoUmrechnen, a.roh, n.roh, function(g)
+        local g2 = {}
+        for k, v in pairs(g) do g2[k] = v end
+        g2.s = nil                                       -- Schrift neu wählen (textVorbereiten)
+        g2.x, g2.y = px(g.x), py(g.y)
+        if g.b then
+          if g.a == "linie" then g2.b, g2.h = px(g.x + g.b) - g2.x, py(g.y + g.h) - g2.y
+          else g2.b, g2.h = math.max(1, px(g.x + g.b) - g2.x), math.max(1, py(g.y + g.h) - g2.y) end
+        end
+        if g2.x >= W or g2.y >= H or (g2.b and (g2.x + g2.b > W or g2.y + g2.h > H)) then return nil end
+        return g2
+      end, W, H)
+      if ok and weg then n.weg = n.weg + weg end
+    end
+  end
+  return n
 end
 
 -- Sensoren und Kanäle der Studio-Datei suchen, in Schritten. Rückgabe true = fertig.

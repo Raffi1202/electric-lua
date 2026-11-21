@@ -862,6 +862,8 @@ local function studioWecke(w, now, nurLaden)
   if not w.studioFertig then
     local F = lade("felder.lua")
     if TEST and TEST.kennung then w.testKennung = TEST.kennung end   -- neutrale Kennung für Testbilder
+    if TEST and TEST.lay and not w.testLay then w.lay, w.testLay = TEST.lay, true end   -- Wahl wie der Menü-Setter
+    if TEST and TEST.orte then STUDIO.ORTE = TEST.orte end   -- Suchorte nachstellen (Simulator: ein Ordner für alle)
     local okJ, J = pcall(STUDIO.schritt, w, F)
     if not okJ then                                     -- Laufzeitfehler beim Laden: Standardanzeige, nie hängen bleiben
       print(tostring(w.name) .. ": Studio-Datei: " .. tostring(J))
@@ -875,6 +877,13 @@ local function studioWecke(w, now, nurLaden)
     end
     w.studioFertig, w.infoOffen, w.studioZustand, w.studio = true, true, J.zustand, nil
     w.studioKennung = J.k
+    -- 0.7.0: woher die Datei kommt und warum ggf. die Standardanzeige bleibt (R4)
+    w.studioQuelle, w.studioWahl = J.quelle, J.wahl or "auto"
+    w.sGrund, w.sAngepasst, w.angepasst, w.ansichtGenutzt, w.skalWunsch = nil, nil, false, nil, nil
+    if J.zustand == "kaputt" then w.sGrund = string.format(T.sGrundKaputt, tostring(J.datei))
+    elseif J.zustand == "zuNeu" then w.sGrund = T.studioZuNeu
+    elseif J.zustand == "fehlt" and J.gewaehltFehlt then w.sGrund = string.format(T.sGrundFehlt, tostring(J.datei))
+    elseif J.zustand == "geladen" and next(J.ansichten or {}) == nil then w.sGrund = T.sGrundKeine end
     symFrei(w)
     if J.zustand == "geladen" then
       STUDIO.anwenden(w, J, F)
@@ -901,6 +910,25 @@ local function studioWecke(w, now, nurLaden)
     return
   end
   if w.studio and not nurLaden then STUDIO.wecke(w, now) end
+  local sw = w.skalWunsch
+  if sw and w.studio and not w.symOffen then              -- 0.7.0: Ansicht einmal je Fenstergrösse umrechnen (R3)
+    w.skalWunsch = nil
+    local key = sw[1] .. "x" .. sw[2]
+    local ok, n = pcall(STUDIO.umrechnen, w, sw[1], sw[2])
+    if ok and n then
+      w.studio.ansichten[key] = n
+      local t = string.format(T.sAngepasst, n.von) .. (n.weg > 0 and string.format(T.sWeg, tostring(n.weg)) or "")
+      w.sAngepasst = t
+      studioHinweis(w, t, now)
+      w.sHinweisBis, w.sKurz = now + 5, true            -- 5 s, danach kein «!»
+    else
+      if not ok then print(tostring(w.name) .. ": Umrechnen: " .. tostring(n)) end
+      w.studio.keine = w.studio.keine or {}
+      w.studio.keine[key] = true
+      w.sGrund = T.sGrundKeine
+    end
+    w.infoOffen = true
+  end
   if w.symOffen and w.sym then                          -- Symbole: Prüfen und Laden in Stücken (nie in paint)
     local ok, fertig = pcall(w.sym.schritt)
     if not ok or fertig then
@@ -947,7 +975,10 @@ function K.wecke(w)
     flug(w, now, dt)
     ansagen(w, now)
     if not w.studioFertig or w.studio or w.infoOffen then studioWecke(w, now) end
-    if w.sHinweis and now >= w.sHinweisBis then w.sHinweis = nil end
+    if w.sHinweis and now >= w.sHinweisBis then
+      w.sHinweis = nil
+      if w.sKurz then w.sAusruf, w.sKurz = false, nil end
+    end
     if TEST and TEST.zustand then testZustand(w, now) end
     if w.hinweis and now >= w.hinweisBis then w.hinweis = nil end
     -- Datei schreiben: sofort nach einer Rückfrage, sonst frühestens 2 s nach dem letzten Schreiben
@@ -1053,10 +1084,21 @@ function K.zeichne(w)
   local S = SEITE[w.seite]
   local A = w.studio and w.seite == 1 and w.studio.ansichten[W .. "x" .. H]
   local J = w.studioJob
+  local warte = false
+  if w.studio and w.seite == 1 and not A and next(w.studio.ansichten) and not (w.studio.keine and w.studio.keine[W .. "x" .. H]) then
+    if w.skalWunsch == nil then w.skalWunsch = { W, H } end   -- umrechnen im wakeup, nicht hier (Befehlsgrenze)
+    warte = true
+  end
+  if A then
+    local g = A.von or (W .. "x" .. H)
+    if g ~= w.ansichtGenutzt or (A.angepasst == true) ~= w.angepasst then
+      w.ansichtGenutzt, w.angepasst, w.infoOffen = g, A.angepasst == true, true
+    end
+  end
   if A and STUDIO then                             -- Ansicht der Studio-Datei für genau diese Fenstergrösse
     if ANSICHT == nil then ANSICHT = lade("ansicht.lua") end
     ANSICHT.zeichne(w, L, Z, A, STUDIO)
-  elseif w.seite == 1 and not w.studioFertig and J and J.stufe and J.stufe >= 2 and kommtAnsicht(J, W, H) then
+  elseif warte or (w.seite == 1 and not w.studioFertig and J and J.stufe and J.stufe >= 2 and kommtAnsicht(J, W, H)) then
     -- Studio-Datei gefunden und sie hat eine Ansicht für genau diese Fenstergrösse: nicht kurz das Standardlayout
     -- zeigen. Ohne passende Ansicht gilt Format 2, 7.1 (eingebaute Belegung, solange die Prüfung läuft).
     Z.text(L, W / 2, H / 2, w.T.studioLaedt, 20, Z.C.grau, CENTERED, W - 16)
@@ -1066,6 +1108,10 @@ function K.zeichne(w)
   Z.kopf(w, L)
   Z.hinweis(w, L)
   Z.studioHinweis(w, L)
+  if w.seite == 1 and not A and not warte and w.sGrund and not w.sHinweis then   -- Standardanzeige: Grund unten (R4)
+    Z.rechteck(0, H - 24, W, 24, Z.C.dunkel)
+    Z.text(L, W / 2, H - 12, w.sGrund, 14, Z.C.orange, CENTERED, W - 8, true)
+  end
   if w.dialog then
     w.zielAb = w.nZiele + 1      -- bei offener Rückfrage zählen nur ihre eigenen Knöpfe
     Z.dialog(w, L)
@@ -1115,6 +1161,11 @@ local function aktion(w, id, arg, now)
     w.dialog = nil
     local nr = arg or w.wahl
     if flugLoeschen(w, nr) then hinweis(w, string.format(T.geloescht, tostring(floor(nr))), now) end
+  elseif id == "lay" then                          -- 0.7.0: Wahl «Studio-Layout» im Menü, gleich neu laden
+    w.lay = type(arg) == "string" and arg or ""
+    if model and model.dirty then pcall(model.dirty) end
+    w.studio, w.studioFertig, w.studioJob, w.funkeOffen = nil, false, nil, false
+    symFrei(w)
   elseif id == "ja_studio" then                    -- Zurück auf Studio-Stand: .funke.lua löschen, neu laden
     w.dialog = nil
     if STUDIO == nil then STUDIO = lade("studio.lua") end
@@ -1229,6 +1280,10 @@ end
 
 function K.menue(w)
   local F = lade("felder.lua")
+  w.studioListe = function()                         -- Liste «Studio-Layout»: nur beim Öffnen des Menüs (R2.4)
+    if STUDIO == nil then STUDIO = lade("studio.lua") end
+    return STUDIO.liste()
+  end
   lade("menue.lua")(w, F, function()
     grenzen(w)
     w.dateiOffen = true

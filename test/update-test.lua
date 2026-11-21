@@ -37,6 +37,7 @@ local q = F.quellen()
 for fmt, anz in pairs(F.FORMATE) do
   SPEICHER, LESE = { fmt }, 0
   for i = 1, anz do SPEICHER[#SPEICHER + 1] = quelle("Q" .. i) end
+  if fmt >= 2 then SPEICHER[#SPEICHER + 1] = "SD:/scripts/studio/X.electric.lua" end   -- 0.7.0: Wahl Studio-Layout
   SPEICHER[#SPEICHER + 1] = fmt
   local w = { name = "Electric" }
   DATEI = nil
@@ -46,6 +47,15 @@ for fmt, anz in pairs(F.FORMATE) do
     local v = w.cfg[q[i]]
     pruef(v and v:name() == "Q" .. i, "Format " .. fmt .. ": Quelle " .. q[i] .. " verloren")
   end
+  pruef(w.lay == (fmt >= 2 and "SD:/scripts/studio/X.electric.lua" or ""), "Format " .. fmt .. ": Wahl Studio-Layout falsch (" .. tostring(w.lay) .. ")")
+  -- zurückschreiben und wieder lesen (Ethos liest nach Reihenfolge): alles bleibt
+  SPEICHER, LESE = {}, 0
+  F.schreibe(w)
+  local w2 = { name = "Electric" }
+  F.lies(w2)
+  local gleich = w2.lay == w.lay
+  for i = 1, anz do gleich = gleich and w2.cfg[q[i]] == w.cfg[q[i]] end
+  pruef(gleich, "Format " .. fmt .. " -> " .. F.FORMAT .. ": Schreiben und Lesen verliert etwas")
 end
 pruef(F.FORMATE[F.FORMAT] == #q, "FORMATE[FORMAT] muss der Zahl der Quellen entsprechen (" .. #q .. ")")
 

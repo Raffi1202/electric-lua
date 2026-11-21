@@ -1,4 +1,4 @@
-# Testleitfaden Electric 0.6.1
+# Testleitfaden Electric 0.7.0
 
 Danke, dass du Electric testest! Arbeite die Testfälle der Reihe nach durch und hake ab, was so klappt wie beschrieben.
 Klappt etwas nicht, melde es (ganz unten steht wie). Ein Testfall dauert meistens nur ein bis zwei Minuten.
@@ -15,7 +15,7 @@ order as the manual. Report problems with the issue template «Fehler / Bug».*
   Drehzahl, Reglertemperatur, Höhe, Speed oder Zellensensor sind willkommen, aber freiwillig.
 - Am Modell: die Sensoren schon gesucht (Modell › Telemetrie › Sensoren suchen).
 - Computer mit der FrSky Suite und ein USB-Kabel.
-- Die Datei `Electric-0.6.1.zip` aus dem GitHub-Release (Seite «Releases» rechts im Repo).
+- Die Datei `Electric-0.7.0.zip` aus dem GitHub-Release (Seite «Releases» rechts im Repo).
 - Die Anleitung `docs/Electric - Anleitung.pdf`. Die Testfälle verweisen auf ihre Kapitel.
 
 **Sicherheit:** Teste mit abgenommenem Propeller, solange du am Tisch arbeitest. Der Flugtest (Testfall 11)
@@ -29,7 +29,7 @@ es legt nur Dateien im Ordner `scripts/electric` an.
 Notiere dir für die Meldung: Sender, Ethos-Version (System › Info) und welche Sensoren dein Modell hat.
 
 ### 1. Installieren (Anleitung Kapitel 2)
-- [ ] Mit der FrSky Suite: Lua-Bibliothek › Von lokaler ZIP installieren › `Electric-0.6.1.zip`. Sender neu starten.
+- [ ] Mit der FrSky Suite: Lua-Bibliothek › Von lokaler ZIP installieren › `Electric-0.7.0.zip`. Sender neu starten.
 - **Erwartet:** Die Suite meldet keinen Fehler. Nach dem Neustart erscheint keine Fehlermeldung.
 
 ### 2. Bildschirm einrichten (Kapitel 3)
@@ -142,7 +142,7 @@ Notiere dir für die Meldung: Sender, Ethos-Version (System › Info) und welche
 
 Ideen und Wünsche bitte mit der Vorlage **«Wunsch / Idee»**.
 
-## Bekannte Grenzen von 0.6.1
+## Bekannte Grenzen von 0.7.0
 
 - Am echten Sender getestet nur auf der **X18RS** (Ethos 26.2.0). Die anderen Sender nur im Simulator.
 - Nicht am echten Sender geprüft: jeder Menüpunkt einzeln, Flugerkennung und Flugliste mit einem echten Flug.

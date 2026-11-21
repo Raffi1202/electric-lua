@@ -23,7 +23,7 @@ io.open = function(p, m) return alt((p:sub(1, 1) == "/" and "" or tmp .. "/") ..
 os.mkdir = function() return true end
 local F = assert(loadfile(quelle .. "felder.lua"))()
 
-pruefe(F.FORMAT == 1 and F.FORMATE[1] == 18, "FORMAT 1 mit 18 Quellen wie 0.5.0")
+pruefe(F.FORMATE[1] == 18, "FORMAT 1 mit 18 Quellen wie 0.5.0 wird weiter gelesen")
 local q = F.quellen()
 local gleich = #q == #FOLGE_050
 for i, n in ipairs(FOLGE_050) do if q[i] ~= n then gleich = false end end
@@ -54,8 +54,9 @@ pruefe(w.dauer.fluege == 12 and #w.liste == 1 and w.liste[1][3] == 3110, "Zähle
 -- Zurückschreiben: gleiches Format
 SP = {}
 F.schreibe(w)
-pruefe(SP.fmt == 1 and SP.ende == 1 and SP.q1 and SP.q1.n == "Q-uGes" and SP.q3 == 0 and SP.q18 == 0 and SP.q19 == nil,
-  "Schreiben bleibt im Format von 0.5.0 (fmt 1, q1..q18)")
+pruefe(w.lay == "", "Speicher von 0.5.0: Wahl Studio-Layout steht auf automatisch")
+pruefe(SP.fmt == 2 and SP.ende == 2 and SP.q1 and SP.q1.n == "Q-uGes" and SP.q3 == 0 and SP.q18 == 0 and SP.q19 == nil
+  and SP.lay == "", "Schreiben: Quellen q1..q18 wie 0.5.0, am Ende die Wahl (fmt 2, 0.7.0)")
 
 -- 0.6.1: keine Datei im neuen Ordner, aber im alten scripts/elektro/daten: wird gelesen, nie gelöscht
 assert(os.execute("mkdir -p '" .. tmp .. "/SCRIPTS:/elektro/daten' && mv '" .. tmp .. "/" .. F.datei() .. "' '" .. tmp .. "/SCRIPTS:/elektro/" .. F.datei() .. "'"))

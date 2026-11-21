@@ -3,6 +3,21 @@
 The version number is in `src/electric/main.lua` (`local VERSION`). It is the same in the manual, the Suite package and here.
 The top section appears in the FrSky Suite as version note. From 0.5.0 on in English; older entries in German.
 
+## 0.7.0 (22 Nov 2026, pre-release)
+
+- Studio layout is always found: the Studio file is searched in `SCRIPTS:/studio/`, `SD:/scripts/studio/` and
+  `RADIO:/scripts/studio/` (in this order). `.funke.lua` and the info file stay in `SCRIPTS:/studio/`.
+- New menu entry «Studio layout»: choose any `*.electric.lua` (shown with its location) if the file name does not match
+  the model name; «automatic (model name)» is the previous way. The choice wins and is stored at the end of the widget
+  storage (FORMAT 2). Storage from 0.6.1 is read without loss, the choice is then «automatic».
+- Other window size: without an exact layout, the layout with the most similar aspect ratio is scaled to the window
+  (below the header), once per size in wakeup. Boxes that get too small become a number or are left out (counted).
+  A hint «Studio: view 800x480 adapted» shows for 5 s.
+- If the built-in display stays although a file was found or chosen, a line at the bottom gives the reason
+  («Studio: file broken (…)», «Studio: no matching view», «Studio: chosen file missing (…)»).
+- Info file: new fields at the end `studioQuelle`, `studioWahl`, `ansichtGenutzt`, `angepasst`, `hinweis`.
+- Tests: `test/layout-test.lua` (cases F1–F5 on the Mac).
+
 ## 0.6.1 (21 Nov 2026, pre-release)
 
 - Upgrade from Elektro: if there is no `daten/<model>.txt` in `scripts/electric`, Electric reads the old one from

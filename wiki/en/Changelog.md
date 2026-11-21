@@ -4,6 +4,7 @@
 
 All changes are listed in [CHANGELOG.md](../../CHANGELOG.md). Versions:
 
+- 0.7.0 (22.11.2026): Studio layout always found (locations, menu choice, scaling) / Studio-Layout wird immer gefunden (Orte, Wahl im Menü, Umrechnen)
 - 0.6.1 (21.11.2026): takes over data from scripts/elektro / übernimmt Daten aus scripts/elektro
 - 0.6.0 (21.11.2026): renamed from Elektro / umbenannt von Elektro
 - 0.5.0 (21.11.2026)

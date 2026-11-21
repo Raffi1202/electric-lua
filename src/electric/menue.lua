@@ -42,6 +42,27 @@ return function(w, F, fertig, suche, aktion)
       else frage(T.qStandard, T.qStandardZ, T.jaZurueck, "ja_standard") end
     end })
   end
+  -- 0.7.0: Studio-Layout wählen (R2). Die Liste entsteht nur hier, beim Öffnen des Menüs.
+  if form.addChoiceField and w.studioListe then
+    local okL, l = pcall(w.studioListe)
+    l = okL and l or {}
+    local werte, pfade = { { T.mLayoutAuto or "automatisch", 1 } }, { "" }
+    local akt = 1
+    for i, e in ipairs(l) do
+      werte[#werte + 1] = { e[2] .. " (" .. e[3] .. ")", i + 1 }
+      pfade[i + 1] = e[1]
+      if e[1] == w.lay then akt = i + 1 end
+    end
+    if akt == 1 and w.lay and w.lay ~= "" then           -- gewählte Datei nicht mehr da: trotzdem anzeigen
+      werte[#werte + 1] = { (w.lay:match("[^/]+$") or w.lay) .. " (?)", #werte + 1 }
+      pfade[#werte] = w.lay
+      akt = #werte
+    end
+    form.addChoiceField(form.addLine(T.mLayout or "Studio layout"), nil, werte, function() return akt end, function(v)
+      akt = v
+      pcall(aktion, "lay", pfade[v] or "")
+    end)
+  end
   local zh = form.addLine(T.mHerkunft)
   w.fHerkunft = form.addStaticText(zh, nil, w.herkunft or "")
 

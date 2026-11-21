@@ -181,8 +181,10 @@ M.folge = {
 -- bleiben stehen, damit ein Update die Zuweisungen behält (Lehre Motoren ECU 1.2.0, 19.11.2026).
 -- 0.5.0: die 10 Einstellungen «Alarm auch bei Motor aus» (akkuMot … lqMot) sind Ja/Nein-Werte. Sie stehen mit Namen
 -- in der Datei daten/<Modell>.txt (bzw. mit Studio-Datei in der .funke.lua), nicht im Widget-Speicher: FORMAT bleibt 1.
-M.FORMAT = 1
-M.FORMATE = { [1] = 18 }
+-- 0.7.0: FORMAT 2 = Format 1 und danach am Ende die Wahl «Studio-Layout» (Text: Pfad der Datei, "" = automatisch).
+-- Ein Speicher in Format 1 (bis 0.6.1) wird weiter gelesen, die Wahl steht dann auf automatisch.
+M.FORMAT = 2
+M.FORMATE = { [1] = 18, [2] = 18 }
 
 -- Feld zu einem Namen (Verzeichnis einmal aufbauen: Ethos begrenzt die Befehle je Aufruf).
 local INDEX = nil
@@ -331,6 +333,7 @@ end
 function M.lies(w)
   local c = M.standard()
   w.cfg = c
+  w.lay = ""                                       -- Studio-Layout: automatisch (Modellname)
   local gefunden = false
   -- Quellen aus dem Widget-Speicher, in jedem bekannten Format
   if storage and storage.read then
@@ -345,11 +348,13 @@ function M.lies(w)
     if anz then
       local werte = {}
       for i = 1, anz do werte[i] = hol("q" .. i) end
+      local lay = fmt >= 2 and hol("lay") or nil     -- Ethos liest nach Reihenfolge: vor «ende»
       if hol("ende") == fmt then
         gefunden = true
         for i, name in ipairs(q) do
           if i <= anz then c[name] = istQuelle(werte[i]) and werte[i] or nil end
         end
+        if fmt >= 2 then w.lay = type(lay) == "string" and lay or "" end
       else
         print(tostring(w.name) .. ": gespeicherte Sensoren unlesbar, bitte neu zuweisen")
       end
@@ -410,6 +415,7 @@ function M.schreibe(w)
     local v = c[name]
     pcall(storage.write, "q" .. i, istQuelle(v) and v or 0)
   end
+  pcall(storage.write, "lay", type(w.lay) == "string" and w.lay or "")
   pcall(storage.write, "ende", M.FORMAT)
 end
 

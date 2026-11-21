@@ -16,7 +16,7 @@
 | A single value shows a dash | Sensor not assigned or sends nothing | Menu › Sensors: check the line (chapter 4). |
 | THROTTLE shows a dash and «Select throttle» | No throttle channel set | Menu › Flight › Throttle channel (chapter 8). |
 | Red text at the bottom left | Script error. The radio keeps working. | Take a photo of the text and report it: on GitHub under Issues, template «Fehler / Bug» (see TESTLEITFADEN.md in the repository). |
-| At the bottom «Studio file broken - default», «too new» or «n errors», then «!» at the top right | The Lua-Studio file is broken, made for a newer Elektro version or contains invalid entries | Transfer it again from Lua-Studio or update Elektro. What exactly is wrong is in the log (one line per error). |
+| At the bottom «Studio file broken - default», «too new» or «n errors», then «!» at the top right | The Lua-Studio file is broken, made for a newer Electric version or contains invalid entries | Transfer it again from Lua-Studio or update Electric. What exactly is wrong is in the log (one line per error). |
 | The widget is missing from the list | Not installed or radio not restarted | Repeat chapter 2, restart the radio. |
 
 ## 10. Update and remove
@@ -26,7 +26,7 @@
 **Remove:** first take the widget off the screen (Model › Screens), then uninstall it in FrSky Suite under Lua library.
 
 ### Lua memory («too much RAM»)
-All Lua scripts on the radio share one Lua memory (about 2048 KB on the X18RS). If Ethos reports «too much RAM» or not enough Lua memory, switch the radio off and on again. From version 0.5.0 Elektro frees its memory when you change to a model without Elektro (about 5 KB stay, measured in the simulator).
+All Lua scripts on the radio share one Lua memory (about 2048 KB on the X18RS). If Ethos reports «too much RAM» or not enough Lua memory, switch the radio off and on again. From version 0.5.0 Electric frees its memory when you change to a model without Electric (about 5 KB stay, measured in the simulator).
 
 ---
 [← Home](../Home.md) | [Previous](FAQ.md) | [Next →](Changelog.md)

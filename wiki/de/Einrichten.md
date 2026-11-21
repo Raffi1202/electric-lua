@@ -6,17 +6,17 @@
 
 1. Tippe unten auf das Symbol **Bildschirme** (zwei Rechtecke).
 2. Tippe oben rechts auf **+**.
-3. Wische nach unten bis zum Layout **Vollbild** (ein einziges grosses Feld) und tippe es an. Willst du die Ethos-Kopf- und Fussleiste behalten, wähle das Layout mit **einem Feld und den Leisten** (im Auswahlraster unten in der Mitte); Elektro zeigt dann die Kompaktansicht (Kapitel 5).
+3. Wische nach unten bis zum Layout **Vollbild** (ein einziges grosses Feld) und tippe es an. Willst du die Ethos-Kopf- und Fussleiste behalten, wähle das Layout mit **einem Feld und den Leisten** (im Auswahlraster unten in der Mitte); Electric zeigt dann die Kompaktansicht (Kapitel 5).
 4. Tippe in das leere Feld, dann auf **Widget**.
-5. Wische in der Liste ganz nach unten und wähle **Elektro**. Die Anzeige erscheint sofort.
+5. Wische in der Liste ganz nach unten und wähle **Electric**. Die Anzeige erscheint sofort.
 
 Das Menü des Widgets erreichst du später jederzeit über Modell › Bildschirme › den Bildschirm wählen › Widget antippen.
 
 ## 4. Sensoren und Akku einstellen
 
-1. Schalte das Modell ein, damit die Telemetrie läuft. Beim ersten Mal sucht Elektro die Sensoren selbst; unten erscheint kurz blau «… Sensoren automatisch zugewiesen».
+1. Schalte das Modell ein, damit die Telemetrie läuft. Beim ersten Mal sucht Electric die Sensoren selbst; unten erscheint kurz blau «… Sensoren automatisch zugewiesen».
 2. Öffne das Menü und die Gruppe **Sensoren**. Kontrolliere jede Zeile. Was leer oder falsch ist, wählst du von Hand. Eine leere Zeile ist erlaubt, das Feld zeigt dann einen Strich.
-3. Mit **Sensoren suchen (nur leere)** › **Suchen** füllt Elektro später nur die leeren Zeilen, deine eigene Wahl bleibt. Hast du in Ethos Sensoren gelöscht und neu gesucht, lade zuerst das Modell neu (anderes Modell wählen und zurück), sonst bleiben die Werte auf 0. Danach bindet die Suche jede Zeile an den passenden Sensor (gleiche Kennung und gleicher Name); Zeilen, deren Sensor nicht mehr in der Sensorliste steht, auch von Hand gewählte, werden neu gesucht.
+3. Mit **Sensoren suchen (nur leere)** › **Suchen** füllt Electric später nur die leeren Zeilen, deine eigene Wahl bleibt. Hast du in Ethos Sensoren gelöscht und neu gesucht, lade zuerst das Modell neu (anderes Modell wählen und zurück), sonst bleiben die Werte auf 0. Danach bindet die Suche jede Zeile an den passenden Sensor (gleiche Kennung und gleicher Name); Zeilen, deren Sensor nicht mehr in der Sensorliste steht, auch von Hand gewählte, werden neu gesucht.
 4. In der Gruppe **Zuordnung prüfen** steht je Zeile der gewählte Sensor mit Physical ID und AppID (z. B. «ESC Strom P04 / 0B50»). Passten mehrere gleiche Sensoren, steht darunter «n Sensoren passen, gewählt: … - bitte prüfen».
 5. Öffne die Gruppe **Akku** und stelle **Akkuart**, **Zellenzahl** und **Kapazität** deines Flugakkus ein.
 
@@ -31,12 +31,12 @@ Das Menü des Widgets erreichst du später jederzeit über Modell › Bildschirm
 | Höhe, Vario, Geschwindigkeit | Vom Vario oder GPS (z. B. «Alt», «VSpd», «GSpd»). |
 | RSSI, LQ | Empfangsstärke «RSSI», bei ELRS und ähnlichen die Verbindungsqualität «LQ». |
 
-**Zellen mit und ohne Zellensensor.** Hast du einen Zellensensor, zeigt das Feld «ZELLE TIEFST» die schwächste Zelle, darunter einen kleinen Balken je Zelle (die schwächste gelb) und «Δ» = Unterschied zwischen stärkster und schwächster Zelle. Ohne Zellensensor zeigt «ZELLE Ø» die mittlere Zelle = Gesamtspannung ÷ Zellenzahl, darunter einen Balken mit der Gesamtspannung. Dafür muss die **Zellenzahl** eingestellt sein; Elektro rät sie nie aus der Spannung. Steht sie auf 0 (automatisch) und es gibt keinen Zellensensor, steht im Feld orange «Zellenzahl?» und im Akku-Tacho «Zellenzahl einstellen».
+**Zellen mit und ohne Zellensensor.** Hast du einen Zellensensor, zeigt das Feld «ZELLE TIEFST» die schwächste Zelle, darunter einen kleinen Balken je Zelle (die schwächste gelb) und «Δ» = Unterschied zwischen stärkster und schwächster Zelle. Ohne Zellensensor zeigt «ZELLE Ø» die mittlere Zelle = Gesamtspannung ÷ Zellenzahl, darunter einen Balken mit der Gesamtspannung. Dafür muss die **Zellenzahl** eingestellt sein; Electric rät sie nie aus der Spannung. Steht sie auf 0 (automatisch) und es gibt keinen Zellensensor, steht im Feld orange «Zellenzahl?» und im Akku-Tacho «Zellenzahl einstellen».
 
-![Zellensensor](../../docs/bilder-simulator/Elektro%20-%20Sim%20800x480%2020%20Zellensensor.png)
+![Zellensensor](../../docs/bilder-simulator/Electric%20-%20Sim%20800x480%2020%20Zellensensor.png)
 *Mit Zellensensor: ZELLE TIEFST, Balken je Zelle*
 
-![Zellenzahl fehlt](../../docs/bilder-simulator/Elektro%20-%20Sim%20800x480%2011%20nur%20ein%20Teil%20der%20Sensoren.png)
+![Zellenzahl fehlt](../../docs/bilder-simulator/Electric%20-%20Sim%20800x480%2011%20nur%20ein%20Teil%20der%20Sensoren.png)
 *Ohne Zellensensor und ohne Zellenzahl: «Zellenzahl einstellen»*
 
 ## 8. Alle Einstellungen

@@ -1,13 +1,13 @@
--- Elektro: Verhalten nach einem Neustart des Senders (Befunde der unabhängigen Prüfung vom 20.11.2026).
+-- Electric: Verhalten nach einem Neustart des Senders (Befunde der unabhängigen Prüfung vom 20.11.2026).
 -- Aufruf aus dem Repo-Ordner:  /opt/homebrew/opt/lua@5.4/bin/lua test/neustart-test.lua
--- Läuft in einer Kopie von src/elektro in einem temporären Ordner (das Skript schreibt daten/).
+-- Läuft in einer Kopie von src/electric in einem temporären Ordner (das Skript schreibt daten/).
 --  a) Nullpunkt «AUF 0» gespeichert, nach dem Neustart beginnt der Regler wieder bei 0: Verbraucht zählt ab 0.
 --  b) Pausierter Flug vor dem Neustart, «Akkuwechsel beendet Flug» an: Er kommt in die Liste, der nächste
 --     Motorlauf ist ein neuer Flug.
 --  c) RSSI in dBm (negativ): angezeigt wie im Sensormenü (-80 dBm), intern +120 für Schwellen.
 --  d) Motorschalter über state() (0.3.1).  e) Höchstwert nach Quellwechsel neu (0.3.1).
 --  f) Alarm mit Studio «ansage = false»: trotzdem Ton (0.3.2).  g) wakeup mit 160 Grenzen < 5000 Befehle (0.3.2).
-local quelle = arg[0]:gsub("test/neustart%-test%.lua$", "") .. "src/elektro"
+local quelle = arg[0]:gsub("test/neustart%-test%.lua$", "") .. "src/electric"
 local tmp = os.tmpname()
 os.remove(tmp)
 assert(os.execute("mkdir -p '" .. tmp .. "/daten' && cp '" .. quelle .. "'/*.lua '" .. tmp .. "/'"))
@@ -139,7 +139,7 @@ pruefe(w.v.tempHoch == 90, "e) Temperatur: gleiche Quelle, MAX bleibt 90")
 CATEGORY_SWITCH_POSITION = nil
 assert(os.execute("mkdir -p '" .. tmp .. "/SCRIPTS:/studio'"))
 local function esc(t) return '"' .. t:gsub(".", function(c) return "\\" .. c:byte() end) .. '"' end
-local fs = io.open("SCRIPTS:/studio/TEST.elektro.lua", "w")
+local fs = io.open("SCRIPTS:/studio/TEST.electric.lua", "w")
 fs:write("return { format = 1, grenzen = { [" .. esc("lua:reglertemp") .. "] = { richtung = " .. esc("ueber")
   .. ", warnung = 70, alarm = 85, ansage = false, vibration = false } } }")
 fs:close()
@@ -157,7 +157,7 @@ toene, werte.t = 0, 95
 for k = 1, 150 do T = T + 0.2 K.wecke(w) end
 pruefe(w.studioZustand == "geladen" and w.studio and w.studio.gAns.temp == false, "f) Studio-Datei geladen, Ansage für Reglertemp. aus")
 pruefe(toene >= 2, "f) Alarm mit Studio «ansage = false» und Ton im Menü aus: trotzdem Ton (" .. toene .. "×)")
-os.remove(ordner .. "SCRIPTS:/studio/TEST.elektro.lua")   -- os.remove ist im Test nicht umgeleitet
+os.remove(ordner .. "SCRIPTS:/studio/TEST.electric.lua")   -- os.remove ist im Test nicht umgeleitet
 toene = 0
 K, w = neuerStart()
 w.cfg.temp = Q("t")
@@ -172,7 +172,7 @@ pruefe(w.studioZustand == "fehlt" and toene == 0, "f) ohne Studio-Datei: Menü �
 local tg = { "return { format = 1, grenzen = {" }
 for i = 1, 160 do tg[#tg + 1] = string.format("[%s]={richtung=%s,alarm=200},", esc(string.format("sensor:%04X:0", i)), esc("ueber")) end
 tg[#tg + 1] = "} }"
-fs = io.open("SCRIPTS:/studio/TEST.elektro.lua", "w") fs:write(table.concat(tg)) fs:close()
+fs = io.open("SCRIPTS:/studio/TEST.electric.lua", "w") fs:write(table.concat(tg)) fs:close()
 local wert = { value = function() return 50 end, category = function() return 1 end }
 system.getSource = function() return wert end
 -- Grundlast ohne Studio-Datei (enthält das periodische Speichern von Zählern und Flügen, seit 0.1.x) gegen dieselbe
@@ -196,7 +196,7 @@ local function messe()
 end
 local maxW = messe()
 local gelanden = w.studioZustand == "geladen" and #w.studio.extra == 48   -- Format 2, Regel 7.2
-os.remove(ordner .. "SCRIPTS:/studio/TEST.elektro.lua")
+os.remove(ordner .. "SCRIPTS:/studio/TEST.electric.lua")
 local maxW0 = messe()
 pruefe(gelanden and maxW - maxW0 < 2500, "g) 160 Sensor-Grenzen: wakeup höchstens " .. maxW .. " Befehle, ohne Studio-Datei "
   .. maxW0 .. " (Zuschlag " .. (maxW - maxW0) .. " < 2500)")

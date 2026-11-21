@@ -1,9 +1,9 @@
-# Testleitfaden Elektro 0.5.0
+# Testleitfaden Electric 0.6.0
 
-Danke, dass du Elektro testest! Arbeite die Testfälle der Reihe nach durch und hake ab, was so klappt wie beschrieben.
+Danke, dass du Electric testest! Arbeite die Testfälle der Reihe nach durch und hake ab, was so klappt wie beschrieben.
 Klappt etwas nicht, melde es (ganz unten steht wie). Ein Testfall dauert meistens nur ein bis zwei Minuten.
 
-*English testers: the widget, the menu and the manual are also in English (`docs/Elektro - Manual.pdf`). Set the
+*English testers: the widget, the menu and the manual are also in English (`docs/Electric - Manual.pdf`). Set the
 language in the widget menu (Display › Language) or leave it «as the radio». The test cases below follow the same
 order as the manual. Report problems with the issue template «Fehler / Bug».*
 
@@ -15,36 +15,36 @@ order as the manual. Report problems with the issue template «Fehler / Bug».*
   Drehzahl, Reglertemperatur, Höhe, Speed oder Zellensensor sind willkommen, aber freiwillig.
 - Am Modell: die Sensoren schon gesucht (Modell › Telemetrie › Sensoren suchen).
 - Computer mit der FrSky Suite und ein USB-Kabel.
-- Die Datei `Elektro-0.5.0.zip` aus dem GitHub-Release (Seite «Releases» rechts im Repo).
-- Die Anleitung `docs/Elektro - Anleitung.pdf`. Die Testfälle verweisen auf ihre Kapitel.
+- Die Datei `Electric-0.6.0.zip` aus dem GitHub-Release (Seite «Releases» rechts im Repo).
+- Die Anleitung `docs/Electric - Anleitung.pdf`. Die Testfälle verweisen auf ihre Kapitel.
 
 **Sicherheit:** Teste mit abgenommenem Propeller, solange du am Tisch arbeitest. Der Flugtest (Testfall 11)
 ist freiwillig und gehört auf den Flugplatz.
 
-**Vorher sichern:** Erstelle in der FrSky Suite eine Sicherung deines Senders. Elektro ändert keine Modelle,
-es legt nur Dateien im Ordner `scripts/elektro` an.
+**Vorher sichern:** Erstelle in der FrSky Suite eine Sicherung deines Senders. Electric ändert keine Modelle,
+es legt nur Dateien im Ordner `scripts/electric` an.
 
 ## Testfälle
 
 Notiere dir für die Meldung: Sender, Ethos-Version (System › Info) und welche Sensoren dein Modell hat.
 
 ### 1. Installieren (Anleitung Kapitel 2)
-- [ ] Mit der FrSky Suite: Lua-Bibliothek › Von lokaler ZIP installieren › `Elektro-0.5.0.zip`. Sender neu starten.
+- [ ] Mit der FrSky Suite: Lua-Bibliothek › Von lokaler ZIP installieren › `Electric-0.6.0.zip`. Sender neu starten.
 - **Erwartet:** Die Suite meldet keinen Fehler. Nach dem Neustart erscheint keine Fehlermeldung.
 
 ### 2. Bildschirm einrichten (Kapitel 3)
-- [ ] Neuer Bildschirm mit dem Layout **Vollbild**, Widget **Elektro** wählen.
+- [ ] Neuer Bildschirm mit dem Layout **Vollbild**, Widget **Electric** wählen.
 - **Erwartet:** Die Anzeige erscheint sofort: oben der Modellname, darunter vier Tachos und sechs Felder. Unten links steht **kein** roter Text.
 
 ### 2b. Gas % und Kompaktansicht (neu in 0.2.0)
 - [ ] Menü › Flug › **Gaskanal** wählen (dein Gas-Kanal, z. B. CH3). Gasknüppel langsam von ganz unten nach ganz oben (Propeller ab, Motorschalter aus oder Akku ab).
 - **Erwartet:** Das grosse Feld GAS links unten zeigt 0 % bis 100 % mit Balken. Ohne Gaskanal steht dort orange «Gaskanal wählen».
-- [ ] Einen zweiten Bildschirm mit dem Layout **mit Kopf- und Fussleiste** (ein Feld, im Auswahlraster unten Mitte) anlegen und Elektro wählen.
+- [ ] Einen zweiten Bildschirm mit dem Layout **mit Kopf- und Fussleiste** (ein Feld, im Auswahlraster unten Mitte) anlegen und Electric wählen.
 - **Erwartet:** Kompaktansicht: oben Flugzeit und Empfang, darunter vier Tachos und acht Felder (GAS, Zelle, Verbraucht, Leistung, Höhe, Speed, Empfang, Flüge). Nichts ragt über den Rand, kein roter Text. FLÜGE antippen öffnet die Flugliste.
 
 ### 2c. Einstellungsdatei aus Lua-Studio (neu in 0.3.0, nur wenn du Lua-Studio hast)
 - [ ] In Lua-Studio für dein Modell eine Ansicht gestalten und auf den Sender übertragen, dann das Modell neu laden.
-- **Erwartet:** Elektro zeigt deine Kästchen. Steht unten ein Hinweis («Studio-Datei …»), bitte mit Log melden.
+- **Erwartet:** Electric zeigt deine Kästchen. Steht unten ein Hinweis («Studio-Datei …»), bitte mit Log melden.
 - [ ] Im Widget-Menü die Kapazität ändern, Modell neu laden.
 - **Erwartet:** Die Änderung bleibt. Menü › Studio-Datei › Zurück › «JA, ZURÜCK» stellt den Stand aus Lua-Studio wieder her.
 - [ ] **Neu in 0.4.0 (Lua-Studio ab 0.3.0):** einigen Kästchen ein Symbol und die fette Einheit geben, dazu einen
@@ -110,7 +110,7 @@ Notiere dir für die Meldung: Sender, Ethos-Version (System › Info) und welche
   keine Ansage, Wert bleibt rot. (3) Haken AUS, SF↓ (scharf): Alarm kommt. Danach den Haken wieder einschalten.
 - [ ] **Ab 0.5.0: Studio-Datei nach dem Modellwechsel.** Modell mit Studio-Datei laden.
 - **Erwartet:** Erst «Studio-Datei wird geladen ...», dann die Studio-Ansicht, nie das Standardlayout dazwischen. Im
-  Debug-Log steht «Elektro: Studio-Datei geladen in x s (n Schritte)»: die Zeit notieren.
+  Debug-Log steht «Electric: Studio-Datei geladen in x s (n Schritte)»: die Zeit notieren.
 - [ ] Schalter **SG↓** einschalten.
 - **Erwartet:** Ansage von Akkustand und Flugzeit.
 
@@ -137,12 +137,12 @@ Notiere dir für die Meldung: Sender, Ethos-Version (System › Info) und welche
 1. Im Repo auf GitHub: **Issues › New issue › «Fehler / Bug»**. Das Formular fragt alles Nötige ab.
 2. **Bildschirmfoto:** Am Sender ein Foto mit dem Handy genügt. Wichtig ist roter Text unten links im Widget.
 3. **Log:** Lua-Fehler stehen im Log des Senders. In der FrSky Suite (Sender per USB im Modus «Ethos Suite»)
-   das **Debug-Log** öffnen und den Text mit «Elektro» kopieren. Alternativ unter System › Info die gespeicherten Fehler abfotografieren.
+   das **Debug-Log** öffnen und den Text mit «Electric» kopieren. Alternativ unter System › Info die gespeicherten Fehler abfotografieren.
 4. Gib die **Nummer des Testfalls** an und was du erwartet hast.
 
 Ideen und Wünsche bitte mit der Vorlage **«Wunsch / Idee»**.
 
-## Bekannte Grenzen von 0.5.0
+## Bekannte Grenzen von 0.6.0
 
 - Am echten Sender getestet nur auf der **X18RS** (Ethos 26.2.0). Die anderen Sender nur im Simulator.
 - Nicht am echten Sender geprüft: jeder Menüpunkt einzeln, Flugerkennung und Flugliste mit einem echten Flug.

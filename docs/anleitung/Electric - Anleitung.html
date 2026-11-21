@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Electric – Anleitung</title>
+<!--
+  ANLEITUNG zum Ausdrucken (A4). Aufbau und Stil sind in jedem Lua gleich (bauplan.md, Abschnitt Anleitung):
+  Kapitel in dieser Reihenfolge lassen, Beispieltexte ersetzen, nichts Leeres stehen lassen.
+  PDF erzeugen: im Browser drucken («Als PDF sichern», ohne Kopf- und Fusszeilen)
+  Danach jede Seite der PDF ansehen (Umbrüche, Bilder, Tabellen).
+  Nummern auf einem Bild: <span class="nr" style="left:12%;top:30%">1</span> innerhalb von <div class="bild">.
+-->
+<style>
+  @page { size: A4; margin: 16mm; }
+  * { box-sizing: border-box; }
+  body { font-family: "Helvetica Neue", Arial, sans-serif; font-size: 10.5pt; line-height: 1.42; color: #1a1f2b; margin: 0; }
+  h1 { font-size: 24pt; margin: 0 0 2mm; }
+  h2 { font-size: 14.5pt; margin: 7mm 0 2.5mm; padding-bottom: 1mm; border-bottom: 1.5pt solid #1f4f96; color: #12305e; break-after: avoid; }
+  h3 { font-size: 11.5pt; margin: 4mm 0 1.5mm; break-after: avoid; }
+  p { margin: 0 0 2.5mm; }
+  ol, ul { margin: 0 0 2.5mm; padding-left: 6mm; }
+  li { margin-bottom: 1.2mm; break-inside: avoid; }
+  .unter { color: #56607a; font-size: 11pt; margin-bottom: 5mm; }
+  .bild { position: relative; width: 100%; margin: 3mm 0; break-inside: avoid; }
+  .bild img { width: 100%; display: block; border-radius: 2mm; border: 0.5pt solid #99a; }
+  .bild .t, .halb .t { font-size: 9pt; color: #56607a; margin-top: 1mm; }
+  .schmal { width: 72%; margin-left: auto; margin-right: auto; }
+  .halb { display: flex; gap: 5mm; break-inside: avoid; margin: 3mm 0; }
+  .halb > div { flex: 1; }
+  .halb img { width: 100%; display: block; border-radius: 1.5mm; border: 0.5pt solid #99a; }
+  .nr { position: absolute; width: 6.2mm; height: 6.2mm; margin: -3.1mm 0 0 -3.1mm; border-radius: 50%; background: #e11d48;
+        color: #fff; font-weight: 700; font-size: 9.5pt; line-height: 6.2mm; text-align: center; border: 0.6pt solid #fff; }
+  .n { display: inline-block; min-width: 5mm; height: 5mm; border-radius: 50%; background: #e11d48; color: #fff; font-weight: 700;
+       font-size: 8.5pt; line-height: 5mm; text-align: center; margin-right: 1mm; }
+  table { border-collapse: collapse; width: 100%; margin: 2mm 0 3mm; font-size: 9.6pt; }
+  tr { break-inside: avoid; }
+  th, td { border: 0.5pt solid #b6bccb; padding: 1.3mm 2mm; text-align: left; vertical-align: top; }
+  th { background: #e9eef8; }
+  .kasten { border: 1pt solid #d99a00; background: #fff7df; border-radius: 2mm; padding: 2.5mm 3.5mm; margin: 3mm 0; break-inside: avoid; }
+  .kasten.blau { border-color: #1f4f96; background: #eef3fb; }
+  .gruen { color: #15803d; font-weight: 700; } .orange { color: #b45309; font-weight: 700; } .rot { color: #b91c1c; font-weight: 700; }
+  .haken { list-style: none; padding-left: 0; }
+  .haken li::before { content: "☐  "; font-size: 12pt; }
+  .neu { break-before: page; }
+  .klein { font-size: 9pt; color: #56607a; }
+</style>
+</head>
+<body>
+
+<h1>Electric</h1>
+<div class="unter">Anzeige für Elektroflieger · Anleitung · Version 0.6.0 · Stand 21.11.2026</div>
+
+<div class="bild schmal">
+  <img src="../bilder-simulator/Electric - Sim 800x480 04 Normal.png" alt="Electric auf dem Sender">
+</div>
+
+<p><b>Electric</b> ist eine Anzeige (ein «Widget») für FrSky-Sender mit Ethos. Sie zeigt auf einem ganzen Bildschirm
+Flugakku, Zellen, Strom, Drehzahl, Reglertemperatur, Leistung, Höhe, Geschwindigkeit und Empfang deines
+Elektrofliegers. Sie überwacht die Werte in zwei Stufen, sagt Alarme und den Akkustand an und führt eine Liste deiner Flüge.</p>
+
+<div class="kasten">
+  <b>Stand der Erprobung:</b> Im Ethos-Simulator 26.2.0 (X18RS) mit 19 Testabläufen geprüft, 800 × 480 direkt,
+  640 × 360, 480 × 320 und 480 × 272 nachgestellt. Am echten Sender getestet auf einer X18RS (Ethos 26.2.0, 20.11.2026): Anzeige und
+  automatische Sensorsuche mit 48 Sensoren, Kompaktansicht und Gas %, mit Version 0.3.0 die Einstellungsdatei aus Lua-Studio (ohne Telemetrie: ohne Datei, Demo-Datei, Änderungen in der .funke.lua, kaputte Datei, Übertragung aus Lua-Studio); mit Telemetrie (0.3.1) Anzeige, Sensorsuche, Motorschalter, ein Alarm bei Motorschalter scharf und aus, Flugerkennung und Flugliste; mit Version 0.4.0 eine volle Format-2-Datei (16 Symbole, fette Einheit, Schmuck) und 10 Modellwechsel ohne Fehler, eine Ansicht aus Lua-Studio mit Symbolen; noch nicht geprüft: Kompaktansicht und Englisch mit Einstellungsdatei. Version 0.5.0 (Speicher beim Modellwechsel freigeben, «Alarm auch bei Motor aus», Anzeige «Studio-Datei wird geladen») bisher nur im Simulator und am Mac geprüft. Die Ansagen wurden mit Version 0.1.2 abgehört. Noch nicht im Flug getestet, nicht jeder Menüpunkt einzeln geprüft,
+  andere Sender nur im Simulator.
+</div>
+
+<h2>1. Was du brauchst</h2>
+<ul class="haken">
+  <li>Einen FrSky-Sender mit Ethos 26.2 (getestet) und Farbdisplay (Liste am Schluss).</li>
+  <li>Ein Elektromodell mit Telemetrie, die Sensoren schon gesucht (Modell › Telemetrie › Sensoren suchen).
+      Nötig ist mindestens die Akkuspannung; Strom, Verbrauch, Drehzahl, Temperatur, Höhe, Speed und Zellensensor sind freiwillig.</li>
+  <li>Einen Computer mit der FrSky Suite und ein USB-Kabel.</li>
+  <li>Die Datei <code>Electric-0.6.0.zip</code>. Sie liegt neben dieser Anleitung in <code>Electric-0.6.0-share.zip</code>. Entpacke nur die äussere ZIP, die innere nicht.</li>
+</ul>
+
+<h2>2. Installieren</h2>
+<ol>
+  <li>Sender einschalten und mit dem USB-Kabel am Computer anschliessen.</li>
+  <li>Am Sender erscheint eine Auswahl. Wähle <b>Ethos Suite</b>.</li>
+  <li>Öffne am Computer die <b>FrSky Suite</b>. Der Sender wird oben angezeigt.</li>
+  <li>Klicke auf <b>Lua-Bibliothek</b>, dann auf <b>Von lokaler ZIP installieren</b>.</li>
+  <li>Wähle die Datei <code>Electric-0.6.0.zip</code>. Die Suite kopiert alles an den richtigen Ort.</li>
+  <li>Ziehe das Kabel ab und starte den Sender neu.</li>
+</ol>
+<p class="klein">Ohne Suite: Sender als «USB-Speicher» anschliessen und den Ordner <code>electric</code> aus der ZIP in den
+Ordner <code>scripts</code> kopieren. Lädt dein Sender die Skripte von der SD-Karte (System › Allgemein › Speicherort),
+gehört er nach <code>scripts</code> auf der SD-Karte. Einen vorhandenen Ordner überschreiben, nicht löschen.</p>
+
+<h2>3. Bildschirm einrichten</h2>
+<ol>
+  <li>Tippe unten auf das Symbol <b>Bildschirme</b> (zwei Rechtecke).</li>
+  <li>Tippe oben rechts auf <b>+</b>.</li>
+  <li>Wische nach unten bis zum Layout <b>Vollbild</b> (ein einziges grosses Feld) und tippe es an. Willst du die
+  Ethos-Kopf- und Fussleiste behalten, wähle das Layout mit <b>einem Feld und den Leisten</b> (im Auswahlraster unten in der Mitte); Electric zeigt dann die
+  Kompaktansicht (Kapitel 5).</li>
+  <li>Tippe in das leere Feld, dann auf <b>Widget</b>.</li>
+  <li>Wische in der Liste ganz nach unten und wähle <b>Electric</b>. Die Anzeige erscheint sofort.</li>
+</ol>
+<p>Das Menü des Widgets erreichst du später jederzeit über Modell › Bildschirme › den Bildschirm wählen › Widget antippen.</p>
+
+<h2>4. Sensoren und Akku einstellen</h2>
+<ol>
+  <li>Schalte das Modell ein, damit die Telemetrie läuft. Beim ersten Mal sucht Electric die Sensoren selbst; unten erscheint kurz blau «… Sensoren automatisch zugewiesen».</li>
+  <li>Öffne das Menü und die Gruppe <b>Sensoren</b>. Kontrolliere jede Zeile. Was leer oder falsch ist, wählst du von Hand. Eine leere Zeile ist erlaubt, das Feld zeigt dann einen Strich.</li>
+  <li>Mit <b>Sensoren suchen (nur leere)</b> › <b>Suchen</b> füllt Electric später nur die leeren Zeilen, deine eigene Wahl bleibt. Hast du in Ethos Sensoren gelöscht und neu gesucht, lade zuerst das Modell neu (anderes Modell wählen und zurück), sonst bleiben die Werte auf 0. Danach bindet die Suche jede Zeile an den passenden Sensor (gleiche Kennung und gleicher Name); Zeilen, deren Sensor nicht mehr in der Sensorliste steht, auch von Hand gewählte, werden neu gesucht.</li>
+  <li>In der Gruppe <b>Zuordnung prüfen</b> steht je Zeile der gewählte Sensor mit Physical ID und AppID (z. B. «ESC Strom  P04 / 0B50»). Passten mehrere gleiche Sensoren, steht darunter «n Sensoren passen, gewählt: … - bitte prüfen».</li>
+  <li>Öffne die Gruppe <b>Akku</b> und stelle <b>Akkuart</b>, <b>Zellenzahl</b> und <b>Kapazität</b> deines Flugakkus ein.</li>
+</ol>
+<table>
+  <tr><th>Zeile im Menü</th><th>Welcher Sensor gehört hinein</th></tr>
+  <tr><td>Gesamtspannung</td><td>Spannung des ganzen Flugakkus, z. B. «VFAS», «ESC Voltage», «Volt». Nicht die Empfängerspannung.</td></tr>
+  <tr><td>Zellen (Zellensensor)</td><td>Nur wenn du einen Zellensensor hast (z. B. FLVSS, Anzeige «Cells» oder «LiPo»). Sonst leer lassen.</td></tr>
+  <tr><td>Strom</td><td>Strom des Reglers, z. B. «Current», «ESC Current».</td></tr>
+  <tr><td>Verbraucht (mAh)</td><td>Verbrauchte Kapazität, z. B. «Consumption».</td></tr>
+  <tr><td>Akku % (Regler)</td><td>Nur wenn dein Regler den Akkustand in % liefert, z. B. «Fuel», «Bat%».</td></tr>
+  <tr><td>Drehzahl, Reglertemperatur, BEC-Spannung</td><td>Die gleichnamigen Werte des Reglers.</td></tr>
+  <tr><td>Höhe, Vario, Geschwindigkeit</td><td>Vom Vario oder GPS (z. B. «Alt», «VSpd», «GSpd»).</td></tr>
+  <tr><td>RSSI, LQ</td><td>Empfangsstärke «RSSI», bei ELRS und ähnlichen die Verbindungsqualität «LQ».</td></tr>
+</table>
+<div class="kasten blau"><b>Zellen mit und ohne Zellensensor.</b> Hast du einen Zellensensor, zeigt das Feld
+«ZELLE TIEFST» die schwächste Zelle, darunter einen kleinen Balken je Zelle (die schwächste gelb) und «Δ» = Unterschied
+zwischen stärkster und schwächster Zelle. Ohne Zellensensor zeigt «ZELLE Ø» die mittlere Zelle = Gesamtspannung ÷ Zellenzahl,
+darunter einen Balken mit der Gesamtspannung. Dafür muss die <b>Zellenzahl</b> eingestellt sein; Electric rät sie nie aus der
+Spannung. Steht sie auf 0 (automatisch) und es gibt keinen Zellensensor, steht im Feld orange «Zellenzahl?» und im Akku-Tacho
+«Zellenzahl einstellen».</div>
+<div class="halb">
+  <div><img src="../bilder-simulator/Electric - Sim 800x480 20 Zellensensor.png" alt="Zellensensor"><div class="t">Mit Zellensensor: ZELLE TIEFST, Balken je Zelle</div></div>
+  <div><img src="../bilder-simulator/Electric - Sim 800x480 11 nur ein Teil der Sensoren.png" alt="Zellenzahl fehlt"><div class="t">Ohne Zellensensor und ohne Zellenzahl: «Zellenzahl einstellen»</div></div>
+</div>
+
+<h2 class="neu">5. Die Anzeige</h2>
+<div class="bild">
+  <img src="../bilder-simulator/Electric - Sim 800x480 04 Normal.png" alt="Anzeige mit Nummern">
+  <span class="nr" style="left:2%;top:12%">1</span>
+  <span class="nr" style="left:50%;top:5%">2</span>
+  <span class="nr" style="left:79%;top:5%">3</span>
+  <span class="nr" style="left:93%;top:5%">4</span>
+  <span class="nr" style="left:3%;top:17%">5</span>
+  <span class="nr" style="left:3%;top:60%">6</span>
+  <span class="nr" style="left:3%;top:93%">7</span>
+  <span class="nr" style="left:52%;top:62%">8</span>
+  <span class="nr" style="left:66%;top:75%">9</span>
+  <span class="nr" style="left:97%;top:62%">10</span>
+  <span class="nr" style="left:52%;top:80%">11</span>
+  <span class="nr" style="left:75%;top:80%">12</span>
+  <span class="nr" style="left:97%;top:80%">13</span>
+</div>
+<table>
+  <tr><th style="width:9mm">Nr.</th><th>Was du siehst</th><th>Was es bedeutet</th></tr>
+  <tr><td><span class="n">1</span></td><td>Modellname, Kopfzeile</td><td>Name des Modells im Sender. Die Kopfzeile wird <span class="orange">orange</span> bei einer Warnung und <span class="rot">rot</span> bei einem Alarm.</td></tr>
+  <tr><td><span class="n">2</span></td><td>Flugzeit</td><td>Dauer des laufenden Flugs in Minuten:Sekunden. Sie läuft nur, solange der Motor an ist.</td></tr>
+  <tr><td><span class="n">3</span></td><td>SCHARF / MOTOR AUS</td><td>Stellung des Motorschalters (nur wenn einer eingestellt ist). Links davon erscheinen deine eigenen Schalter als grüne Pille, solange sie eingeschaltet sind (z. B. «FAHRWERK»). Ist zu wenig Platz, fällt die vordere weg.</td></tr>
+  <tr><td><span class="n">4</span></td><td>Balken, Akkusymbol</td><td>Empfangsstärke (RSSI) in vier Stufen und der Akku des Senders.</td></tr>
+  <tr><td><span class="n">5</span></td><td>Vier Tachos</td><td>Ab Werk AKKU (Akkustand in %, darunter Zellenzahl und Gesamtspannung), STROM in Ampere, DREHZAHL in U/min und REGLERTEMP. in °C. «MAX» darunter ist der höchste gemessene Wert mit diesem Akku, keine Grenze.</td></tr>
+  <tr><td><span class="n">6</span></td><td>GAS</td><td>Gas in % aus dem Gaskanal, darunter der Strom dazu («bei 46 A») und ein Balken. Steht dort orange «Gaskanal wählen», im Menü unter Flug den <b>Gaskanal</b> wählen. Im Menü (Felder › Grosses Feld) wählst du auch einen anderen Inhalt.</td></tr>
+  <tr><td><span class="n">7</span></td><td>«8 Flüge»</td><td>Zahl der Flüge dieses Modells, der laufende mitgezählt, sobald er zählt (Kapitel 7). Antippen öffnet die Flugliste.</td></tr>
+  <tr><td><span class="n">8</span></td><td>ZELLE Ø oder ZELLE TIEFST</td><td>Spannung je Zelle unter Last (Kasten in Kapitel 4). «TIEF» ist der tiefste Wert mit diesem Akku.</td></tr>
+  <tr><td><span class="n">9</span></td><td>VERBRAUCHT, Knopf AUF 0</td><td>Verbrauchte mAh seit dem Anstecken bzw. seit «AUF 0». Den Knopf brauchst du nur, wenn dein Regler beim Akkuwechsel nicht selbst bei 0 beginnt.</td></tr>
+  <tr><td><span class="n">10</span></td><td>LEISTUNG</td><td>Gesamtspannung × Strom in Watt, darunter die verbrauchte Energie in Wh mit diesem Akku.</td></tr>
+  <tr><td><span class="n">11</span></td><td>HÖHE</td><td>Höhe in Metern, darunter Steigen ↑ oder Sinken ↓ in m/s und links gelb die höchste Höhe mit diesem Akku.</td></tr>
+  <tr><td><span class="n">12</span></td><td>SPEED</td><td>Geschwindigkeit in km/h, darunter der höchste Wert.</td></tr>
+  <tr><td><span class="n">13</span></td><td>EMPFANG</td><td>RSSI in dB, darunter LQ in % und der tiefste RSSI («TIEF»). Liefert dein Empfänger RSSI in dBm (negativ, z. B. ELRS, Crossfire), steht er wie im Sensormenü da, z. B. «-80 dBm».</td></tr>
+</table>
+<p>Ein kurzer grauer Strich statt einer Zahl heisst: Dieser Wert kommt gerade nicht an oder hat keinen Sensor.
+Was in welchem Tacho und Feld steht, kannst du im Menü ändern (Kapitel 8, Gruppe Felder).</p>
+<p><b>Akku %</b> kommt vom Regler, wenn er ihn liefert und «Akku % kommt von» auf «Regler, sonst gerechnet» steht.
+Sonst rechnet Electric: Steht das Modell 2 Sekunden ohne Strom, liest es aus der Ruhespannung den Startwert (Kennlinie der
+Akkuart) und zählt danach mit den verbrauchten mAh und der Kapazität herunter. Dann steht unter dem Tacho «RUHE». Was gerade
+gilt, steht im Menü in der Zeile «Akku % kommt von».</p>
+<p><b>Neuer Akku:</b> Ist die Telemetrie über 30 Sekunden weg (Akku abgesteckt), beginnen MAX- und TIEF-Werte, Wh und Akku % von vorn.</p>
+
+<h3>Kompaktansicht</h3>
+<p>Wählst du das Layout mit Kopf- und Fussleiste (Kapitel 3), merkt Electric das selbst und zeigt eine kompakte Ansicht:
+oben eine schmale Leiste mit Flugzeit, SCHARF / MOTOR AUS und Empfang (Modellname und Senderakku stehen in der
+Ethos-Kopfzeile), darunter die vier Tachos und acht Felder: das grosse Feld (ab Werk GAS, hier ohne Balken), Feld 1 bis 6 und FLÜGE.
+Antippen von FLÜGE öffnet die Flugliste. Alles andere geht wie im Vollbild.</p>
+<div class="bild"><img src="../bilder-simulator/Electric - Sim 784x316 30 Kompakt Normal mit Gas.png" alt="Kompaktansicht"></div>
+<p class="klein">Kompaktansicht auf X20 und X18RS (784 × 316). Auf X14 und X18 / Twin X Lite ist sie entsprechend kleiner.</p>
+
+<h2>6. Warnungen und Alarme</h2>
+<p>Jeder überwachte Wert hat zwei Grenzen: Warnung (orange, nur Anzeige) und Alarm (rot, Rahmen, Ton und Ansage).
+Beide stellst du im Menü in der Gruppe <b>Grenzwerte</b> ein, 0 schaltet eine Grenze aus. Die Werte ab Werk:</p>
+<table>
+  <tr><th>Wert</th><th>Warnung (orange)</th><th>Alarm (rot, Ton, Ansage)</th></tr>
+  <tr><td>Akku %</td><td>unter 30 %</td><td>unter 20 %, «Achtung! Akku» und die Zahl</td></tr>
+  <tr><td>Zelle (mittlere oder tiefste)</td><td>unter 3,50 V</td><td>unter 3,30 V, «Achtung! Zellenspannung» und die Zahl</td></tr>
+  <tr><td>Zellendifferenz (nur mit Zellensensor)</td><td>über 0,10 V</td><td>über 0,20 V, «Achtung! Zellen ungleich» und die Zahl</td></tr>
+  <tr><td>Reglertemperatur</td><td>über 70 °C</td><td>über 85 °C, «Achtung! Reglertemperatur» und die Zahl</td></tr>
+  <tr><td>Strom</td><td>über 80 A</td><td>über 100 A, «Achtung! Strom» und die Zahl</td></tr>
+  <tr><td>Verbraucht (in % der Kapazität)</td><td>über 70 %</td><td>über 80 %, «Achtung! Kapazität» und die Zahl</td></tr>
+  <tr><td>BEC-Spannung</td><td>aus</td><td>aus</td></tr>
+  <tr><td>Höhe</td><td>über 110 m</td><td>über 120 m, «Höhe» und die Zahl</td></tr>
+  <tr><td>RSSI (bei dBm-Werten: Schwelle = dBm + 120, z. B. 40 = -80 dBm)</td><td>unter 45 dB</td><td>unter 40 dB, «Achtung! Empfang» und die Zahl</td></tr>
+  <tr><td>LQ</td><td>unter 70 %</td><td>unter 50 %, «Achtung! Empfang» und die Zahl</td></tr>
+</table>
+<p class="klein">Die Zellen-Grenzen gelten für LiPo und LiHV. Wählst du eine andere Akkuart und stehen die Zellen-Grenzen noch auf dem
+Werkwert, stellt Electric sie passend um: LiFe 3,00/2,80 V, Li-Ion 3,20/3,00 V, NiMH 1,10/1,00 V.</p>
+<div class="halb">
+  <div><img src="../bilder-simulator/Electric - Sim 800x480 05 Warnung.png" alt="Warnung"><div class="t">Warnung: Kopf und Wert orange, kein Ton</div></div>
+  <div><img src="../bilder-simulator/Electric - Sim 800x480 06 Alarm.png" alt="Alarm"><div class="t">Alarm: Kopf rot, roter Rahmen, Ton und Ansage</div></div>
+</div>
+<p>Eine Warnung erscheint, wenn der Wert 1 Sekunde lang jenseits der Grenze liegt, und verschwindet, wenn er 3 Sekunden
+lang wieder gut ist. Ein Alarm piept, sagt den Wert an und wiederholt das alle 10 Sekunden («Alarm wiederholen alle»),
+solange er besteht. Zwischen zwei Ansagen liegen immer mindestens 3 Sekunden.</p>
+<p><b>Alarm auch bei Motor aus</b> (ab Version 0.5.0): Ab Werk kommen alle Warnungen und Alarme auch, wenn der
+Motorschalter auf «aus» steht. Im Menü in der Gruppe <b>Alarm auch bei Motor aus</b> kannst du das je Wert ausschalten.
+Dann schweigt dieser Wert, solange der Motorschalter auf «aus» steht: keine Meldung, kein Ton, keine Ansage, keine
+Vibration. Die Farbe des Werts zeigt die Grenze weiter. Sobald du den Motor scharf schaltest, kommt der Alarm wieder.
+Ohne eingestellten Motorschalter gilt diese Einstellung nie.</p>
+
+<h2 class="neu">7. Bedienen</h2>
+<h3>Flüge erkennen</h3>
+<p>Ab Werk erkennt Electric einen Flug am <b>Motorschalter</b>: «Motor aus bei» steht auf <b>SF↑</b>. Schaltest du den Motor
+scharf, beginnt die Flugzeit; schaltest du ihn aus, sagt der Sender «Motor aus», die Zeit hält an und es kommt die Frage
+«Flug beendet?».</p>
+<ul>
+  <li><b>JA, BEENDET</b>: Der Flug kommt in die Liste.</li>
+  <li><b>NEIN, NUR PAUSE</b>: Der Flug bleibt offen. Schaltest du den Motor wieder scharf, läuft er weiter.</li>
+  <li>Ein pausierter Flug endet von selbst, wenn du den Akku absteckst (Telemetrie über 30 s weg, «Akkuwechsel beendet Flug»).</li>
+</ul>
+<p>Ein Flug zählt erst ab 30 Sekunden Motorlaufzeit («Flug zählt ab»); kürzere Läufe am Boden fallen weg. Ohne Motorschalter oder mit
+«Flug erkennen über» = «Strom oder Gas» beginnt der Flug, sobald der Strom über 3 A oder das Gas über 10 % liegt, und die Pause
+mit der Frage kommt nach 20 Sekunden darunter.</p>
+<div class="bild schmal"><img src="../bilder-simulator/Electric - Sim 800x480 07 Rueckfrage Flug beendet.png" alt="Flug beendet?"></div>
+
+<h3>Flugliste (Seite 2)</h3>
+<p>Wische nach links oder tippe auf «8 Flüge». Rechts stehen die Flüge, der neuste oben, der laufende blau mit «läuft»
+oder «Pause». Tippe einen Flug an: Links erscheinen seine Werte. Mit dem Drehrad wählst du Flüge auch ohne Tippen.</p>
+<div class="bild schmal"><img src="../bilder-simulator/Electric - Sim 800x480 22 Flugliste.png" alt="Flugliste"></div>
+<ol>
+  <li>Einen Flug löschen: Flug antippen, <b>FLUG n LÖSCHEN</b>, dann <b>JA, LÖSCHEN</b>. Die späteren Nummern rücken nach.</li>
+  <li>Alle Flüge löschen: <b>LISTE LÖSCHEN</b>, dann <b>JA, LÖSCHEN</b>. Der Zähler beginnt wieder bei 1.</li>
+  <li>Zurück zur Anzeige: <b>&lt; ZURÜCK</b> oder nach rechts wischen.</li>
+</ol>
+<p class="klein">Die Liste behält die letzten 20 Flüge. Sie bleibt beim Ausschalten erhalten. Ein pausierter Flug wird beim nächsten Einschalten abgeschlossen und kommt in die Liste (wenn «Akkuwechsel beendet Flug» an ist).</p>
+
+<h3>Verbrauch auf 0</h3>
+<p>Tippe im Feld VERBRAUCHT auf <b>AUF 0</b> und bestätige mit <b>JA, AUF 0</b>. Mit <b>ABBRECHEN</b> bleibt alles, wie es ist.</p>
+
+<h3>Ansage auf Schalter</h3>
+<p>Schaltest du <b>SG↓</b> ein («Ansage bei»), sagt der Sender den Akkustand und die Flugzeit an. Was angesagt wird, wählst du
+in der Gruppe Ansagen. Ausserdem sagt Electric beim Entladen alle 10 % den Akkustand an («Akku % ansagen alle»).</p>
+
+<h3>Sender ohne Berührung (X14, X10, X12)</h3>
+<p>Im Menü oben gibt es <b>Kapazität auf 0</b>, <b>Flug löschen</b> (vorher bei «Flug Nr. zum Löschen» die Nummer wählen) und
+<b>Ganze Liste löschen</b>, jeweils mit Rückfrage. Mit dem Drehrad kommst du auf die Flugliste und wählst Flüge; vor dem
+ersten Flug zurückdrehen führt wieder zur Anzeige.</p>
+
+<h2 class="neu">8. Alle Einstellungen</h2>
+<p>Menü öffnen: Modell › Bildschirme › den Bildschirm wählen › Widget antippen. Jede Änderung gilt sofort und bleibt gespeichert.</p>
+<table>
+  <tr><th>Gruppe</th><th>Einstellung</th><th>Ab Werk</th><th>Was sie bewirkt</th></tr>
+  <tr><td>oben</td><td>Akku % kommt von</td><td>–</td><td>Zeigt, woher der Akkustand gerade kommt: Regler, gerechnet oder kein Wert.</td></tr>
+  <tr><td>Sensoren</td><td>13 Zeilen</td><td>leer</td><td>Siehe Kapitel 4.</td></tr>
+  <tr><td rowspan="5">Akku</td><td>Akkuart</td><td>LiPo</td><td>LiPo, LiHV, LiFe, Li-Ion oder NiMH. Bestimmt die Kennlinie für Akku % und die Balken.</td></tr>
+  <tr><td>Zellenzahl (0 = auto)</td><td>0</td><td>Zellen in Serie. 0 = vom Zellensensor; ohne Zellensensor bitte einstellen.</td></tr>
+  <tr><td>Kapazität</td><td>4500 mAh</td><td>Kapazität des Flugakkus. Für Akku % und die Grenze «Verbraucht». 0 = Akku % nur aus der Spannung.</td></tr>
+  <tr><td>Akku % kommt von</td><td>Regler, sonst gerechnet</td><td>«immer gerechnet» übergeht den Wert des Reglers.</td></tr>
+  <tr><td>Drehzahl teilen durch</td><td>1</td><td>Für Regler, die die elektrische Drehzahl senden: Zahl der Polpaare eintragen.</td></tr>
+  <tr><td>Grenzwerte</td><td>je Wert Warnung und Alarm</td><td>siehe Kapitel 6</td><td>0 = aus.</td></tr>
+  <tr><td>Alarm auch bei Motor aus</td><td>je Wert ein/aus (10 Zeilen)</td><td>ein</td><td>Aus = dieser Wert schweigt, solange der Motor aus ist (Kapitel 6).</td></tr>
+  <tr><td rowspan="4">Schalter</td><td>Motor aus bei</td><td>SF↑</td><td>Schalterstellung, in der der Motor aus ist.</td></tr>
+  <tr><td>Ansage bei</td><td>SG↓</td><td>Schalterstellung für die Ansage.</td></tr>
+  <tr><td>Schalter 1 und 2</td><td>leer</td><td>Eigene Schalter, die in der Kopfzeile erscheinen, solange sie eingeschaltet sind.</td></tr>
+  <tr><td>Schalter 1 und 2 Name</td><td>SCHALTER 1 / 2</td><td>Eigener Name, höchstens 12 Zeichen, z. B. STABI oder FAHRWERK.</td></tr>
+  <tr><td rowspan="7">Flug</td><td>Flug erkennen über</td><td>Motorschalter</td><td>Oder «Strom oder Gas».</td></tr>
+  <tr><td>Gaskanal</td><td>leer</td><td>Kanal des Gases: für das Feld GAS und für die Erkennung über Gas.</td></tr>
+  <tr><td>Flug ab Strom</td><td>3 A</td><td>Ab diesem Strom läuft der Flug (Erkennung über Strom oder Gas).</td></tr>
+  <tr><td>Flug ab Gas</td><td>10 %</td><td>Ab dieser Gasstellung läuft der Flug.</td></tr>
+  <tr><td>Pause nach</td><td>20 s</td><td>So lange ohne Strom und Gas, bis die Frage «Flug beendet?» kommt.</td></tr>
+  <tr><td>Flug zählt ab</td><td>30 s</td><td>Kürzere Läufe kommen nicht in die Liste.</td></tr>
+  <tr><td>Akkuwechsel beendet Flug</td><td>ein</td><td>Ein pausierter Flug endet, wenn die Telemetrie über 30 s weg ist.</td></tr>
+  <tr><td rowspan="11">Ansagen</td><td>Alarme ansagen</td><td>ein</td><td>Aus: bei Alarm nur Ton und Anzeige.</td></tr>
+  <tr><td>Warnung auch ansagen</td><td>aus</td><td>Ein: auch die orange Warnung wird angesagt.</td></tr>
+  <tr><td>Alarm wiederholen alle</td><td>10 s</td><td>3 bis 300 s.</td></tr>
+  <tr><td>Akku % ansagen alle</td><td>10 %</td><td>aus, 5 %, 10 % oder 20 %.</td></tr>
+  <tr><td>«Motor aus» ansagen</td><td>ein</td><td>Ansage beim Ausschalten des Motors.</td></tr>
+  <tr><td>Ansage: Akku %</td><td>ein</td><td rowspan="4">Was auf dem Ansageschalter gesagt wird.</td></tr>
+  <tr><td>Ansage: Flugzeit</td><td>ein</td></tr>
+  <tr><td>Ansage: Höhe</td><td>aus</td></tr>
+  <tr><td>Ansage: Verbraucht</td><td>aus</td></tr>
+  <tr><td>Ton bei Alarm</td><td>ein</td><td>Piepton vor der Alarm-Ansage.</td></tr>
+  <tr><td>Vibration bei Alarm</td><td>aus</td><td>Der Sender vibriert bei jedem Alarm.</td></tr>
+  <tr><td rowspan="3">Felder</td><td>Tacho 1 bis 4, Feld 1 bis 6</td><td>wie im Bild</td><td>Inhalt wählbar: Akku %, Strom, Drehzahl, Reglertemp., Zelle, Gesamtspannung, Verbraucht, Leistung, Höhe, Vario, Speed, Empfang, BEC, Flugzeit, Gas % oder leer.</td></tr>
+  <tr><td>Grosses Feld (links)</td><td>Gas %</td><td>Das grosse Feld unten links; in der Kompaktansicht das erste der acht Felder. Nach dem Update von 0.1.x steht hier, was vorher in Feld 7 stand, falls das Fliegerbild aus war.</td></tr>
+  <tr><td>Tacho Strom / Drehzahl / Temp. bis</td><td>120 A / 12000 / 100 °C</td><td>Endwert des Bogens.</td></tr>
+  <tr><td>Anzeige</td><td>Sprache / Language</td><td>wie der Sender</td><td>Deutsch oder Englisch für Anzeige, Menü und Ansagen. Das Menü wechselt beim nächsten Öffnen.</td></tr>
+</table>
+
+<h3>Einstellungsdatei aus Lua-Studio</h3>
+<p>Mit dem PC-Programm <b>Lua-Studio</b> gestaltest du die Anzeige je Modell frei: Für jedes Kästchen wählst du
+Wert, Darstellung (Zahl, Ring, Balken waagrecht oder senkrecht, Verlauf, Status), Titel, Bereich, Farben und
+Zusatzzeile (MIN, MAX oder Ø über den Flug). Dazu kommen Einstellungen und Grenzwerte je Modell. Lua-Studio legt
+dafür auf der SD-Karte die Datei <code>scripts/studio/Modellname.electric.lua</code> an. Im Dateinamen stehen vom Modellnamen nur Buchstaben A–Z und Ziffern, alles andere wird zu <code>_</code> (aus «Möwe 2» wird <code>M__we_2</code>); Lua-Studio rechnet das selbst. Electric liest sie
+beim Laden des Modells.</p>
+<ul>
+  <li><b>Ohne diese Datei</b> arbeitet Electric genau wie bisher, ohne Hinweis.</li>
+  <li><b>Mit Datei</b> gilt ihre Ansicht nur für die Fenstergrösse, für die sie gemacht ist (z. B. Vollbild 800 × 480
+  oder mit Leisten 784 × 316). Für andere Grössen zeichnet Electric seine eingebaute Anzeige.</li>
+  <li><b>Nach dem Wechsel des Modells</b> liest Electric die Datei in kleinen Schritten, das kann einen Moment dauern.
+  Hat die Datei eine Ansicht für diese Fenstergrösse, steht solange «Studio-Datei wird geladen ...» statt der
+  eingebauten Anzeige; sonst zeigt Electric gleich seine eingebaute Anzeige.</li>
+  <li><b>Symbole, fette Einheit und Schmuck</b> (ab Version 0.4.0, Lua-Studio ab 0.3.0): Ein Kästchen kann oben links
+  ein Symbol tragen (z. B. Akku, Uhr, Höhe) und die Einheit fett zeigen. Dazu kommen frei platzierte Symbole, Texte,
+  Linien und Rahmen unter den Kästchen. Die Bilder schreibt Lua-Studio nach <code>scripts/studio/symbole/</code>.
+  Fehlt ein Bild oder ist es kaputt, zeigt Electric das Kästchen ohne Symbol und unten kurz «Studio: n Symbole fehlen».
+  Symbole und Schmuck ändern nie einen Grenzwert oder Alarm.</li>
+  <li><b>Grenzwerte</b> gelten je Wert, egal ob und wie er angezeigt wird. Fehlt ein Wert in der Datei, gilt die
+  Werkgrenze. Ein Alarm geht nur aus, wenn die Datei das ausdrücklich so will. Passt eine Angabe nicht zum Wert (z. B. falsche Richtung), gilt ebenfalls die Werkgrenze, mit Hinweis.
+  Auch «auch bei Motor aus» lässt sich in Lua-Studio je Grenze einstellen (ab Version 0.5.0, auch für Sensoren und Kanäle).
+  Im Menü der Funke stehen nur die 10 eigenen Werte von Electric; Grenzen für Sensoren und Kanäle aus der Datei stellst du in Lua-Studio ein.</li>
+  <li><b>Änderst du an der Funke</b> Akku, Grenzwerte oder andere Einstellungen im Menü, schreibt Electric das in eine
+  eigene Datei <code>…electric.funke.lua</code>. Die Datei von Lua-Studio bleibt unverändert. Lua-Studio zeigt die
+  Unterschiede und übernimmt sie auf Wunsch.</li>
+  <li><b>Menü › Studio-Datei › Zurück:</b> mit Datei «Zurück auf Studio-Stand» (deine Änderungen an der Funke werden
+  gelöscht), ohne Datei «Zurück auf Standard» (Einstellungen und Grenzwerte ab Werk; Sensoren und Flüge bleiben).
+  Beides fragt nach.</li>
+  <li><b>Hinweise:</b> Ist die Datei kaputt, zu neu oder enthält sie ungültige Angaben, steht 8 Sekunden lang unten
+  ein Band (z. B. «Studio-Datei kaputt - Standard»), danach oben rechts ein oranges «!». Electric läuft immer
+  weiter, im Zweifel mit der eingebauten Anzeige.</li>
+  <li>Electric schreibt dazu die Datei <code>…electric.info.json</code> mit Modellname, Sender und Sensorliste. Nur
+  Lua-Studio liest sie.</li>
+</ul>
+
+<h2>9. Wenn etwas nicht geht</h2>
+<table>
+  <tr><th>Was du siehst</th><th>Ursache</th><th>Was du tust</th></tr>
+  <tr><td>Überall Striche, Flugzeit 0:00</td><td>Keine Telemetrie</td><td>Modell einschalten. Prüfen, ob der Empfänger verbunden ist.</td></tr>
+  <tr><td>«Zellenzahl einstellen» bzw. «Zellenzahl?»</td><td>Kein Zellensensor und Zellenzahl auf 0</td><td>Menü › Akku › Zellenzahl einstellen.</td></tr>
+  <tr><td>Akku % stimmt nicht</td><td>Falsche Kapazität oder Akkuart, oder Akku unter Last angesteckt</td><td>Menü › Akku kontrollieren. Den Akku anstecken, bevor du Gas gibst.</td></tr>
+  <tr><td>Kein «SCHARF / MOTOR AUS» oben, Flüge zählen nicht</td><td>Motorschalter nicht gefunden</td><td>Menü › Schalter › «Motor aus bei» die Stellung wählen, z. B. SF↑.</td></tr>
+  <tr><td>Bei Motor aus kommt ein Alarm nicht</td><td>«Alarm auch bei Motor aus» für diesen Wert aus (Menü oder Lua-Studio)</td><td>Menü › Alarm auch bei Motor aus › den Wert einschalten.</td></tr>
+  <tr><td>Drehzahl viel zu hoch</td><td>Regler sendet elektrische Drehzahl</td><td>Menü › Akku › «Drehzahl teilen durch» = Polpaare des Motors.</td></tr>
+  <tr><td>Bei Alarm nur ein Piepton und die Zahl</td><td>Die Sprachdateien fehlen auf dem Sender (Ordner <code>audio</code>)</td><td>Kapitel 2 wiederholen.</td></tr>
+  <tr><td>Ein einzelner Wert zeigt einen Strich</td><td>Sensor nicht zugewiesen oder liefert nichts</td><td>Menü › Sensoren: Zeile kontrollieren (Kapitel 4).</td></tr>
+  <tr><td>GAS zeigt einen Strich und «Gaskanal wählen»</td><td>Kein Gaskanal eingestellt</td><td>Menü › Flug › Gaskanal wählen (Kapitel 8).</td></tr>
+  <tr><td>Unten links steht roter Text</td><td>Fehler im Skript. Der Sender läuft normal weiter.</td><td>Text abfotografieren und als Fehler melden: auf GitHub unter Issues, Vorlage «Fehler / Bug» (siehe TESTLEITFADEN.md im Repo).</td></tr>
+  <tr><td>Unten «Studio-Datei kaputt - Standard», «zu neu» oder «n Fehler», danach oben rechts «!»</td><td>Die Datei von Lua-Studio ist kaputt, für eine neuere Electric-Version oder enthält ungültige Angaben</td><td>In Lua-Studio neu übertragen bzw. Electric aktualisieren. Was genau falsch ist, steht im Log (je Fehler eine Zeile).</td></tr>
+  <tr><td>Das Widget fehlt in der Liste</td><td>Nicht installiert oder Sender nicht neu gestartet</td><td>Kapitel 2 wiederholen, Sender neu starten.</td></tr>
+</table>
+
+<h2>10. Aktualisieren und Entfernen</h2>
+<p><b>Aktualisieren:</b> Die neue ZIP genau wie in Kapitel 2 installieren. Deine Einstellungen, Sensoren, Flüge und Zähler bleiben erhalten.</p>
+<p><b>Umstieg von Elektro (bis 0.5.0):</b> Ab 0.6.0 heisst das Widget <b>Electric</b> (Ordner <code>scripts/electric</code>, Studio-Datei <code>….electric.lua</code>). Nach dem Installieren das Widget in jedem Modell neu wählen und die Einstellungen neu machen; Studio-Dateien aus Lua-Studio neu übertragen. Eine alte <code>….elektro.lua</code> liest Electric übergangsweise noch. Den Ordner <code>scripts/elektro</code> danach löschen.</p>
+<p><b>Entfernen:</b> Zuerst das Widget vom Bildschirm nehmen (Modell › Bildschirme), dann in der FrSky Suite unter Lua-Bibliothek deinstallieren.</p>
+
+<h2>11. Welche Sender</h2>
+<table>
+  <tr><th>Display</th><th>Sender</th><th>Stand</th></tr>
+  <tr><td>800 × 480, Berührung</td><td>X20, X20S, X20HD, X20 Pro, X20R, X20RS, X18R, X18RS</td><td>X18RS am echten Sender getestet, die übrigen im Simulator</td></tr>
+  <tr><td>640 × 360, ohne Berührung</td><td>Twin X14, X14S</td><td>im Simulator nachgestellt</td></tr>
+  <tr><td>480 × 320, Berührung</td><td>X18, X18S, X18SE, Twin X Lite, Twin X Lite S</td><td>im Simulator nachgestellt</td></tr>
+  <tr><td>480 × 272, ohne Berührung</td><td>X10, X10S, X10 Express, X12S mit Ethos</td><td>im Simulator nachgestellt</td></tr>
+</table>
+<div class="halb">
+  <div><img src="../bilder-simulator/Electric - Sim 480x320 06 Alarm.png" alt="480x320"><div class="t">480 × 320 (X18): gekürzte Titel</div></div>
+  <div><img src="../bilder-simulator/Electric - Sim 800x480 12 Englisch.png" alt="Englisch"><div class="t">Englisch: Sprache im Menü oder wie der Sender</div></div>
+</div>
+<p class="klein">Electric Version 0.6.0 · 21.11.2026</p>
+
+</body>
+</html>

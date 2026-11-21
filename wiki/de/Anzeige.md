@@ -4,7 +4,7 @@
 
 ## 5. Die Anzeige
 
-![Anzeige mit Nummern](../../docs/bilder-simulator/Elektro%20-%20Sim%20800x480%2004%20Normal.png)
+![Anzeige mit Nummern](../../docs/bilder-simulator/Electric%20-%20Sim%20800x480%2004%20Normal.png)
 
 *Die Nummern der Tabelle sind im PDF der Anleitung ins Bild eingezeichnet.*
 
@@ -26,21 +26,21 @@
 
 Ein kurzer grauer Strich statt einer Zahl heisst: Dieser Wert kommt gerade nicht an oder hat keinen Sensor. Was in welchem Tacho und Feld steht, kannst du im Menü ändern (Kapitel 8, Gruppe Felder).
 
-**Akku %** kommt vom Regler, wenn er ihn liefert und «Akku % kommt von» auf «Regler, sonst gerechnet» steht. Sonst rechnet Elektro: Steht das Modell 2 Sekunden ohne Strom, liest es aus der Ruhespannung den Startwert (Kennlinie der Akkuart) und zählt danach mit den verbrauchten mAh und der Kapazität herunter. Dann steht unter dem Tacho «RUHE». Was gerade gilt, steht im Menü in der Zeile «Akku % kommt von».
+**Akku %** kommt vom Regler, wenn er ihn liefert und «Akku % kommt von» auf «Regler, sonst gerechnet» steht. Sonst rechnet Electric: Steht das Modell 2 Sekunden ohne Strom, liest es aus der Ruhespannung den Startwert (Kennlinie der Akkuart) und zählt danach mit den verbrauchten mAh und der Kapazität herunter. Dann steht unter dem Tacho «RUHE». Was gerade gilt, steht im Menü in der Zeile «Akku % kommt von».
 
 **Neuer Akku:** Ist die Telemetrie über 30 Sekunden weg (Akku abgesteckt), beginnen MAX- und TIEF-Werte, Wh und Akku % von vorn.
 
 ### Kompaktansicht
 
-Wählst du das Layout mit Kopf- und Fussleiste (Kapitel 3), merkt Elektro das selbst und zeigt eine kompakte Ansicht: oben eine schmale Leiste mit Flugzeit, SCHARF / MOTOR AUS und Empfang (Modellname und Senderakku stehen in der Ethos-Kopfzeile), darunter die vier Tachos und acht Felder: das grosse Feld (ab Werk GAS, hier ohne Balken), Feld 1 bis 6 und FLÜGE. Antippen von FLÜGE öffnet die Flugliste. Alles andere geht wie im Vollbild.
+Wählst du das Layout mit Kopf- und Fussleiste (Kapitel 3), merkt Electric das selbst und zeigt eine kompakte Ansicht: oben eine schmale Leiste mit Flugzeit, SCHARF / MOTOR AUS und Empfang (Modellname und Senderakku stehen in der Ethos-Kopfzeile), darunter die vier Tachos und acht Felder: das grosse Feld (ab Werk GAS, hier ohne Balken), Feld 1 bis 6 und FLÜGE. Antippen von FLÜGE öffnet die Flugliste. Alles andere geht wie im Vollbild.
 
-![Kompaktansicht](../../docs/bilder-simulator/Elektro%20-%20Sim%20784x316%2030%20Kompakt%20Normal%20mit%20Gas.png) Kompaktansicht auf X20 und X18RS (784 × 316). Auf X14 und X18 / Twin X Lite ist sie entsprechend kleiner.
+![Kompaktansicht](../../docs/bilder-simulator/Electric%20-%20Sim%20784x316%2030%20Kompakt%20Normal%20mit%20Gas.png) Kompaktansicht auf X20 und X18RS (784 × 316). Auf X14 und X18 / Twin X Lite ist sie entsprechend kleiner.
 
 ## 7. Bedienen
 
 ### Flüge erkennen
 
-Ab Werk erkennt Elektro einen Flug am **Motorschalter**: «Motor aus bei» steht auf **SF↑**. Schaltest du den Motor scharf, beginnt die Flugzeit; schaltest du ihn aus, sagt der Sender «Motor aus», die Zeit hält an und es kommt die Frage «Flug beendet?».
+Ab Werk erkennt Electric einen Flug am **Motorschalter**: «Motor aus bei» steht auf **SF↑**. Schaltest du den Motor scharf, beginnt die Flugzeit; schaltest du ihn aus, sagt der Sender «Motor aus», die Zeit hält an und es kommt die Frage «Flug beendet?».
 
 - **JA, BEENDET**: Der Flug kommt in die Liste.
 
@@ -50,13 +50,13 @@ Ab Werk erkennt Elektro einen Flug am **Motorschalter**: «Motor aus bei» steht
 
 Ein Flug zählt erst ab 30 Sekunden Motorlaufzeit («Flug zählt ab»); kürzere Läufe am Boden fallen weg. Ohne Motorschalter oder mit «Flug erkennen über» = «Strom oder Gas» beginnt der Flug, sobald der Strom über 3 A oder das Gas über 10 % liegt, und die Pause mit der Frage kommt nach 20 Sekunden darunter.
 
-![Flug beendet?](../../docs/bilder-simulator/Elektro%20-%20Sim%20800x480%2007%20Rueckfrage%20Flug%20beendet.png)
+![Flug beendet?](../../docs/bilder-simulator/Electric%20-%20Sim%20800x480%2007%20Rueckfrage%20Flug%20beendet.png)
 
 ### Flugliste (Seite 2)
 
 Wische nach links oder tippe auf «8 Flüge». Rechts stehen die Flüge, der neuste oben, der laufende blau mit «läuft» oder «Pause». Tippe einen Flug an: Links erscheinen seine Werte. Mit dem Drehrad wählst du Flüge auch ohne Tippen.
 
-![Flugliste](../../docs/bilder-simulator/Elektro%20-%20Sim%20800x480%2022%20Flugliste.png)
+![Flugliste](../../docs/bilder-simulator/Electric%20-%20Sim%20800x480%2022%20Flugliste.png)
 
 1. Einen Flug löschen: Flug antippen, **FLUG n LÖSCHEN**, dann **JA, LÖSCHEN**. Die späteren Nummern rücken nach.
 2. Alle Flüge löschen: **LISTE LÖSCHEN**, dann **JA, LÖSCHEN**. Der Zähler beginnt wieder bei 1.
@@ -70,7 +70,7 @@ Tippe im Feld VERBRAUCHT auf **AUF 0** und bestätige mit **JA, AUF 0**. Mit **A
 
 ### Ansage auf Schalter
 
-Schaltest du **SG↓** ein («Ansage bei»), sagt der Sender den Akkustand und die Flugzeit an. Was angesagt wird, wählst du in der Gruppe Ansagen. Ausserdem sagt Elektro beim Entladen alle 10 % den Akkustand an («Akku % ansagen alle»).
+Schaltest du **SG↓** ein («Ansage bei»), sagt der Sender den Akkustand und die Flugzeit an. Was angesagt wird, wählst du in der Gruppe Ansagen. Ausserdem sagt Electric beim Entladen alle 10 % den Akkustand an («Akku % ansagen alle»).
 
 ### Sender ohne Berührung (X14, X10, X12)
 

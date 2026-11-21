@@ -3,7 +3,7 @@
 # FAQ
 
 **Do I need Lua-Studio?**  
-No. Without a settings file Elektro works exactly as described, without any message.
+No. Without a settings file Electric works exactly as described, without any message.
 
 **Does the motor switch silence alarms?**  
 No, not by default. Only if you switch «Alarm also with motor off» off for a value, see [Alarms](Alarms.md).

@@ -1,4 +1,4 @@
--- Aufruf aus dem Repo-Ordner:  /opt/homebrew/opt/lua@5.4/bin/lua test/nil-test.lua src/elektro
+-- Aufruf aus dem Repo-Ordner:  /opt/homebrew/opt/lua@5.4/bin/lua test/nil-test.lua src/electric
 -- Rückrufe mit w = nil aufrufen: darf keinen Fehler werfen
 local reg
 system = { registerWidget = function(t) reg = t end }

@@ -1,4 +1,4 @@
-# Elektro: Anforderungen und Entscheide
+# Electric: Anforderungen und Entscheide
 
 Angelegt 19.11.2026. Hier steht, was der Auftraggeber verlangt hat (mit Datum, möglichst im Wortlaut) und was
 entschieden wurde. Keine Arbeitsprotokolle, keine Pfade zu fremden Rechnern.
@@ -15,7 +15,7 @@ entschieden wurde. Keine Arbeitsprotokolle, keine Pfade zu fremden Rechnern.
 
 ## Freigabe des Konzepts
 
-- <Datum>: Konzept `docs/konzept/Elektro - Konzept.html` gezeigt. Antwort: «<Wortlaut>». Änderungen: <…>
+- <Datum>: Konzept `docs/konzept/Electric - Konzept.html` gezeigt. Antwort: «<Wortlaut>». Änderungen: <…>
 
 ## Entscheide
 
@@ -39,7 +39,7 @@ Anleitung, Paket und Ansagen folgen später).
 - Zellen: Fall 1 nur Gesamtspannung (Zelle Ø = Gesamt ÷ Zellenzahl), Fall 2 Zellensensor (tiefste Zelle, Δ).
   Zellenzahl «automatisch» ohne Zellensensor: keine Schätzung, Hinweis «Zellenzahl einstellen» (wie Motoren Lua 1.5.0).
 - So viel wie möglich konfigurierbar (Menütabelle im Konzept).
-- Name «Elektro», Schlüssel `elektro`, Skriptordner `elektro`, Repo `elektro-lua`.
+- Name «Electric», Schlüssel `electric`, Skriptordner `electric`, Repo `electric-lua`.
 - Kopfzeile wie Heli RF; rechts Senderakku wie Heli RF (statt Flugakku im Konzeptbild).
 
 ### Offen

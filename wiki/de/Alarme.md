@@ -22,12 +22,12 @@ Jeder überwachte Wert hat zwei Grenzen: Warnung (orange, nur Anzeige) und Alarm
 | RSSI (bei dBm-Werten: Schwelle = dBm + 120, z. B. 40 = -80 dBm) | unter 45 dB | unter 40 dB, «Achtung! Empfang» und die Zahl |
 | LQ | unter 70 % | unter 50 %, «Achtung! Empfang» und die Zahl |
 
-Die Zellen-Grenzen gelten für LiPo und LiHV. Wählst du eine andere Akkuart und stehen die Zellen-Grenzen noch auf dem Werkwert, stellt Elektro sie passend um: LiFe 3,00/2,80 V, Li-Ion 3,20/3,00 V, NiMH 1,10/1,00 V.
+Die Zellen-Grenzen gelten für LiPo und LiHV. Wählst du eine andere Akkuart und stehen die Zellen-Grenzen noch auf dem Werkwert, stellt Electric sie passend um: LiFe 3,00/2,80 V, Li-Ion 3,20/3,00 V, NiMH 1,10/1,00 V.
 
-![Warnung](../../docs/bilder-simulator/Elektro%20-%20Sim%20800x480%2005%20Warnung.png)
+![Warnung](../../docs/bilder-simulator/Electric%20-%20Sim%20800x480%2005%20Warnung.png)
 *Warnung: Kopf und Wert orange, kein Ton*
 
-![Alarm](../../docs/bilder-simulator/Elektro%20-%20Sim%20800x480%2006%20Alarm.png)
+![Alarm](../../docs/bilder-simulator/Electric%20-%20Sim%20800x480%2006%20Alarm.png)
 *Alarm: Kopf rot, roter Rahmen, Ton und Ansage*
 
 Eine Warnung erscheint, wenn der Wert 1 Sekunde lang jenseits der Grenze liegt, und verschwindet, wenn er 3 Sekunden lang wieder gut ist. Ein Alarm piept, sagt den Wert an und wiederholt das alle 10 Sekunden («Alarm wiederholen alle»), solange er besteht. Zwischen zwei Ansagen liegen immer mindestens 3 Sekunden.
@@ -37,7 +37,7 @@ Eine Warnung erscheint, wenn der Wert 1 Sekunde lang jenseits der Grenze liegt, 
 ### Was nie stumm wird
 - Eine Lua-Studio-Datei schaltet einen überwachten Alarm **nur mit `aus = true`** ganz aus (Entscheid des Autors 20.11.2026). Ein Eintrag ohne Stufen (nur Ansage, Vibration oder «auch bei Motor aus») oder mit Warnung und Alarm beide `false` behält die Werkgrenze.
 - «Alarm auch bei Motor aus» = aus macht diesen Wert nur still, solange der Motorschalter auf aus steht; ohne eingestellten Motorschalter gilt es nie.
-- Elektro hat keine Fehlercodes oder Abschaltgründe eines Reglers; alle Alarme sind Grenzwert-Alarme wie oben aufgeführt.
+- Electric hat keine Fehlercodes oder Abschaltgründe eines Reglers; alle Alarme sind Grenzwert-Alarme wie oben aufgeführt.
 
 ---
 [← Start](../Home.md) | [Zurück](Anzeige.md) | [Weiter →](Lua-Studio.md)

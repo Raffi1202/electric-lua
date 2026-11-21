@@ -1,7 +1,19 @@
-# Elektro versions
+# Electric versions (formerly Elektro)
 
-The version number is in `src/elektro/main.lua` (`local VERSION`). It is the same in the manual, the Suite package and here.
+The version number is in `src/electric/main.lua` (`local VERSION`). It is the same in the manual, the Suite package and here.
 The top section appears in the FrSky Suite as version note. From 0.5.0 on in English; older entries in German.
+
+## 0.6.0 (21 Nov 2026, pre-release)
+
+- **Renamed from Elektro – breaking: old models must re-add the widget; Studio files must be renamed or re-transferred.**
+  Visible name **Electric**, folder on the radio `scripts/electric`, widget key `elec` (Ethos allows at most 7
+  characters), Studio files `<Kennung>.electric.lua` / `.electric.funke.lua` / `.electric.info.json`, `"lua": "electric"`
+  in `beschreibung.json` and the info file, packages `Electric-0.6.0.zip` and `Electric-0.6.0-share.zip`, repository
+  `electric-lua`. The settings of the old widget are not taken over (they belong to the widget key).
+- Transition: if there is no `<Kennung>.electric.lua` but an old `<Kennung>.elektro.lua`, Electric reads it and writes
+  «old studio file found, please re-transfer» to the log. Changes on the radio go to the new `.electric.funke.lua`.
+- Suite description (INFO) in English. No other functional change compared with 0.5.0.
+- Test: `test/motoraus-test.lua` case k (old studio file).
 
 ## 0.5.0 (21 Nov 2026, pre-release)
 

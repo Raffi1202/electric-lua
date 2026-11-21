@@ -1,6 +1,6 @@
--- Elektro: Pflichtfälle der Sensorzuordnung (Vorgaben Sensorzuordnung 20.11.2026) auf dem Mac, mit nachgebildeten
--- Ethos-Sensoren. Aufruf (im Projektordner): /opt/homebrew/opt/lua@5.4/bin/lua test/suche-test.lua src/elektro
-local ordner = arg[1] or "src/elektro"
+-- Electric: Pflichtfälle der Sensorzuordnung (Vorgaben Sensorzuordnung 20.11.2026) auf dem Mac, mit nachgebildeten
+-- Ethos-Sensoren. Aufruf (im Projektordner): /opt/homebrew/opt/lua@5.4/bin/lua test/suche-test.lua src/electric
+local ordner = arg[1] or "src/electric"
 local fehler = 0
 local function pruef(bed, text) if not bed then fehler = fehler + 1 print("FEHLER: " .. text) end end
 CATEGORY_TELEMETRY_SENSOR, UNIT_VOLT, UNIT_AMPERE, UNIT_MILLIAMPERE_HOUR, UNIT_PERCENT = 1, 1, 2, 3, 4

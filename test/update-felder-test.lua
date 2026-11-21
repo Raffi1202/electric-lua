@@ -1,15 +1,15 @@
--- Elektro: Update 0.1.x -> 0.2.0 der Einstellungen in der Datei daten/<Modell>.txt (nicht der Quellen, die prüft
+-- Electric: Update 0.1.x -> 0.2.0 der Einstellungen in der Datei daten/<Modell>.txt (nicht der Quellen, die prüft
 -- update-test.lua). 0.2.0 entfernt «bild», «f7», «f8» und bringt «fGross» (ab Werk 15 = Gas %). War das Fliegerbild
 -- aus (bild=0), stand dort Feld 7: dieser Inhalt kommt ins grosse Feld.
 -- Aufruf aus dem Repo-Ordner:  /opt/homebrew/opt/lua@5.4/bin/lua test/update-felder-test.lua
-local quelle = arg[0]:gsub("test/update%-felder%-test%.lua$", "") .. "src/elektro"
+local quelle = arg[0]:gsub("test/update%-felder%-test%.lua$", "") .. "src/electric"
 local tmp = os.tmpname()
 os.remove(tmp)
 assert(os.execute("mkdir -p '" .. tmp .. "/daten' && cp '" .. quelle .. "'/*.lua '" .. tmp .. "/'"))
 
 -- Datei, wie 0.1.6 sie schreibt (gekürzt auf die betroffenen Zeilen, eigene Wahl f1 = 9, Bild aus, 2 Flüge)
 local f = assert(io.open(tmp .. "/daten/models_test.txt", "w"))
-f:write([[# Elektro: Einstellungen, Zähler und Flüge dieses Modells
+f:write([[# Electric: Einstellungen, Zähler und Flüge dieses Modells
 akkuart=1
 kapaz=2200
 f1=9
@@ -42,7 +42,7 @@ local function pruefe(ok, text)
 end
 
 local K = assert(loadfile("kern.lua"))()
-K.NAME = "Elektro"
+K.NAME = "Electric"
 local w = K.neu()
 K.lies(w)
 pruefe(w.gelesen == true, "Datei gelesen")

@@ -1,11 +1,11 @@
 {
  "skripte": [
   [
-   "src/elektro",
-   "elektro"
+   "src/electric",
+   "electric"
   ]
  ],
- "widget": "elektro",
+ "widget": "elec",
  "abbild": false,
  "ersetze": [],
  "schritte": [
@@ -19,7 +19,7 @@
    ]
   },
   {
-   "bild": "docs/bilder-simulator/Elektro - Sim 800x480 02 Menue.png"
+   "bild": "docs/bilder-simulator/Electric - Sim 800x480 02 Menue.png"
   },
   {
    "tipp": [
@@ -60,7 +60,7 @@
    ]
   },
   {
-   "bild": "docs/bilder-simulator/Elektro - Sim 800x480 01 Widget-Liste.png"
+   "bild": "docs/bilder-simulator/Electric - Sim 800x480 01 Widget-Liste.png"
   },
   {
    "taste": "RTN"

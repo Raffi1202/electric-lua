@@ -1,15 +1,15 @@
--- Elektro: Studio-Datei laden und prüfen (Lua-Studio-Format v1, Abschnitt 12) auf dem Mac.
+-- Electric: Studio-Datei laden und prüfen (Lua-Studio-Format v1, Abschnitt 12) auf dem Mac.
 -- Aufruf aus dem Repo-Ordner:  /opt/homebrew/opt/lua@5.4/bin/lua test/studio-test.lua
 --  a) keine Datei: Zustand «fehlt», kein Hinweis
 --  b) alle Angriffs- und Grenzfalldateien (test/studio-messen/dateien): nie ein Absturz, Zustand passt
---  c) gültige Datei mit absichtlichen Fehlern (test/studio/gueltig.elektro.lua) und .funke.lua: Werte geprüft
+--  c) gültige Datei mit absichtlichen Fehlern (test/studio/gueltig.electric.lua) und .funke.lua: Werte geprüft
 --  d) .funke.lua schreiben: .neu, prüfen, alte entfernen, umbenennen; übrig gebliebene .funke.neu
 -- Je Aufruf von studio.schritt höchstens 5000 Lua-Befehle (debug.sethook).
 local repo = arg[0]:gsub("test/studio%-test%.lua$", "")
 local tmp = os.tmpname()
 os.remove(tmp)
-assert(os.execute("mkdir -p '" .. tmp .. "/SCRIPTS/studio' '" .. tmp .. "/elektro'"))
-assert(os.execute("cp '" .. repo .. "src/elektro/'*.lua '" .. tmp .. "/elektro/'"))
+assert(os.execute("mkdir -p '" .. tmp .. "/SCRIPTS/studio' '" .. tmp .. "/electric'"))
+assert(os.execute("cp '" .. repo .. "src/electric/'*.lua '" .. tmp .. "/electric/'"))
 
 local print_ = print
 local fehlerZahl = 0
@@ -22,7 +22,7 @@ end
 local function pfad(p)
   if p:sub(1, 9) == "SCRIPTS:/" then return tmp .. "/SCRIPTS/" .. p:sub(10) end
   if p:sub(1, 1) == "/" then return p end
-  return tmp .. "/elektro/" .. p
+  return tmp .. "/electric/" .. p
 end
 local io_open, os_rename, os_remove = io.open, os.rename, os.remove
 io.open = function(p, m) return io_open(pfad(p), m) end
@@ -48,7 +48,7 @@ local function kopiere(von, nach)
   local a = assert(io_open(von, "rb")) local t = a:read("a") a:close()
   local b = assert(io_open(nach, "wb")) b:write(t) b:close()
 end
-local ziel = tmp .. "/SCRIPTS/studio/TEST.elektro.lua"
+local ziel = tmp .. "/SCRIPTS/studio/TEST.electric.lua"
 
 -- ein ganzer Ladevorgang; Rückgabe Ergebnis, grösste Befehlszahl je Aufruf, Fehlertext
 local function ganz()
@@ -84,8 +84,8 @@ end
 pruefe(maxN < 5000, "b) " .. anzahl .. " Dateien, höchstens " .. maxN .. " Befehle je Aufruf (< 5000)")
 
 -- c) gültige Datei mit absichtlichen Fehlern, dazu .funke.lua
-kopiere(repo .. "test/studio/gueltig.elektro.lua", ziel)
-kopiere(repo .. "test/studio/gueltig.elektro.funke.lua", tmp .. "/SCRIPTS/studio/TEST.elektro.funke.lua")
+kopiere(repo .. "test/studio/gueltig.electric.lua", ziel)
+kopiere(repo .. "test/studio/gueltig.electric.funke.lua", tmp .. "/SCRIPTS/studio/TEST.electric.funke.lua")
 zeilen = 0
 local J, nc = ganz()
 pruefe(J and J.zustand == "geladen", "c) gültige Datei geladen, " .. nc .. " Befehle je Aufruf höchstens")
@@ -118,22 +118,22 @@ pruefe(a.plaetze[1].stufen and #a.plaetze[1].stufen == 2, "c) Farbstufen überno
 -- d) .funke.lua schreiben (wie am Sender: os.rename überschreibt nicht, darum erst entfernen)
 local text = ST.funkeText({ kapaz = 4000, akkuEnde = false, sw1Name = "Möwe" }, { ["lua:akku_proz"] = { warnung = 33, alarm = 21 }, ["lua:strom"] = { aus = true } })
 pruefe(ST.studioLaden ~= nil and ST.funkeSchreiben("TEST", text), "d) .funke.lua geschrieben")
-local fu, grund = ST.studioLaden(tmp .. "/SCRIPTS/studio/TEST.elektro.funke.lua", 1)
+local fu, grund = ST.studioLaden(tmp .. "/SCRIPTS/studio/TEST.electric.funke.lua", 1)
 pruefe(fu and fu.einstellungen.kapaz == 4000 and fu.einstellungen.akku_ende == false and fu.einstellungen.sw1_name == "Möwe", "d) zurückgelesen: " .. tostring(grund))
 pruefe(fu and fu.grenzen["lua:akku_proz"].warnung == 33 and fu.grenzen["lua:strom"].aus == true, "d) Grenzen zurückgelesen")
-pruefe(io_open(tmp .. "/SCRIPTS/studio/TEST.elektro.funke.neu", "r") == nil, "d) keine .funke.neu übrig")
+pruefe(io_open(tmp .. "/SCRIPTS/studio/TEST.electric.funke.neu", "r") == nil, "d) keine .funke.neu übrig")
 -- übrig gebliebene .funke.neu ohne .funke.lua (Strom weg): wird übernommen
-os_rename(tmp .. "/SCRIPTS/studio/TEST.elektro.funke.lua", tmp .. "/SCRIPTS/studio/TEST.elektro.funke.neu")
-kopiere(repo .. "test/studio/gueltig.elektro.lua", ziel)
+os_rename(tmp .. "/SCRIPTS/studio/TEST.electric.funke.lua", tmp .. "/SCRIPTS/studio/TEST.electric.funke.neu")
+kopiere(repo .. "test/studio/gueltig.electric.lua", ziel)
 J = ganz()
-pruefe(J and J.einst.kapaz == 4000 and io_open(tmp .. "/SCRIPTS/studio/TEST.elektro.funke.lua", "r") ~= nil, "d) .funke.neu nach Stromausfall übernommen")
+pruefe(J and J.einst.kapaz == 4000 and io_open(tmp .. "/SCRIPTS/studio/TEST.electric.funke.lua", "r") ~= nil, "d) .funke.neu nach Stromausfall übernommen")
 -- kaputte .funke.lua: nur sie wird verworfen, die Studio-Datei gilt
-local k = io_open(tmp .. "/SCRIPTS/studio/TEST.elektro.funke.lua", "w") k:write("return { format = 1, a = os }") k:close()
+local k = io_open(tmp .. "/SCRIPTS/studio/TEST.electric.funke.lua", "w") k:write("return { format = 1, a = os }") k:close()
 J = ganz()
 pruefe(J and J.zustand == "geladen" and J.funkeVerworfen and J.einst.kapaz == 2200, "d) kaputte .funke.lua verworfen, Studio-Datei gilt (2200)")
 -- e) volle Belegung (Abschnitt 12.2): 2 Ansichten zu 16 Plätzen, 8 eigene Werte, 12 Grenzen, ~1060 Elemente
-os_remove(tmp .. "/SCRIPTS/studio/TEST.elektro.funke.lua")
-kopiere(repo .. "test/studio/voll.elektro.lua", ziel)
+os_remove(tmp .. "/SCRIPTS/studio/TEST.electric.funke.lua")
+kopiere(repo .. "test/studio/voll.electric.lua", ziel)
 local Jv, nv = ganz()
 pruefe(Jv and Jv.zustand == "geladen" and Jv.fehler == 0, "e) volle Belegung geladen, 0 Fehler (" .. tostring(Jv and Jv.fehler) .. ")")
 pruefe(nv < 5000, "e) höchstens " .. nv .. " Befehle je Aufruf (< 5000)")
@@ -164,8 +164,8 @@ local m1 = collectgarbage("count")
 pruefe(m1 - m0 < 4, string.format("f) zehn Modellwechsel: Speicher %.1f KB -> %.1f KB", m0, m1))
 
 -- g) Format 6.5: «false» = Stufe aus; ohne Eintrag in der Studio-Datei beginnt .funke.lua mit den Werkgrenzen
-kopiere(repo .. "test/studio/demo.elektro.lua", ziel)        -- hat keinen Eintrag für lua:strom
-local fk = io_open(tmp .. "/SCRIPTS/studio/TEST.elektro.funke.lua", "w")
+kopiere(repo .. "test/studio/demo.electric.lua", ziel)        -- hat keinen Eintrag für lua:strom
+local fk = io_open(tmp .. "/SCRIPTS/studio/TEST.electric.funke.lua", "w")
 fk:write('return { format = 1, grenzen = { ["' .. ("lua:strom"):gsub(".", function(c) return "\\" .. c:byte() end) .. '"] = { warnung = false } } }')
 fk:close()
 local Jg = ganz()
@@ -179,12 +179,12 @@ local txt = ST.funkeAusCfg(wg, F)
 local fz = txt and load(txt, "=t", "t", {})()
 local tz = fz and fz.grenzen["lua:reglertemp"]
 pruefe(tz and tz.warnung == false and tz.alarm == 85, "g) .funke.lua schreibt warnung = false, Alarm bleibt 85")
-os_remove(tmp .. "/SCRIPTS/studio/TEST.elektro.funke.lua")
+os_remove(tmp .. "/SCRIPTS/studio/TEST.electric.funke.lua")
 
 -- h) Befunde der Prüfung 0.3.0
 local function datei(text) local x = io_open(ziel, "w") x:write(text) x:close() end
 local function lua(k) return '["' .. k:gsub(".", function(c) return "\\" .. c:byte() end) .. '"]' end
-os_remove(tmp .. "/SCRIPTS/studio/TEST.elektro.funke.lua")
+os_remove(tmp .. "/SCRIPTS/studio/TEST.electric.funke.lua")
 -- Alarm an der Funke wieder einschalten: aus = false hebt aus = true der Studio-Datei auf
 datei("return { format = 1, grenzen = { " .. lua("lua:akku_proz") .. " = { aus = true } } }")
 local J1 = ganz()
@@ -197,7 +197,7 @@ local J2 = ganz()
 local w2 = { cfg = F.standard(), v = {}, st = {}, dauer = {} }
 ST.anwenden(w2, J2, F)
 pruefe(w2.cfg.akkuW == 30 and w2.cfg.akkuA == 20, "h) nach dem Neuladen bleibt der Alarm an (" .. w2.cfg.akkuW .. "/" .. w2.cfg.akkuA .. ")")
-os_remove(tmp .. "/SCRIPTS/studio/TEST.elektro.funke.lua")
+os_remove(tmp .. "/SCRIPTS/studio/TEST.electric.funke.lua")
 -- abweichende Richtung: Werkgrenze, ein Fehler (nicht doppelt gezählt)
 datei("return { format = 1, grenzen = { " .. lua("lua:akku_proz") .. " = { richtung = " .. lua("ueber"):sub(2, -2) .. ", warnung = 30, alarm = 20 } } }")
 local J3 = ganz()
@@ -217,11 +217,11 @@ local w5 = { cfg = F.standard(), v = {}, st = {}, dauer = {} }
 ST.anwenden(w5, J5, F)
 pruefe(w5.cfg.diffW == 1 and w5.cfg.diffA == 20, "h) Zellendifferenz-Warnung 0,004 V bleibt an (diffW " .. w5.cfg.diffW .. ")")
 -- übrig gebliebene .funke.neu neben .funke.lua wird gelöscht
-kopiere(repo .. "test/studio/gueltig.elektro.funke.lua", tmp .. "/SCRIPTS/studio/TEST.elektro.funke.lua")
-kopiere(repo .. "test/studio/gueltig.elektro.funke.lua", tmp .. "/SCRIPTS/studio/TEST.elektro.funke.neu")
+kopiere(repo .. "test/studio/gueltig.electric.funke.lua", tmp .. "/SCRIPTS/studio/TEST.electric.funke.lua")
+kopiere(repo .. "test/studio/gueltig.electric.funke.lua", tmp .. "/SCRIPTS/studio/TEST.electric.funke.neu")
 ganz()
-pruefe(io_open(tmp .. "/SCRIPTS/studio/TEST.elektro.funke.neu", "r") == nil, "h) übrige .funke.neu neben .funke.lua gelöscht")
-os_remove(tmp .. "/SCRIPTS/studio/TEST.elektro.funke.lua")
+pruefe(io_open(tmp .. "/SCRIPTS/studio/TEST.electric.funke.neu", "r") == nil, "h) übrige .funke.neu neben .funke.lua gelöscht")
+os_remove(tmp .. "/SCRIPTS/studio/TEST.electric.funke.lua")
 -- ungültige Stufe bei überwachtem Wert: Werkgrenze dieser Stufe, nicht «aus»
 datei("return { format = 1, grenzen = { " .. lua("lua:akku_proz") .. " = { warnung = " .. lua("x"):sub(2, -2) .. ", alarm = 15 } } }")
 local J7 = ganz()

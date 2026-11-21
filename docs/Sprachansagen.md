@@ -1,8 +1,8 @@
-# Elektro: Sprachansagen
+# Electric: Sprachansagen
 
 Diese Liste ist die einzige Quelle der Ansagen. Texte immer hier ändern und die WAV-Dateien danach neu erzeugen
 (Text-to-Speech, siehe Format unten).
-Ablage: `src/elektro/audio/de/<Dateiname>.wav` und `src/elektro/audio/en/<Dateiname>.wav`.
+Ablage: `src/electric/audio/de/<Dateiname>.wav` und `src/electric/audio/en/<Dateiname>.wav`.
 Format WAV A-law, mono, 16 kHz, 8 Bit. Stimmen wie die Ethos-Originale: deutsch de-DE-Wavenet-E (Tempo 1,1),
 englisch en-US-Wavenet-F. Vorne und hinten keine Stille, weil meist direkt danach die Zahl folgt.
 

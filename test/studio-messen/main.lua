@@ -1,6 +1,6 @@
 -- Mess-Widget «smess» (nur zum Testen, kommt nie in ein Paket): Speicher und Verhalten der Studio-Ladefunktion
--- am echten Sender, neben dem laufenden Elektro-Widget (Lua-Studio-Format v1, Abschnitt 12).
--- Einbau: Ordner nach SCRIPTS:/smess/ (main.lua und dateien/*.txt). Modell mit Elektro laden, zweiten Bildschirm
+-- am echten Sender, neben dem laufenden Electric-Widget (Lua-Studio-Format v1, Abschnitt 12).
+-- Einbau: Ordner nach SCRIPTS:/smess/ (main.lua und dateien/*.txt). Modell mit Electric laden, zweiten Bildschirm
 -- mit diesem Widget anlegen und anzeigen. Es misst je Datei einen Schritt pro Sekunde und schreibt alles ins Log
 -- (print) und nach SCRIPTS:/smess/daten/ergebnis.txt.
 
@@ -160,7 +160,7 @@ local function wakeup(w)
   schritt = schritt + 1
   if schritt == 1 then
     collectgarbage("collect")
-    melde(string.format("Start: Lua-Speicher belegt %.1f KB (alle Skripte, Elektro läuft daneben), frei %s KB", kb(), fr()))
+    melde(string.format("Start: Lua-Speicher belegt %.1f KB (alle Skripte, Electric läuft daneben), frei %s KB", kb(), fr()))
     pruefe126()
   elseif schritt <= #DATEIEN + 1 then
     local name, erwartet = DATEIEN[schritt - 1][1], DATEIEN[schritt - 1][2]

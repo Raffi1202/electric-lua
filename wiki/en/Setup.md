@@ -6,15 +6,15 @@
 
 1. Tap the **Screens** icon at the bottom (two rectangles).
 2. Tap **+** at the top right.
-3. Swipe down to the layout **Full screen** (one large field) and tap it. To keep the Ethos top and bottom bars, choose the layout with **one field and the bars** instead (bottom centre of the layout grid); Elektro then shows the compact view (chapter 5).
+3. Swipe down to the layout **Full screen** (one large field) and tap it. To keep the Ethos top and bottom bars, choose the layout with **one field and the bars** instead (bottom centre of the layout grid); Electric then shows the compact view (chapter 5).
 4. Tap the empty field, then **Widget**.
-5. Swipe to the bottom of the list and select **Elektro**. The display appears at once.
+5. Swipe to the bottom of the list and select **Electric**. The display appears at once.
 
 You reach the widget menu any time through Model › Screens › select the screen › tap the widget.
 
 ## 4. Sensors and battery
 
-1. Switch the model on so telemetry runs. The first time, Elektro finds the sensors itself; a short blue note «… sensors assigned automatically» appears.
+1. Switch the model on so telemetry runs. The first time, Electric finds the sensors itself; a short blue note «… sensors assigned automatically» appears.
 2. Open the menu and the group **Sensors**. Check every line and select missing or wrong ones by hand. An empty line is allowed; the field then shows a dash.
 3. **Find sensors (empty only)** › **Search** later fills only empty lines; your own choices stay. If you deleted sensors in Ethos and searched again, first reload the model (select another model and back), otherwise the values stay at 0. Then the search binds each line to the matching sensor (same ID and name); lines whose sensor is no longer in the sensor list, including ones you chose yourself, are searched again.
 4. The group **Check assignment** shows each chosen sensor with physical ID and AppID (e.g. «ESC Current P04 / 0B50»). If several identical sensors matched, a line «n sensors match, chosen: … - please check» follows.
@@ -32,12 +32,12 @@ You reach the widget menu any time through Model › Screens › select the scre
 | RSSI, LQ | Signal strength «RSSI»; with ELRS and similar the link quality «LQ». |
 
 **Cells with and without a cell sensor.** With a cell sensor the field «CELL LOWEST» shows the weakest cell, below it a small bar per cell (the weakest in yellow) and «Δ» = difference between strongest and weakest cell. Without a cell sensor «CELL Ø» shows the average cell = pack voltage ÷ cell count, with a bar for the pack voltage. For this the
-**Cell count** must be set; Elektro never guesses it from the voltage. If it is 0 (auto) and there is no cell sensor, the field shows «Cell count?» in orange and the battery gauge «Set cell count».
+**Cell count** must be set; Electric never guesses it from the voltage. If it is 0 (auto) and there is no cell sensor, the field shows «Cell count?» in orange and the battery gauge «Set cell count».
 
-![cell sensor](../../docs/bilder-simulator/Elektro%20-%20Sim%20800x480%2020%20Zellensensor.png)
+![cell sensor](../../docs/bilder-simulator/Electric%20-%20Sim%20800x480%2020%20Zellensensor.png)
 *With cell sensor: bar per cell*
 
-![cell count missing](../../docs/bilder-simulator/Elektro%20-%20Sim%20800x480%2011%20nur%20ein%20Teil%20der%20Sensoren.png)
+![cell count missing](../../docs/bilder-simulator/Electric%20-%20Sim%20800x480%2011%20nur%20ein%20Teil%20der%20Sensoren.png)
 *No cell sensor, no cell count: «Set cell count»*
 
 ## 8. All settings

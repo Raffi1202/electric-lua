@@ -4,6 +4,7 @@
 
 All changes are listed in [CHANGELOG.md](../../CHANGELOG.md). Versions:
 
+- 0.6.0 (21.11.2026): renamed from Elektro / umbenannt von Elektro
 - 0.5.0 (21.11.2026)
 - 0.4.0 (21.11.2026)
 - 0.3.2 (20.11.2026)

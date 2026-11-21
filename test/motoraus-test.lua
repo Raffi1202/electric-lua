@@ -1,13 +1,13 @@
--- Elektro: «Alarm auch bei Motor aus» je Grenzwert (Lua-Studio-Format 2, Abschnitt 3.5, Auftrag 21.11.2026).
+-- Electric: «Alarm auch bei Motor aus» je Grenzwert (Lua-Studio-Format 2, Abschnitt 3.5, Auftrag 21.11.2026).
 -- Aufruf aus dem Repo-Ordner:  /opt/homebrew/opt/lua@5.4/bin/lua test/motoraus-test.lua
--- Läuft in einer Kopie von src/elektro in einem temporären Ordner (das Skript schreibt daten/ und SCRIPTS:/studio).
+-- Läuft in einer Kopie von src/electric in einem temporären Ordner (das Skript schreibt daten/ und SCRIPTS:/studio).
 --  a) Menü, Standard EIN: Alarm kommt auch bei Motor aus (Pflichtregel «Alarme trotz Motor-aus-Schalter»).
 --  b) Menü AUS, Motor aus: Alarm schweigt (kein Ton, keine Meldung), die Farbe zeigt den Wert weiter.
 --  c) Menü AUS, Motor ein: Alarm kommt.  d) laufender Alarm schweigt sofort, wenn der Motor ausgeht.
 --  e) Studio-Datei «beiMotorAus = false» für einen überwachten Wert.  f) für eine Sensor-Grenze.
 --  g) .funke.lua «beiMotorAus = true» hebt das false der Studio-Datei auf; Menüänderung landet in .funke.lua.
 --  h) falscher Typ zählt als true, mit Fehler.  i) ohne Motorschalter schweigt nie etwas.
-local quelle = arg[0]:gsub("test/motoraus%-test%.lua$", "") .. "src/elektro"
+local quelle = arg[0]:gsub("test/motoraus%-test%.lua$", "") .. "src/electric"
 local tmp = os.tmpname()
 os.remove(tmp)
 assert(os.execute("mkdir -p '" .. tmp .. "/daten' '" .. tmp .. "/SCRIPTS:/studio' && cp '" .. quelle .. "'/*.lua '" .. tmp .. "/'"))
@@ -47,8 +47,8 @@ local os_remove, os_rename = os.remove, os.rename
 os.remove = function(p) return os_remove((p:sub(1, 1) == "/" and "" or ordner) .. p) end
 os.rename = function(a, b) return os_rename(ordner .. a, ordner .. b) end
 local function esc(t) return '"' .. t:gsub(".", function(c) return "\\" .. c:byte() end) .. '"' end
-local STUDIO = "SCRIPTS:/studio/TEST.elektro.lua"
-local FUNKE = "SCRIPTS:/studio/TEST.elektro.funke.lua"
+local STUDIO = "SCRIPTS:/studio/TEST.electric.lua"
+local FUNKE = "SCRIPTS:/studio/TEST.electric.funke.lua"
 local function schreib(p, t) local f = assert(io.open(p, "w")) f:write(t) f:close() end
 
 -- Motorschalter SF: state() = true heisst «Motor aus» aktiv
@@ -189,6 +189,18 @@ toene, werte.t = 0, 95
 lauf(15)
 pruefe(alarmAn() and toene >= 1, "j) Reglertemp.-Alarm kommt mit der Werkgrenze")
 os.remove(STUDIO)
+
+-- k) 0.6.0 Übergang: Studio-Datei nur unter dem alten Namen <Kennung>.elektro.lua wird gelesen, mit Log-Hinweis
+schreib("SCRIPTS:/studio/TEST.elektro.lua", "return { format = 1, grenzen = { [" .. esc("lua:reglertemp") .. "] = { richtung = "
+  .. esc("ueber") .. ", warnung = 60, alarm = 75 } } }")
+local alteDruck, hinweisAlt = print, false
+print = function(s) if tostring(s):find("old studio file found", 1, true) then hinweisAlt = true end end
+start()
+lauf(15)
+print = alteDruck
+pruefe(w.studioZustand == "geladen" and w.cfg.tempW == 60 and w.cfg.tempA == 75 and hinweisAlt,
+  "k) alte Studio-Datei .elektro.lua gelesen (60/75), Hinweis im Log")
+os.remove("SCRIPTS:/studio/TEST.elektro.lua")
 
 -- Menü: eigene Gruppe, nicht über «einstellungen» der Studio-Datei
 local F = assert(loadfile("felder.lua"))()

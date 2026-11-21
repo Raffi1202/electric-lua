@@ -1,4 +1,4 @@
-# Elektro – Anzeige für Elektroflieger (FrSky Ethos)
+# Electric – Anzeige für Elektroflieger (FrSky Ethos)
 
 [English](README.md) · **Deutsch** · Doku: [Wiki (Deutsch)](wiki/de/Installation.md) · [Wiki (English)](wiki/en/Installation.md)
 
@@ -8,12 +8,12 @@ Ethos-Widget für Elektroflieger auf FrSky-Sendern mit Farbdisplay. Es zeigt auf
 Strom, Drehzahl, Reglertemperatur, Verbrauch, Leistung, Höhe, Speed und Empfang. Dazu kommen Warnungen und Alarme
 mit Sprachansagen sowie eine Flugliste. Anzeige, Menü und Ansagen gibt es auf Deutsch und Englisch.
 
-![Elektro auf 800 × 480 (Ethos-Simulator)](docs/bilder-simulator/Elektro%20-%20Sim%20800x480%2004%20Normal.png)
+![Electric auf 800 × 480 (Ethos-Simulator)](docs/bilder-simulator/Electric%20-%20Sim%20800x480%2004%20Normal.png)
 
 - **Vier Tachos:** Akku %, Strom, Drehzahl und Reglertemperatur.
 - **Sechs Felder:** Zelle, Verbraucht, Leistung, Höhe, Speed und Empfang, dazu ein grosses Feld **Gas %** (aus dem
   Gaskanal, mit dem Strom dazu). Was wo steht, wählst du im Menü.
-- **Vollbild oder kompakt:** Im Layout mit Ethos-Kopf- und Fussleiste zeigt Elektro von selbst eine Kompaktansicht
+- **Vollbild oder kompakt:** Im Layout mit Ethos-Kopf- und Fussleiste zeigt Electric von selbst eine Kompaktansicht
   mit vier Tachos und acht Feldern.
 - **Zellen:** mit Zellensensor die tiefste Zelle und die Differenz, ohne Zellensensor Gesamtspannung ÷ Zellenzahl.
 - **Akku %:** vom Regler oder aus Ruhespannung und verbrauchten mAh gerechnet.
@@ -26,6 +26,7 @@ mit Sprachansagen sowie eine Flugliste. Anzeige, Menü und Ansagen gibt es auf D
   Grenzwerte. Ohne diese Datei läuft alles wie bisher.
 - **Symbole und Schmuck (neu in 0.4.0, Lua-Studio-Format 2):** Kästchen mit Symbol und fetter Einheit, dazu frei
   platzierte Symbole, Texte, Linien und Rahmen. Format-1-Dateien laufen unverändert.
+- **Neu in 0.6.0 (Bruch):** umbenannt von «Elektro» in **Electric** (Widget, Ordner `scripts/electric`, Studio-Datei `….electric.lua`). Das Widget in jedem Modell neu wählen, siehe [Umstieg](wiki/de/Installation.md#umstieg-von-der-deutschen-version-elektro).
 - **Neu in 0.5.0:** «Alarm auch bei Motor aus» je Wert (Menü und Lua-Studio, ab Werk ein), Speicher wird beim
   Modellwechsel freigegeben (es bleiben rund 5 KB statt über 100 KB), Studio-Datei lädt schneller und zeigt
   «Studio-Datei wird geladen ...» statt kurz der Standardanzeige.
@@ -34,11 +35,11 @@ mit Sprachansagen sowie eine Flugliste. Anzeige, Menü und Ansagen gibt es auf D
 
 ## Schnellstart in 5 Schritten
 
-1. `Elektro-0.5.0.zip` aus dem neusten **Release** herunterladen (rechts auf der Repo-Seite unter «Releases»).
+1. `Electric-0.6.0.zip` aus dem neusten **Release** herunterladen (rechts auf der Repo-Seite unter «Releases»).
 2. Sender per USB anschliessen, am Sender **Ethos Suite** wählen, am Computer die **FrSky Suite** öffnen.
 3. Suite › **Lua-Bibliothek** › **Von lokaler ZIP installieren** › die ZIP wählen. Danach den Sender neu starten.
-4. Modell › Bildschirme › **+** › Layout **Vollbild** (oder mit Leisten) › ins Feld tippen › Widget **Elektro**.
-5. Modell einschalten: Elektro sucht die Sensoren selbst. Danach im Widget-Menü unter **Akku** Akkuart, Zellenzahl und Kapazität einstellen.
+4. Modell › Bildschirme › **+** › Layout **Vollbild** (oder mit Leisten) › ins Feld tippen › Widget **Electric**.
+5. Modell einschalten: Electric sucht die Sensoren selbst. Danach im Widget-Menü unter **Akku** Akkuart, Zellenzahl und Kapazität einstellen.
 
 Ohne Suite geht es auch per USB-Speicher bzw. SD-Karte (Anleitung Kapitel 2). Beim Aktualisieren bleiben
 Einstellungen, Flüge und Zähler erhalten.
@@ -47,14 +48,14 @@ Einstellungen, Flüge und Zähler erhalten.
 
 | Was | Datei |
 |---|---|
-| Anleitung zum Ausdrucken | [`docs/Elektro - Anleitung.pdf`](docs/Elektro%20-%20Anleitung.pdf) (HTML-Fassung in `docs/anleitung/`) |
-| Manual (English) | [`docs/Elektro - Manual.pdf`](docs/Elektro%20-%20Manual.pdf) |
+| Anleitung zum Ausdrucken | [`docs/Electric - Anleitung.pdf`](docs/Electric%20-%20Anleitung.pdf) (HTML-Fassung in `docs/anleitung/`) |
+| Manual (English) | [`docs/Electric - Manual.pdf`](docs/Electric%20-%20Manual.pdf) |
 | Testleitfaden für Tester (Häkchenliste) | [`TESTLEITFADEN.md`](TESTLEITFADEN.md) |
 | Fehler melden, Wünsche | GitHub › Issues › New issue (Vorlagen «Fehler / Bug» und «Wunsch / Idee») |
 | Versionen | [`CHANGELOG.md`](CHANGELOG.md) |
 | Texte der Sprachansagen | [`docs/Sprachansagen.md`](docs/Sprachansagen.md) |
 
-## Sender und Stand der Erprobung (Version 0.5.0, 21.11.2026)
+## Sender und Stand der Erprobung (Version 0.6.0, 21.11.2026)
 
 | Display | Sender | Stand |
 |---|---|---|
@@ -71,10 +72,10 @@ Einstellungen, Flüge und Zähler erhalten.
 - Version 0.2.0: Kompaktansicht im Layout mit Leisten (784 × 316) mit Live-Telemetrie sauber, Gas % live von 0 bis 100 %
   mit Balken, Flugerkennung über Gas, Rückfrage AUF 0, Flugliste öffnen und zurück, Update von 0.1.6 ohne Verlust, Log leer.
 - Version 0.3.0 (ohne Telemetrie): Einstellungsdatei aus Lua-Studio. Ohne Datei entsteht die Info-Datei für Lua-Studio;
-  die Demo-Datei wird geladen und angezeigt; Änderungen im Widget-Menü gehen in `…elektro.funke.lua` (neu schreiben,
+  die Demo-Datei wird geladen und angezeigt; Änderungen im Widget-Menü gehen in `…electric.funke.lua` (neu schreiben,
   vorhandene Datei ersetzen, bleibt nach dem Neuladen, «Zurück» stellt den Studio-Stand her und entfernt sie); eine
   kaputte Datei zeigt einen Hinweis und die Standardansicht statt eines Absturzes; Lua-Studio 0.2.0 überträgt eine
-  Einstellungsdatei per Serial und Elektro lädt sie. Log jeweils leer.
+  Einstellungsdatei per Serial und Electric lädt sie. Log jeweils leer.
 - Version 0.3.0 mit Telemetrie aus einem Sensor-Simulator: Live-Werte und Sensorsuche sauber; ein Alarm (Reglertemperatur)
   kommt mit Ton und Ansage bei Motorschalter aus. Den Fall «ein» hat 0.3.0 wegen eines Fehlers nicht erkannt (Pille immer
   MOTOR AUS).
@@ -118,7 +119,7 @@ Einstellungen, Flüge und Zähler erhalten.
 
 | Inhalt | Ort |
 |---|---|
-| Skript, 1:1 so wie es auf den Sender kommt | `src/elektro/` |
+| Skript, 1:1 so wie es auf den Sender kommt | `src/electric/` |
 | Anleitung (PDF, Quelle als HTML) | `docs/`, `docs/anleitung/` |
 | Bilder aus dem Ethos-Simulator | `docs/bilder-simulator/` |
 | Konzept, Anforderungen und Entscheide | `docs/konzept/`, `docs/entwicklung/` |
@@ -130,10 +131,10 @@ Einstellungen, Flüge und Zähler erhalten.
 Für Tester nicht nötig. Die Tests auf dem Mac laufen mit Lua 5.4 aus dem Repo-Ordner, z. B.:
 
 ```sh
-luac -p src/elektro/*.lua
+luac -p src/electric/*.lua
 lua test/motoraus-test.lua
 lua test/speicher-test.lua
-lua test/suche-test.lua src/elektro
+lua test/suche-test.lua src/electric
 lua test/format2-test.lua "<Ordner mit den Format-2-Testdateien von Lua-Studio>"
 ```
 
@@ -145,10 +146,10 @@ nicht Teil dieses Repos.
 
 | Projekt | Wozu |
 |---|---|
-| [Heli RF](https://github.com/Raffi1202/heli-lua) | Ethos-Widget für Rotorflight-Helis |
+| [Heli](https://github.com/Raffi1202/heli-lua) | Ethos-Widget für Helis (Rotorflight) |
 | [Jet](https://github.com/Raffi1202/jet-lua) | Ethos-Widget für Turbinen (mehrere ECU-Hersteller) |
-| [Segler](https://github.com/Raffi1202/segler-lua) | Ethos-Widget für Segler (Vario, Thermik) |
-| [Motoren ECU / Vergaser](https://github.com/Raffi1202/motoren-lua) | Ethos-Widgets für Verbrennungsmotoren |
+| [Glider](https://github.com/Raffi1202/glider-lua) | Ethos-Widget für Segler (Vario, Thermik) |
+| [Gas Engine ECU / Carb](https://github.com/Raffi1202/gas-engine-lua) | Ethos-Widgets für Verbrennungsmotoren |
 | [Lua-Studio](https://github.com/Raffi1202/lua-studio) | PC-Programm zum Einrichten der Widgets (Mac/Windows) |
 | [Telemetrie-Simulator](https://github.com/Raffi1202/telemetrie-simulator) | ESP32-S3, der FrSky-Telemetriesensoren nachbildet |
 | [Ethos-Modell-Konverter](https://github.com/Raffi1202/ethos-modell-konverter) | Modelle zwischen Ethos-Sendern umziehen |
@@ -156,4 +157,4 @@ nicht Teil dieses Repos.
 
 ## Lizenz
 
-GPL-3.0, siehe [LICENSE](LICENSE). Der Baustein `src/elektro/studio_symbole.lua` stammt aus Lua-Studio (gleicher Autor, gleiche Lizenz).
+GPL-3.0, siehe [LICENSE](LICENSE). Der Baustein `src/electric/studio_symbole.lua` stammt aus Lua-Studio (gleicher Autor, gleiche Lizenz).

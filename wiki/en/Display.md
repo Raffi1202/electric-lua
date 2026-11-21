@@ -4,7 +4,7 @@
 
 ## 5. The display
 
-![Display with numbers](../../docs/bilder-simulator/Elektro%20-%20Sim%20800x480%2012%20Englisch.png)
+![Display with numbers](../../docs/bilder-simulator/Electric%20-%20Sim%20800x480%2012%20Englisch.png)
 
 *The numbers of the table are drawn into this picture in the PDF manual.*
 
@@ -28,21 +28,21 @@ This picture shows an alarm (red top bar and frames); in normal operation the to
 
 A short grey dash instead of a number means: this value is not arriving or has no sensor. You choose what each gauge and field shows in the menu (chapter 8, group Fields).
 
-**Battery %** comes from the ESC if it sends it and «Battery % from» is «ESC, else calculated». Otherwise Elektro calculates: when the model rests 2 seconds without current, it takes the start value from the resting voltage (curve of the battery type) and then counts down with the used mAh and the capacity. «REST» then appears below the gauge. The menu line «Battery % from» shows what applies.
+**Battery %** comes from the ESC if it sends it and «Battery % from» is «ESC, else calculated». Otherwise Electric calculates: when the model rests 2 seconds without current, it takes the start value from the resting voltage (curve of the battery type) and then counts down with the used mAh and the capacity. «REST» then appears below the gauge. The menu line «Battery % from» shows what applies.
 
 **New pack:** if telemetry is gone for more than 30 seconds (pack unplugged), MAX and LOW values, Wh and battery % start again.
 
 ### Compact view
 
-If you choose the layout with top and bottom bars (chapter 3), Elektro notices it and shows a compact view: a narrow bar with flight time, ARMED / MOTOR OFF and signal (model name and radio battery are in the Ethos top bar), below it the four gauges and eight fields: the large field (THROTTLE by default, here without bar), fields 1 to 6 and FLIGHTS. Tap FLIGHTS to open the flight list. Everything else works as in the full screen.
+If you choose the layout with top and bottom bars (chapter 3), Electric notices it and shows a compact view: a narrow bar with flight time, ARMED / MOTOR OFF and signal (model name and radio battery are in the Ethos top bar), below it the four gauges and eight fields: the large field (THROTTLE by default, here without bar), fields 1 to 6 and FLIGHTS. Tap FLIGHTS to open the flight list. Everything else works as in the full screen.
 
-![compact view](../../docs/bilder-simulator/Elektro%20-%20Sim%20784x316%2030%20Kompakt%20Normal%20mit%20Gas.png) Compact view on X20 and X18RS (784 × 316). On X14 and X18 / Twin X Lite it is smaller accordingly.
+![compact view](../../docs/bilder-simulator/Electric%20-%20Sim%20784x316%2030%20Kompakt%20Normal%20mit%20Gas.png) Compact view on X20 and X18RS (784 × 316). On X14 and X18 / Twin X Lite it is smaller accordingly.
 
 ## 7. Operation
 
 ### Detecting flights
 
-By default Elektro detects a flight by the **motor switch**: «Motor off at» is **SF↑**. Arm the motor and the flight time starts; switch it off and the radio says «Motor off», the time stops and the question «Flight ended?» appears.
+By default Electric detects a flight by the **motor switch**: «Motor off at» is **SF↑**. Arm the motor and the flight time starts; switch it off and the radio says «Motor off», the time stops and the question «Flight ended?» appears.
 
 - **YES, ENDED**: the flight goes into the list.
 
@@ -56,7 +56,7 @@ A flight counts only after 30 seconds of motor time («Flight counts from»); sh
 
 Swipe left or tap «8 flights». The flights are on the right, newest first, the current one in blue with «running» or «paused». Tap a flight and its values appear on the left. The rotary encoder also selects flights.
 
-![flight list](../../docs/bilder-simulator/Elektro%20-%20Sim%20800x480%2013%20Englisch%20Flugliste.png)
+![flight list](../../docs/bilder-simulator/Electric%20-%20Sim%20800x480%2013%20Englisch%20Flugliste.png)
 
 1. Delete one flight: tap it, **DELETE FLIGHT n**, then **YES, DELETE**. The later numbers move up.
 2. Delete all flights: **CLEAR LIST**, then **YES, DELETE**. The counter starts at 1 again.
@@ -70,7 +70,7 @@ Tap **RESET** in the USED field and confirm with **YES, RESET**. **CANCEL** leav
 
 ### Announcement on a switch
 
-Switch **SG↓** on («Announce at») and the radio announces battery level and flight time. Choose what is announced in the group Announcements. In addition Elektro announces the battery level every 10 % while discharging («Announce battery % every»).
+Switch **SG↓** on («Announce at») and the radio announces battery level and flight time. Choose what is announced in the group Announcements. In addition Electric announces the battery level every 10 % while discharging («Announce battery % every»).
 
 ### Radios without touch (X14, X10, X12)
 

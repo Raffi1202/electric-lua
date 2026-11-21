@@ -1,22 +1,22 @@
--- Elektro: Pflichttests Lua-Studio-Format 2 (Format 2, Abschnitt 9) auf dem Mac, mit dem echten kern.lua.
+-- Electric: Pflichttests Lua-Studio-Format 2 (Format 2, Abschnitt 9) auf dem Mac, mit dem echten kern.lua.
 -- Aufruf aus dem Repo-Ordner:  /opt/homebrew/opt/lua@5.4/bin/lua test/format2-test.lua "<Ordner Testdateien>"
 --   Ordner = «FrSky Koordination/Lua-Studio-Format 2 - Testdateien» (p*.lua und symbole/), wird nur gelesen.
--- Läuft in einer Kopie von src/elektro in einem temporären Ordner. Prüft je Testdatei: geladen / fehlend / verworfen
+-- Läuft in einer Kopie von src/electric in einem temporären Ordner. Prüft je Testdatei: geladen / fehlend / verworfen
 -- (S.zaehler), loadMask nur für gültige Dateien, keine Datei ausserhalb von symbole/, Modellwechsel ohne
 -- Speicherwachstum, «---» bei fehlendem Sensor. Befehle je wakeup und je ganzem paint (auch im ersten paint, während
 -- S.schritt noch läuft) werden nur gemessen und als MESSUNG ausgegeben, nicht als Fehler gezählt (siehe unten).
-local quelle = arg[0]:gsub("test/format2%-test%.lua$", "") .. "src/elektro"
+local quelle = arg[0]:gsub("test/format2%-test%.lua$", "") .. "src/electric"
 local testOrdner = assert(arg[1], "Ordner der Testdateien fehlt")
 local tmp = os.tmpname()
 os.remove(tmp)
-assert(os.execute("mkdir -p '" .. tmp .. "/elektro/daten' '" .. tmp .. "/SCRIPTS/studio' && cp '" .. quelle .. "'/*.lua '" .. tmp .. "/elektro/'"))
+assert(os.execute("mkdir -p '" .. tmp .. "/electric/daten' '" .. tmp .. "/SCRIPTS/studio' && cp '" .. quelle .. "'/*.lua '" .. tmp .. "/electric/'"))
 assert(os.execute("cp -R '" .. testOrdner .. "/symbole' '" .. tmp .. "/SCRIPTS/studio/symbole'"))
 
 local fehler = 0
 local zeilen = {}
 local print_ = print
 print = function(...) local t = table.concat({ ... }, " ") zeilen[#zeilen + 1] = t if not t:find("^Studio%-Symbol") then print_(...) end end
--- Befehle je Aufruf: Format 2 verlangt < 5000, auch für das ganze paint. Elektro liegt schon ohne Studio-Datei
+-- Befehle je Aufruf: Format 2 verlangt < 5000, auch für das ganze paint. Electric liegt schon ohne Studio-Datei
 -- darüber (eingebaute Seite rund 8700, läuft am X18RS ohne Abbruch). Bis zum Messentscheid am Sender (20.11.2026)
 -- werden die Zahlen nur gemeldet (MESSUNG), nicht als Fehler gezählt.
 local messungen = {}
@@ -30,7 +30,7 @@ end
 local function pfad(p)
   if p:sub(1, 9) == "SCRIPTS:/" then return tmp .. "/SCRIPTS/" .. p:sub(10) end
   if p:sub(1, 1) == "/" then return p end
-  return tmp .. "/elektro/" .. p
+  return tmp .. "/electric/" .. p
 end
 local geoeffnet = {}
 local io_open = io.open
@@ -76,7 +76,7 @@ local function kopiere(von, nach)
   local a = assert(io_open(von, "rb")) local t = a:read("a") a:close()
   local b = assert(io_open(nach, "wb")) b:write(t) b:close()
 end
-local ZIEL = tmp .. "/SCRIPTS/studio/TEST.elektro.lua"
+local ZIEL = tmp .. "/SCRIPTS/studio/TEST.electric.lua"
 
 local function messe(f, ...)
   local n = 0

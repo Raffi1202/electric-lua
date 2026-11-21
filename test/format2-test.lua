@@ -1,6 +1,6 @@
 -- Electric: Pflichttests Lua-Studio-Format 2 (Format 2, Abschnitt 9) auf dem Mac, mit dem echten kern.lua.
 -- Aufruf aus dem Repo-Ordner:  /opt/homebrew/opt/lua@5.4/bin/lua test/format2-test.lua "<Ordner Testdateien>"
---   Ordner = «FrSky Koordination/Lua-Studio-Format 2 - Testdateien» (p*.lua und symbole/), wird nur gelesen.
+--   Ordner = the folder with the Lua-Studio format 2 test files (p*.lua und symbole/), wird nur gelesen.
 -- Läuft in einer Kopie von src/electric in einem temporären Ordner. Prüft je Testdatei: geladen / fehlend / verworfen
 -- (S.zaehler), loadMask nur für gültige Dateien, keine Datei ausserhalb von symbole/, Modellwechsel ohne
 -- Speicherwachstum, «---» bei fehlendem Sensor. Befehle je wakeup und je ganzem paint (auch im ersten paint, während

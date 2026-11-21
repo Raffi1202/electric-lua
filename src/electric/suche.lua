@@ -1,4 +1,4 @@
--- Electric: Sensoren automatisch zuweisen (Vorgaben Sensorzuordnung, FrSky Koordination, 20.11.2026).
+-- Electric: Sensoren automatisch zuweisen (Vorgaben Sensorzuordnung, 20.11.2026).
 -- Füllt nur leere Felder; was von Hand gesetzt ist, bleibt. Vorher wird jedes zugewiesene Telemetriefeld neu an
 -- den Sensor der aktuellen Liste gebunden (gleiche AppID, Teilwert, Physical ID und Name); ohne Gegenstück wird es
 -- frei und neu gesucht (0.3.1: nach «Alle Sensoren löschen» lieferten alte Verweise am Sender 0 und Alarm).

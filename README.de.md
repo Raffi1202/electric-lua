@@ -122,7 +122,6 @@ Einstellungen, Flüge und Zähler erhalten.
 | Skript, 1:1 so wie es auf den Sender kommt | `src/electric/` |
 | Anleitung (PDF, Quelle als HTML) | `docs/`, `docs/anleitung/` |
 | Bilder aus dem Ethos-Simulator | `docs/bilder-simulator/` |
-| Konzept, Anforderungen und Entscheide | `docs/konzept/`, `docs/entwicklung/` |
 | Abläufe für den Simulator, Mac-Tests | `test/` |
 | Release-ZIP (nicht im Repo, als Download im GitHub-Release) | `dist/` |
 

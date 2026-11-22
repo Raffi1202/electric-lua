@@ -3,6 +3,11 @@
 The version number is in `src/electric/main.lua` (`local VERSION`). It is the same in the manual, the Suite package and here.
 The top section appears in the FrSky Suite as version note. From 0.5.0 on in English; older entries in German.
 
+## 0.7.2 (22 Nov 2026, pre-release)
+
+- Info file: the hint «view … adapted» is cleared when the widget switches back to a window size with an exact layout
+  (before, it could stay from the scaled preview in the screen setup).
+
 ## 0.7.1 (22 Nov 2026, pre-release)
 
 - Studio hints («view … adapted», «file broken», «no matching view») are shown in the widget's own header instead of

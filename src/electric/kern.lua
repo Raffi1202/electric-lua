@@ -945,9 +945,12 @@ local function studioWecke(w, now, nurLaden)
       w.studio.ansichten[key] = n
       if n.dekoVon then w.skalDeko = n end
       local t = string.format(T.sAngepasst, n.von) .. (n.weg > 0 and string.format(T.sWeg, tostring(n.weg)) or "")
-      w.sAngepasst = t
-      studioHinweis(w, t, now)
-      w.sHinweisBis, w.sKurz = now + 5, true            -- 5 s, danach kein «!»
+      local L = w.L
+      if L and L.W == sw[1] and L.H == sw[2] then         -- 0.7.2: nur, wenn diese Grösse noch gezeigt wird
+        w.sAngepasst = t
+        studioHinweis(w, t, now)
+        w.sHinweisBis, w.sKurz = now + 5, true          -- 5 s, danach kein «!»
+      end
     else
       if not ok then print(tostring(w.name) .. ": Umrechnen: " .. tostring(n)) end
       w.studio.keine = w.studio.keine or {}
@@ -1124,6 +1127,7 @@ function K.zeichne(w)
     local g = A.von or (W .. "x" .. H)
     if g ~= w.ansichtGenutzt or (A.angepasst == true) ~= w.angepasst then
       w.ansichtGenutzt, w.angepasst, w.infoOffen = g, A.angepasst == true, true
+      if not A.angepasst then w.sAngepasst = nil end   -- 0.7.2: genau passende Ansicht, Hinweis «angepasst» gilt nicht mehr
     end
   end
   if A and STUDIO then                             -- Ansicht der Studio-Datei für genau diese Fenstergrösse

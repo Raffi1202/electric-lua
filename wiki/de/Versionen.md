@@ -4,6 +4,7 @@
 
 Alle Änderungen stehen in [CHANGELOG.md](../../CHANGELOG.md). Versionen:
 
+- 0.7.2 (22.11.2026): info file hint fixed / Hinweis in der Info-Datei korrigiert
 - 0.7.1 (22.11.2026): hints in the header, instruction limit in every wakeup / Hinweise in der Kopfzeile, Befehlsgrenze in jedem wakeup
 - 0.7.0 (22.11.2026): Studio layout always found (locations, menu choice, scaling) / Studio-Layout wird immer gefunden (Orte, Wahl im Menü, Umrechnen)
 - 0.6.1 (21.11.2026): takes over data from scripts/elektro / übernimmt Daten aus scripts/elektro

@@ -22,7 +22,7 @@ Display, menu and voice are in German and English.
 - **Sensors** are assigned automatically on first start. What you choose by hand stays.
 - **Lua-Studio:** a settings file per model from the PC app Lua-Studio designs the display freely (boxes with number,
   gauge, bar, graph or status, symbols, own colours) and sets settings and limits. Without this file everything works as before.
-- **New in 0.7.1:** the Studio file is also found on the SD card or internal memory, can be chosen in the widget menu («Studio layout») and is adapted to other window sizes; a line at the bottom says why if it is not used.
+- **New in 0.7.2:** the Studio file is also found on the SD card or internal memory, can be chosen in the widget menu («Studio layout») and is adapted to other window sizes; a line at the bottom says why if it is not used.
 - **New in 0.6.0 (breaking):** renamed from «Elektro» to **Electric** (widget, folder `scripts/electric`, Studio file `….electric.lua`). Add the widget again in every model, see [Upgrading](wiki/en/Installation.md#upgrading-from-the-german-version-elektro).
 - **New in 0.5.0:** «alarm also with motor off» per value (menu and Lua-Studio, on by default), memory is freed on model
   change (about 5 KB stay instead of over 100 KB), the Studio file loads faster and shows «Loading Studio file ...».
@@ -32,7 +32,7 @@ follows. Use at your own risk. License: GPL-3.0, see below.
 
 ## Quick start
 
-1. Download `Electric-0.7.1.zip` from the latest **release**.
+1. Download `Electric-0.7.2.zip` from the latest **release**.
 2. Connect the radio by USB, choose **Ethos Suite** on the radio and open the **FrSky Suite** on the computer.
 3. Suite › **Lua library** › **Install from local ZIP** › choose the ZIP. Then restart the radio.
 4. Model › Screens › **+** › layout **Full screen** (or with bars) › tap the field › widget **Electric**.

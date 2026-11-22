@@ -48,8 +48,9 @@ local MAX_DATEI = 4096       -- Byte je Symboldatei (Abschnitt 4)
 local ORDNER = "SCRIPTS:/studio/symbole/"
 local PX = { [12] = true, [16] = true, [24] = true, [32] = true, [48] = true, [64] = true }
 -- Platzkopf (22.11.2026, Entscheid User «Symbole gleich gross wie der Text»): Ethos 26.2 skaliert Masken nicht
--- (drawMask übergeht Breite/Höhe, gemessen). Darum die Stufen 12 und 16 px; im Kopf gilt die grösste vorhandene Stufe,
--- die nicht höher ist als die Titelschrift, sonst die kleinste vorhandene (alte Dateien ohne 12/16: bleibt 24).
+-- (drawMask übergeht Breite/Höhe, gemessen). Darum die Stufen 12 und 16 px; im Kopf gilt die Stufe, die der Texthöhe
+-- des Titels (0,8 × Zeilenhöhe) am nächsten liegt, bei Gleichstand die grössere, höchstens die Zeilenhöhe; sonst die
+-- kleinste vorhandene (alte Dateien ohne 12/16: bleibt 24).
 local STUFEN = { 12, 16, 24, 32, 48, 64 }
 local KENNUNG = "\137PNG\r\n\26\n\0\0\0\13IHDR"         -- Byte 1–16: PNG-Kennung, Länge 13, IHDR
 local ENDE = "\0\0\0\0IEND\174\66\96\130"                -- letzte 12 Byte jeder vollständigen PNG
@@ -371,7 +372,9 @@ local function platzInfo(p, hoch)
       local m = gut and masken[p.symbol .. "_" .. s]
       if m and m.m then                           -- nur geladene Masken (eine fehlende _12/_16 fällt später weg)
         klein = klein or m
-        if m.k <= hoch then best = m end
+        -- 0.7.7 (Sendertest): die Stufe, die der Texthöhe (0,8 × Zeilenhöhe) am nächsten liegt, bei Gleichstand die
+        -- grössere, höchstens die Zeilenhöhe. Normale Titelschrift (18 px) -> 16 px.
+        if m.k <= hoch and (best == nil or math.abs(m.k - hoch * 0.8) <= math.abs(best.k - hoch * 0.8)) then best = m end
       end
     end
     e = best or klein or e

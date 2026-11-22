@@ -3,6 +3,11 @@
 The version number is in `src/electric/main.lua` (`local VERSION`). It is the same in the manual, the Suite package and here.
 The top section appears in the FrSky Suite as version note. From 0.5.0 on in English; older entries in German.
 
+## 0.7.7 (22 Nov 2026, pre-release)
+
+- Box header symbol size: the size closest to the title text height (0.8 × line height) is used, the larger one on a
+  tie, at most the line height. With the normal title this is 16 px (before 12 px, which looked too small on the radio).
+
 ## 0.7.6 (22 Nov 2026, pre-release)
 
 - Box header symbols: the size is chosen only from symbols that are loaded, and remembered only after all symbols are

@@ -425,17 +425,22 @@ function S.nochZuZeichnen() return wartet end
 -- Geprüften Schmuck der Ansicht a umgerechnet für die Tabelle neu ablegen (Fenstergrösse ohne eigene Ansicht).
 -- f(g) gibt das umgerechnete Element oder nil (fällt weg). Symbole behalten ihre Grösse und fallen weg, wenn sie
 -- nicht mehr in W × H passen. Rückgabe: true, Zahl der weggelassenen Elemente; false, solange a noch geprüft wird.
-function S.dekoUmrechnen(a, neu, f, W, H)
+-- 0.7.1: in Stücken zu 8 Elementen ab von + 1; Rückgabe fertig, weggelassen, nächstes von. Unfertig: Liste mit n = true.
+function S.dekoUmrechnen(a, neu, f, W, H, von)
   local liste = dekoListen[a]
-  if not liste or liste.n then return false, 0 end
-  local l2, weg = {}, 0
-  for i = 1, #liste do
+  if not liste or liste.n then return true, 0 end
+  von = von or 0
+  local l2 = dekoListen[neu] or { n = true }
+  local weg, bis = 0, math.min(#liste, von + 8)
+  for i = von + 1, bis do
     local g = f(liste[i])
     local m = g and g.a == "symbol" and masken[g.k]
     if g and m and (g.x + m.k > W or g.y + m.k > H) then g = nil end
     if g then l2[#l2 + 1] = g else weg = weg + 1 end
   end
   dekoListen[neu] = l2
+  if bis < #liste then return false, weg, bis end
+  l2.n = nil
   return true, weg
 end
 

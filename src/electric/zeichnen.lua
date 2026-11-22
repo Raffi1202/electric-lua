@@ -289,7 +289,17 @@ function Z.kopf(w, L)
     Z.text(L, zx, kh / 2, Z.zeit(a and a[2] or 0), 34, C.weiss, CENTERED, 120 * s)
     x = W - 12 * s
   end
-  if w.sAusruf and not w.sHinweis then x = x - 22 end   -- Platz für das «!» der Studio-Datei oben rechts
+  -- Studio-Hinweis (0.7.1, A1): in der eigenen Kopfzeile statt unten über den Plätzen, Werte bleiben frei.
+  -- Vollbild: anstelle des Modellnamens; Kompakt: rechts neben der Flugzeit.
+  local hw = w.sHinweis or w.kopfGrund
+  if hw then
+    local x0 = L.kompakt and (12 * s + Z.breite(L, "00:00", 34) + 22 * s) or 8 * s
+    local b0 = L.kompakt and (W * 0.6 - x0) or (zx - 60 * s - 8 * s)
+    Z.rund(x0, 3, b0, kh - 6, floor(5 * s), C.dunkel)
+    if Z.breite(L, hw, 14) > b0 - 8 then hw = hw:gsub(" %(.*%)$", "") end   -- zu lang: ohne Dateinamen (steht in der Info-Datei)
+    Z.text(L, x0 + b0 / 2, kh / 2, hw, 14, C.orange, CENTERED, b0 - 8, true)
+  end
+  if w.sAusruf and not hw then x = x - 22 end   -- Platz für das «!» der Studio-Datei oben rechts
   if not L.kompakt then x = Z.senderakku(L, v, grund, x, kh) end
   Z.empfangUndPillen(w, L, x, kh, zx)
   Z.rechteck(0, kh, W, max(1, floor(2 * s)), C.linie)
@@ -350,10 +360,8 @@ end
 function Z.studioHinweis(w, L)
   if not w.sAusruf then return end
   local C, W, H = Z.C, L.W, L.H
-  if w.sHinweis then
-    Z.rechteck(0, H - 24, W, 24, C.dunkel)
-    Z.text(L, W / 2, H - 12, w.sHinweis, 14, C.orange, CENTERED, W - 8, true)
-  else
+  if w.sHinweis or w.kopfGrund then return end      -- steht in der Kopfzeile (Z.kopf)
+  do
     local r = 9
     local ym = max(r + 2, floor(L.kh / 2))
     lcd.color(C.orange)

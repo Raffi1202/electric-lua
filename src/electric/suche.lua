@@ -99,18 +99,8 @@ local function start(w)
     if ok and type(liste) == "table" then J.liste = liste end
   end
   J.liste = J.liste or {}
-  local okK, K = pcall(function() local f = loadfile("kennung.lua") return f and f() end)
-  J.index = {}
-  if okK and type(K) == "table" then
-    for _, k in ipairs(K) do
-      if type(k[1]) == "number" then
-        local b = bereich(k[1])
-        local l = J.index[b] or {}
-        l[#l + 1] = k
-        J.index[b] = l
-      end
-    end
-  end
+  J.index, J.ki = {}, 0
+  J.schritt = "index"                                -- 0.7.1: Index in Stücken (Befehlsgrenze wakeup, A2)
   return J
 end
 
@@ -148,6 +138,28 @@ return function(w)
   local J = w.suchJob
   if J == nil then
     w.suchJob = start(w)
+    return nil
+  end
+
+  if J.schritt == "index" then                       -- kennung.lua laden, dann je Aufruf höchstens 50 Einträge
+    if J.K == nil then
+      local okK, K = pcall(function() local f = loadfile("kennung.lua") return f and f() end)
+      J.K = (okK and type(K) == "table") and K or {}
+      return nil
+    end
+    local K = J.K
+    local bis = math.min(#K, J.ki + 50)
+    for i = J.ki + 1, bis do
+      local k = K[i]
+      if type(k[1]) == "number" then
+        local b = bereich(k[1])
+        local l = J.index[b] or {}
+        l[#l + 1] = k
+        J.index[b] = l
+      end
+    end
+    J.ki = bis
+    if bis >= #K then J.K, J.schritt = nil, "lesen" end
     return nil
   end
 

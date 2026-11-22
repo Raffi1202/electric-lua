@@ -710,7 +710,6 @@ function M.infoSchritt(w, version, formate)
     .. ',\n "ansichtGenutzt": ' .. jtext(w.ansichtGenutzt or "") .. ',\n "angepasst": ' .. tostring(w.angepasst == true)
     .. ',\n "hinweis": ' .. jtext(w.sGrund or w.sAngepasst or "") .. '\n}\n'
   w.infoJob = nil
-  if w.testKennung and t ~= w.infoAlt then print("ZUSTAND INFO " .. t:gsub("\n", " ")) end   -- nur Testbilder
   if t == w.infoAlt then return true end               -- nichts geändert: nicht schreiben (SD-Karte schonen)
   pcall(os.mkdir, "SCRIPTS:/studio")
   local ok, f = pcall(io.open, M.ORDNER .. (w.testKennung or M.kennung()) .. "." .. M.LUA .. ".info.json", "w")
@@ -750,25 +749,34 @@ local function grenzeCfg(J, F, c, n, e, werk)
 end
 
 -- Ergebnis von M.schritt auf das Widget anwenden (nur bei Zustand «geladen»)
-function M.anwenden(w, J, F)
-  local c = w.cfg
-  local werk = F.standard()
-  local S = { zustand = "geladen", fehler = J.fehler, werte = J.werte, ansichten = J.ansichten, einstBasis = {},
-    grenzBasis = {}, motBasis = {}, gAns = J.gAns or {}, gVib = J.gVib or {}, extra = J.extra or {}, quellen = {}, offen = {}, st = {},
-    zx = {}, kurven = {} }
+-- 0.7.1 (A2): in zwei Aufrufen. Teil 1 (M.anwenden1) nur die Einstellungen, Teil 2 (M.anwenden) der Rest.
+function M.anwenden1(w, J, F)
+  local c, werk = w.cfg, F.standard()
+  local eb = {}
   for _, g in ipairs(F.gruppen) do
     for _, f in ipairs(g[2]) do
       local k = f[1]
       if F.studioEinstellung(k) then
         local b = J.einstStudio[k]
         if b == nil then b = werk[k] end
-        S.einstBasis[k] = b
+        eb[k] = b
         local v = J.einst[k]
         if v == nil then v = werk[k] end
         c[k] = v
       end
     end
   end
+  J.werk, J.einstBasis = werk, eb
+end
+
+function M.anwenden(w, J, F)
+  local c = w.cfg
+  if not J.werk then M.anwenden1(w, J, F) end
+  local werk = J.werk
+  local S = { zustand = "geladen", fehler = J.fehler, werte = J.werte, ansichten = J.ansichten, einstBasis = {},
+    grenzBasis = {}, motBasis = {}, gAns = J.gAns or {}, gVib = J.gVib or {}, extra = J.extra or {}, quellen = {}, offen = {}, st = {},
+    zx = {}, kurven = {} }
+  S.einstBasis = J.einstBasis
   for n, info in pairs(M.UEBERWACHT) do
     local key = "lua:" .. info[1]
     local e = J.grenzen[key]
@@ -833,16 +841,22 @@ function M.besteAnsicht(ansichten, W, H)
   return best
 end
 
-function M.umrechnen(w, W, H)
-  local S = w.studio
-  local a = S and M.besteAnsicht(S.ansichten, W, H)
-  if a == nil then return nil end
-  local kq, kz = kopfH(a.breite, a.hoehe), kopfH(W, H)
-  local fx, fy = W / a.breite, (H - kz) / math.max(1, a.hoehe - kq)
+function M.umrechnen(w, W, H, n)
+  if n == nil then
+    local S = w.studio
+    local a = S and M.besteAnsicht(S.ansichten, W, H)
+    if a == nil then return nil end
+    local kq, kz = kopfH(a.breite, a.hoehe), kopfH(W, H)
+    n = { breite = W, hoehe = H, plaetze = {}, angepasst = true, von = a.breite .. "x" .. a.hoehe, weg = 0, quelle = a, i = 0,
+      kz = kz, kq = kq, fx = W / a.breite, fy = (H - kz) / math.max(1, a.hoehe - kq) }
+    return n, false                                      -- 0.7.1 (A2): Plätze in den nächsten Aufrufen, je 6
+  end
+  local a, kz, kq, fx, fy = n.quelle, n.kz, n.kq, n.fx, n.fy
   local function px(x) return floor(x * fx + 0.5) end
   local function py(y) return kz + floor(math.max(0, y - kq) * fy + 0.5) end
-  local n = { breite = W, hoehe = H, plaetze = {}, angepasst = true, von = a.breite .. "x" .. a.hoehe, weg = 0 }
-  for _, q in ipairs(a.plaetze) do
+  local bis = math.min(#a.plaetze, n.i + 6)
+  for nr = n.i + 1, bis do
+    local q = a.plaetze[nr]
     local x, y = px(q.x), py(q.y)
     local b, h = math.min(W - x, px(q.x + q.b) - x), math.min(H - y, py(q.y + q.h) - y)
     local darst = q.darst
@@ -864,11 +878,23 @@ function M.umrechnen(w, W, H)
       n.weg = n.weg + 1
     end
   end
-  if a.roh then                                          -- Format 2: Schmuck mit umrechnen (studio_symbole.lua)
-    n.roh = { breite = W, hoehe = H }
+  n.i = bis
+  if bis < #a.plaetze then return n, false end
+  n.quelle = nil
+  if a.roh then n.roh, n.dekoVon, n.di = { breite = W, hoehe = H }, a, 0 end   -- Schmuck in eigenen Aufrufen
+  return n, true
+end
+
+-- Schmuck der Ansicht a für die umgerechnete Ansicht n (eigener wakeup, Befehlsgrenze)
+function M.umrechnenDeko(w, n)
+  local a, W, H, kz, kq, fx, fy = n.dekoVon, n.breite, n.hoehe, n.kz, n.kq, n.fx, n.fy
+  n.dekoVon = nil                                        -- bleibt gesetzt, solange Stücke fehlen (siehe unten)
+  local function px(x) return floor(x * fx + 0.5) end
+  local function py(y) return kz + floor(math.max(0, y - kq) * fy + 0.5) end
+  do
     local SY = w.sym
     if SY and SY.dekoUmrechnen then
-      local ok, _, weg = pcall(SY.dekoUmrechnen, a.roh, n.roh, function(g)
+      local ok, fertig, weg, di = pcall(SY.dekoUmrechnen, a.roh, n.roh, function(g)
         local g2 = {}
         for k, v in pairs(g) do g2[k] = v end
         g2.s = nil                                       -- Schrift neu wählen (textVorbereiten)
@@ -879,11 +905,11 @@ function M.umrechnen(w, W, H)
         end
         if g2.x >= W or g2.y >= H or (g2.b and (g2.x + g2.b > W or g2.y + g2.h > H)) then return nil end
         return g2
-      end, W, H)
+      end, W, H, n.di)
       if ok and weg then n.weg = n.weg + weg end
+      if ok and fertig == false and di then n.di, n.dekoVon = di, a return false end
     end
   end
-  return n
 end
 
 -- Sensoren und Kanäle der Studio-Datei suchen, in Schritten. Rückgabe true = fertig.

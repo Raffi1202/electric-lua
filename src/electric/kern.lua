@@ -858,16 +858,32 @@ local function studioWecke(w, now, nurLaden)
       return
     end
     STUDIO = m
+    if not w.studioFertig then return end           -- 0.7.1 (A2): felder.lua erst im nächsten Aufruf
   end
   if not w.studioFertig then
-    local F = lade("felder.lua")
+    local F = w.studioF
+    if F == nil then                                -- 0.7.1 (A2): einmal je Ladevorgang, eigener Aufruf, danach frei
+      w.studioF = lade("felder.lua")
+      return
+    end
     if TEST and TEST.kennung then w.testKennung = TEST.kennung end   -- neutrale Kennung für Testbilder
     if TEST and TEST.lay and not w.testLay then w.lay, w.testLay = TEST.lay, true end   -- Wahl wie der Menü-Setter
     if TEST and TEST.orte then STUDIO.ORTE = TEST.orte end   -- Suchorte nachstellen (Simulator: ein Ordner für alle)
-    local okJ, J = pcall(STUDIO.schritt, w, F)
+    local okJ, J = true, w.studioWarte
+    w.studioWarte = nil
+    if J and not J.werk then                         -- 0.7.1 (A2): Einstellungen anwenden, Rest im nächsten Aufruf
+      local okA, e = pcall(STUDIO.anwenden1, w, J, F)
+      if okA then w.studioWarte, w.schwer = J, true return end
+      okJ, J = false, e
+    end
+    if okJ and J == nil then
+      okJ, J = pcall(STUDIO.schritt, w, F)
+      -- 0.7.1 (A2): fertig geladene Datei erst im nächsten Aufruf anwenden (Befehlsgrenze wakeup)
+      if okJ and J and J.zustand == "geladen" then w.studioWarte = J return end
+    end
     if not okJ then                                     -- Laufzeitfehler beim Laden: Standardanzeige, nie hängen bleiben
       print(tostring(w.name) .. ": Studio-Datei: " .. tostring(J))
-      w.studioFertig, w.studioJob, w.studioZustand, w.infoOffen = true, nil, "kaputt", true
+      w.studioFertig, w.studioJob, w.studioZustand, w.infoOffen, w.studioF = true, nil, "kaputt", true, nil
       studioHinweis(w, T.studioKaputt, now)
       return
     end
@@ -876,10 +892,11 @@ local function studioWecke(w, now, nurLaden)
       print(string.format("%s: Studio-Datei geladen in %.1f s (%d Schritte)", tostring(w.name), now - J.t0, J.n or 0))
     end
     w.studioFertig, w.infoOffen, w.studioZustand, w.studio = true, true, J.zustand, nil
-    w.studioKennung = J.k
+    w.studioKennung, w.studioF = J.k, nil
     -- 0.7.0: woher die Datei kommt und warum ggf. die Standardanzeige bleibt (R4)
     w.studioQuelle, w.studioWahl = J.quelle, J.wahl or "auto"
     w.sGrund, w.sAngepasst, w.angepasst, w.ansichtGenutzt, w.skalWunsch = nil, nil, false, nil, nil
+    w.skalJob, w.skalDeko = nil, nil
     if J.zustand == "kaputt" then w.sGrund = string.format(T.sGrundKaputt, tostring(J.datei))
     elseif J.zustand == "zuNeu" then w.sGrund = T.studioZuNeu
     elseif J.zustand == "fehlt" and J.gewaehltFehlt then w.sGrund = string.format(T.sGrundFehlt, tostring(J.datei))
@@ -887,6 +904,7 @@ local function studioWecke(w, now, nurLaden)
     symFrei(w)
     if J.zustand == "geladen" then
       STUDIO.anwenden(w, J, F)
+      w.schwer = true                                   -- in diesem Aufruf keine Sensorsuche (A2)
       if J.roh then                                     -- Format 2: Symbole in eigenen wakeup prüfen und laden
         local okS, SY = pcall(lade, "studio_symbole.lua")
         if okS and type(SY) == "table" then
@@ -910,13 +928,22 @@ local function studioWecke(w, now, nurLaden)
     return
   end
   if w.studio and not nurLaden then STUDIO.wecke(w, now) end
+  local sd = w.skalDeko
+  if sd then                                              -- 0.7.1 (A2): Schmuck der umgerechneten Ansicht, in Stücken
+    local ok, e = pcall(STUDIO.umrechnenDeko, w, sd)
+    if not ok then print(tostring(w.name) .. ": Umrechnen Schmuck: " .. tostring(e)) end
+    if not (ok and e == false) then w.skalDeko = nil end
+    return
+  end
   local sw = w.skalWunsch
   if sw and w.studio and not w.symOffen then              -- 0.7.0: Ansicht einmal je Fenstergrösse umrechnen (R3)
-    w.skalWunsch = nil
     local key = sw[1] .. "x" .. sw[2]
-    local ok, n = pcall(STUDIO.umrechnen, w, sw[1], sw[2])
+    local ok, n, fertig = pcall(STUDIO.umrechnen, w, sw[1], sw[2], w.skalJob)
+    if ok and n and not fertig then w.skalJob = n return end   -- 0.7.1 (A2): in Stücken
+    w.skalWunsch, w.skalJob = nil, nil
     if ok and n then
       w.studio.ansichten[key] = n
+      if n.dekoVon then w.skalDeko = n end
       local t = string.format(T.sAngepasst, n.von) .. (n.weg > 0 and string.format(T.sWeg, tostring(n.weg)) or "")
       w.sAngepasst = t
       studioHinweis(w, t, now)
@@ -962,6 +989,7 @@ function K.wecke(w)
     w.tL = now
     testStart(w)
     -- Erster Start ohne gespeicherte Einstellungen: Schalter nach Standard vorgeben (Ethos ruft read nicht immer auf)
+    local erst = not w.vorgabe                      -- 0.7.1 (A2): im ersten Aufruf noch keine Studio-Datei laden
     if not w.vorgabe then
       w.vorgabe = true
       if not w.gelesen then schalterVorgabe(w) end
@@ -974,7 +1002,7 @@ function K.wecke(w)
     warnungen(w, now)
     flug(w, now, dt)
     ansagen(w, now)
-    if not w.studioFertig or w.studio or w.infoOffen then studioWecke(w, now) end
+    if not erst and (not w.studioFertig or w.studio or w.infoOffen) then studioWecke(w, now) end
     if w.sHinweis and now >= w.sHinweisBis then
       w.sHinweis = nil
       if w.sKurz then w.sAusruf, w.sKurz = false, nil end
@@ -995,7 +1023,10 @@ function K.wecke(w)
     end
     -- Sensorsuche in Schritten (Ethos begrenzt die Befehle je Aufruf): ein Schritt je wakeup, bis sie fertig ist.
     -- Erster Start ohne gespeicherte Einstellungen: automatisch, sobald Telemetrie da ist (alle 5 s, höchstens 10-mal).
-    if w.suche then
+    if w.suche and w.schwer then
+      w.schwer = nil                                    -- 0.7.1 (A2): Suche erst im nächsten Aufruf
+    elseif w.suche then
+      w.schwer = nil
       if SUCHE == nil then
         local okL, f = pcall(lade, "suche.lua")
         SUCHE = okL and f or false
@@ -1105,13 +1136,11 @@ function K.zeichne(w)
   elseif S then
     S.zeichne(w, L, Z)
   end
+  -- Standardanzeige trotz Datei: Grund in der Kopfzeile (R4, A1: nie über den Plätzen)
+  w.kopfGrund = (w.seite == 1 and not A and not warte and w.sGrund) or nil
   Z.kopf(w, L)
   Z.hinweis(w, L)
   Z.studioHinweis(w, L)
-  if w.seite == 1 and not A and not warte and w.sGrund and not w.sHinweis then   -- Standardanzeige: Grund unten (R4)
-    Z.rechteck(0, H - 24, W, 24, Z.C.dunkel)
-    Z.text(L, W / 2, H - 12, w.sGrund, 14, Z.C.orange, CENTERED, W - 8, true)
-  end
   if w.dialog then
     w.zielAb = w.nZiele + 1      -- bei offener Rückfrage zählen nur ihre eigenen Knöpfe
     Z.dialog(w, L)
@@ -1164,13 +1193,13 @@ local function aktion(w, id, arg, now)
   elseif id == "lay" then                          -- 0.7.0: Wahl «Studio-Layout» im Menü, gleich neu laden
     w.lay = type(arg) == "string" and arg or ""
     if model and model.dirty then pcall(model.dirty) end
-    w.studio, w.studioFertig, w.studioJob, w.funkeOffen = nil, false, nil, false
+    w.studio, w.studioFertig, w.studioJob, w.funkeOffen, w.studioWarte = nil, false, nil, false, nil
     symFrei(w)
   elseif id == "ja_studio" then                    -- Zurück auf Studio-Stand: .funke.lua löschen, neu laden
     w.dialog = nil
     if STUDIO == nil then STUDIO = lade("studio.lua") end
     STUDIO.funkeSchreiben(w.testKennung or STUDIO.kennung(), nil)
-    w.studio, w.studioFertig, w.studioJob, w.funkeOffen = nil, false, nil, false
+    w.studio, w.studioFertig, w.studioJob, w.funkeOffen, w.studioWarte = nil, false, nil, false, nil
     symFrei(w)
     hinweis(w, T.studioZurueck, now)
   elseif id == "ja_standard" then                  -- ohne Studio-Datei: Einstellungen und Grenzen auf Werk
@@ -1302,7 +1331,7 @@ function K.lies(w)
   w.gelesen = F.lies(w)
   if w.datenAlt then w.dateiOffen = true end      -- aus scripts/elektro übernommen: gleich in den neuen Ordner schreiben
   -- Die Studio-Datei gilt über den gelesenen Einstellungen: nach jedem Lesen neu anwenden
-  w.studio, w.studioFertig, w.studioJob = nil, false, nil
+  w.studio, w.studioFertig, w.studioJob, w.studioWarte = nil, false, nil, nil
   symFrei(w)
   local d = w.dauer
   if not (gut(d.fluege) and d.fluege >= 0) then d.fluege = 0 end

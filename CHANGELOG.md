@@ -3,6 +3,14 @@
 The version number is in `src/electric/main.lua` (`local VERSION`). It is the same in the manual, the Suite package and here.
 The top section appears in the FrSky Suite as version note. From 0.5.0 on in English; older entries in German.
 
+## 0.7.1 (22 Nov 2026, pre-release)
+
+- Studio hints («view … adapted», «file broken», «no matching view») are shown in the widget's own header instead of
+  a band at the bottom, so no value is covered.
+- Instruction limit kept in every wakeup (< 5000), also right after loading a model: the sensor index, loading
+  `studio.lua`/`felder.lua`, applying the Studio file and scaling a layout (boxes and decoration) are spread over
+  several calls. Highest wakeup in the Mac tests 4687 (before 7832).
+
 ## 0.7.0 (22 Nov 2026, pre-release)
 
 - Studio layout is always found: the Studio file is searched in `SCRIPTS:/studio/`, `SD:/scripts/studio/` and

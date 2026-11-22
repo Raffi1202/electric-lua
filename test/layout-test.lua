@@ -179,7 +179,7 @@ weg("RADIO:/scripts/studio/TEST.electric.lua")
 schreib("SCRIPTS:/studio/TEST.electric.lua", NUR800)
 for _, f in ipairs({ { 784, 316 }, { 640, 360 }, { 472, 210 } }) do
   local w3 = neu(f)
-  local mw, mp = lauf(w3, 20, f)
+  local mw, mp = lauf(w3, 26, f)
   local key = f[1] .. "x" .. f[2]
   local A = w3.studio and w3.studio.ansichten[key]
   local kh = w3.L.kh
@@ -190,9 +190,9 @@ for _, f in ipairs({ { 784, 316 }, { 640, 360 }, { 472, 210 } }) do
   pruefe(A and A.angepasst and A.von == "800x480" and drin, "F3 " .. key .. ": Ansicht umgerechnet, " .. (A and #A.plaetze or 0)
     .. " Plätze innerhalb unter der Kopfzeile (" .. kh .. " px), " .. (A and A.weg or 0) .. " weggelassen")
   pruefe(w3.sHinweis and w3.sHinweis:find("Studio: view 800x480 adapted", 1, true), "F3 " .. key .. ": Hinweis «" .. tostring(w3.sHinweis) .. "»")
+  local mw2, mp2 = lauf(w3, 30, f)
   local I3 = info()
   pruefe(I3:find('"ansichtGenutzt": "800x480"', 1, true) and I3:find('"angepasst": true', 1, true), "F3 " .. key .. ": Info-Datei angepasst = true")
-  local mw2, mp2 = lauf(w3, 30, f)
   pruefe(w3.sHinweis == nil and not w3.sAusruf, "F3 " .. key .. ": nach 5 s kein Hinweis und kein «!» mehr")
   messung(string.format("F3 %s: wakeup beim Umrechnen %d, paint mit umgerechneter Ansicht höchstens %d, danach wakeup höchstens %d Befehle (erster wakeup beim Laden %d)", key, SKAL, mp2, mw2, mw))
   pruefe(SKAL > 0 and SKAL < 5000 and mp2 < 10000 and mw2 < 5000, "F3 " .. key .. ": Befehlsgrenzen (wakeup < 5000, paint < 10000)")

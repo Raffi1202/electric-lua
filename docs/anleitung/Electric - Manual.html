@@ -48,7 +48,7 @@
 <body>
 
 <h1>Electric</h1>
-<div class="unter">Display for electric planes · Manual · Version 0.7.0 · 22 Nov 2026</div>
+<div class="unter">Display for electric planes · Manual · Version 0.7.1 · 22 Nov 2026</div>
 
 <div class="bild schmal"><img src="../bilder-simulator/Electric - Sim 800x480 12 Englisch.png" alt="Electric on the radio"></div>
 
@@ -69,7 +69,7 @@ display except where noted; the English display uses the same layout.</p>
   <li>An electric model with telemetry, sensors already discovered (Model › Telemetry › Discover sensors). At least the pack
       voltage is needed; current, consumption, RPM, temperature, altitude, speed and a cell sensor are optional.</li>
   <li>A computer with FrSky Suite and a USB cable.</li>
-  <li>The file <code>Electric-0.7.0.zip</code>. It is inside <code>Electric-0.7.0-share.zip</code>. Unzip only the outer ZIP, not the inner one.</li>
+  <li>The file <code>Electric-0.7.1.zip</code>. It is inside <code>Electric-0.7.1-share.zip</code>. Unzip only the outer ZIP, not the inner one.</li>
 </ul>
 
 <h2>2. Install</h2>
@@ -78,7 +78,7 @@ display except where noted; the English display uses the same layout.</p>
   <li>The radio shows a choice. Select <b>Ethos Suite</b>.</li>
   <li>Open <b>FrSky Suite</b> on the computer. The radio appears at the top.</li>
   <li>Click <b>Lua library</b>, then <b>Install from local ZIP</b>.</li>
-  <li>Select <code>Electric-0.7.0.zip</code>. The Suite copies everything to the right place.</li>
+  <li>Select <code>Electric-0.7.1.zip</code>. The Suite copies everything to the right place.</li>
   <li>Unplug the cable and restart the radio.</li>
 </ol>
 <p class="klein">Without the Suite: connect the radio as «USB storage» and copy the folder <code>electric</code> from the ZIP into
@@ -290,8 +290,8 @@ extra line (MIN, MAX or Ø over the flight). Settings and limits per model come 
 <code>scripts/studio/modelname.electric.lua</code> to the SD card. In the file name, only the letters A–Z and digits of the model name are kept, everything else becomes <code>_</code> («Möwe 2» becomes <code>M__we_2</code>); Lua-Studio does this itself. Electric reads it when the model is loaded.</p>
 <ul>
   <li><b>Without this file</b> Electric works exactly as before, without any message.</li>
-  <li><b>Where and which file (from 0.7.0):</b> Electric looks for the file in <code>scripts/studio</code> in the set script location, then on the SD card, then in the internal memory. If the file name does not match the model name, choose the file in the widget menu under <b>Studio layout</b> (the list shows every file with its location; «automatic (model name)» is the previous way). The choice in the menu wins over the model name.</li>
-  <li><b>With the file</b> its layout applies to the window size it was made for. If there is no layout for this size, Electric 0.7.0 adapts the layout with the most similar aspect ratio and shows «Studio: view 800x480 adapted» for 5 s. Boxes that get too small are shown as a number or left out. If the built-in display stays although there is a file, a line at the bottom gives the reason, e.g. «Studio: file broken (…)» or «Studio: no matching view».</li>
+  <li><b>Where and which file (from 0.7.1):</b> Electric looks for the file in <code>scripts/studio</code> in the set script location, then on the SD card, then in the internal memory. If the file name does not match the model name, choose the file in the widget menu under <b>Studio layout</b> (the list shows every file with its location; «automatic (model name)» is the previous way). The choice in the menu wins over the model name.</li>
+  <li><b>With the file</b> its layout applies to the window size it was made for. If there is no layout for this size, Electric 0.7.1 adapts the layout with the most similar aspect ratio and shows «Studio: view 800x480 adapted» in the header for 5 s. Boxes that get too small are shown as a number or left out. If the built-in display stays although there is a file, the header gives the reason, e.g. «Studio: file broken (…)» or «Studio: no matching view».</li>
   <li><b>After a model change</b> Electric reads the file in small steps, which can take a moment. If the file has a
   layout for this window size, it shows «Loading Studio file ...» meanwhile instead of the built-in display; otherwise
   Electric shows its built-in display right away.</li>
@@ -345,7 +345,7 @@ extra line (MIN, MAX or Ø over the flight). Settings and limits per model come 
   <tr><td>480 × 320, touch</td><td>X18, X18S, X18SE, Twin X Lite, Twin X Lite S</td><td>simulated</td></tr>
   <tr><td>480 × 272, no touch</td><td>X10, X10S, X10 Express, X12S with Ethos</td><td>simulated</td></tr>
 </table>
-<p class="klein">Electric version 0.7.0 · 22 Nov 2026</p>
+<p class="klein">Electric version 0.7.1 · 22 Nov 2026</p>
 
 </body>
 </html>

@@ -3,6 +3,15 @@
 The version number is in `src/electric/main.lua` (`local VERSION`). It is the same in the manual, the Suite package and here.
 The top section appears in the FrSky Suite as version note. From 0.5.0 on in English; older entries in German.
 
+## 0.8.0 (22 Nov 2026, pre-release)
+
+- Symbols removed completely (decision of the user: less memory, less drawing, fewer errors, same for all Luas).
+  Studio files with `symbole`, box symbols or decoration symbols are read as before; the symbols are skipped silently
+  (no error count, no hint). Lines, frames and texts of the decoration stay.
+- Menu line «Show symbols» removed; an old `symbole=` entry in the data file is ignored.
+- Box header: normal title, unit small next to the value (left out if the title contains it as a word).
+- Lower load: p12_voll paint 13 839 → 12 083, Lua memory (Mac) 238 → 186 KB.
+
 ## 0.7.7 (22 Nov 2026, pre-release)
 
 - Box header symbol size: the size closest to the title text height (0.8 × line height) is used, the larger one on a

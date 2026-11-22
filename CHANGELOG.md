@@ -3,6 +3,14 @@
 The version number is in `src/electric/main.lua` (`local VERSION`). It is the same in the manual, the Suite package and here.
 The top section appears in the FrSky Suite as version note. From 0.5.0 on in English; older entries in German.
 
+## 0.7.3 (22 Nov 2026, pre-release)
+
+- Box header (Lua-Studio format 2, transmitter test): no large bold unit next to the symbol any more. A unit marked
+  «bold» is shown small next to the value, and not at all if the title already contains it (e.g. «Akku %»).
+  The title text is as high as the symbol, so the symbol is never larger than the text beside it.
+- Full screen 800 × 480: the reserved «Flights» button no longer covers a box; boxes reaching into it are shortened.
+- Instruction limit: full stress files (16 boxes with symbols) ran on the X18RS without «Max instructions».
+
 ## 0.7.2 (22 Nov 2026, pre-release)
 
 - Info file: the hint «view … adapted» is cleared when the widget switches back to a window size with an exact layout

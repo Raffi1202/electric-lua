@@ -225,6 +225,43 @@ pruefe(alle and w5.lay == "", "F5: Speicher der Vorversion gelesen, alle Quellen
 FELDER = {} reg.configure(w5)
 pruefe(FELDER[LAYOUT].get() == 1, "F5: Menü zeigt «automatisch (Modellname)»")
 
+-- 0.9.0 Standard-Layout für alle Modelle
+local function istDa(p) local f = io_open(pfad(p), "r") if f then f:close() return true end return false end
+SP = {}
+schreib("SD:/scripts/studio/Standard.electric.lua", NUR800)
+local name0 = model.name
+for _, n in ipairs({ "TEST", "ZWEI" }) do
+  model.name = function() return n end
+  local ws = neu() lauf(ws)
+  pruefe(ws.studio and ws.studioWahl == "standard" and ws.studioQuelle == "SD:/scripts/studio/Standard.electric.lua",
+    "S1 Modell " .. n .. ": nur Standard-Datei, Layout geladen, studioWahl standard")
+end
+model.name = function() return "TEST" end
+schreib("SCRIPTS:/studio/TEST.electric.lua", NUR800)
+local ws2 = neu() lauf(ws2)
+pruefe(ws2.studioWahl == "auto" and ws2.studioQuelle == "SCRIPTS:/studio/TEST.electric.lua", "S2: Standard + Modelldatei: Modelldatei gewinnt")
+weg("SCRIPTS:/studio/TEST.electric.lua")
+schreib("RADIO:/scripts/studio/Wahl.electric.lua", NUR800)
+local ws3 = neu() lauf(ws3)
+FELDER = {} reg.configure(ws3)
+local fe3, nr3, std3 = FELDER[LAYOUT], nil, false
+for _, x in ipairs(fe3.werte) do
+  if x[1] == "Wahl.electric.lua (RADIO)" then nr3 = x[2] end
+  if x[1] == "Default (all models) (SD)" then std3 = true end
+end
+pruefe(fe3.werte[1][1] == "automatic (default)" and std3, "Menü: «automatisch (Standard)» und Eintrag «Standard (alle Modelle)»")
+fe3.set(nr3) lauf(ws3)
+pruefe(ws3.studioWahl == "menue" and ws3.studioQuelle == "RADIO:/scripts/studio/Wahl.electric.lua", "S3: Standard + Wahl im Menü: Wahl gewinnt")
+weg("RADIO:/scripts/studio/Wahl.electric.lua")
+SP = {}
+local ws4 = neu() lauf(ws4)
+ws4.cfg.kapaz = 4321
+ws4.funkeOffen = true
+lauf(ws4, 30)
+pruefe(istDa("SCRIPTS:/studio/TEST.electric.funke.lua") and not istDa("SCRIPTS:/studio/Standard.electric.funke.lua")
+  and not istDa("SD:/scripts/studio/Standard.electric.funke.lua"), "S4: Änderung am Sender bei Standard-Layout nur in TEST.electric.funke.lua")
+model.name = name0
+
 os.execute("rm -rf '" .. tmp .. "'")
 for _, x in ipairs(messungen) do print_("MESSUNG " .. x) end
 print_(fehler == 0 and "ERGEBNIS: kein Fehler" or ("ERGEBNIS: " .. fehler .. " Fehler"))

@@ -8,7 +8,7 @@ Mit dem PC-Programm **Lua-Studio** gestaltest du die Anzeige je Modell frei: Fü
 
 - **Ohne diese Datei** arbeitet Electric genau wie bisher, ohne Hinweis.
 
-- **Wo und welche Datei (ab 0.7.0):** Electric sucht die Datei in `scripts/studio` unter dem eingestellten Skript-Speicherort, dann auf der SD-Karte, dann im internen Speicher. Passt der Dateiname nicht zum Modellnamen, wähle die Datei im Widget-Menü unter **Studio-Layout** (die Liste zeigt jede Datei mit Ort; «automatisch (Modellname)» ist der bisherige Weg). Die Wahl im Menü gilt vor dem Modellnamen.
+- **Wo und welche Datei (ab 0.7.0):** Electric sucht die Datei in `scripts/studio` unter dem eingestellten Skript-Speicherort, dann auf der SD-Karte, dann im internen Speicher. Passt der Dateiname nicht zum Modellnamen, wähle die Datei im Widget-Menü unter **Studio-Layout** (die Liste zeigt jede Datei mit Ort; «automatisch (Modellname)» ist der bisherige Weg). Die Wahl im Menü gilt vor dem Modellnamen. Ohne Datei für das Modell gilt `Standard.electric.lua` (ab 0.9.0, ein Layout für alle Modelle; Lua-Studio: «Für alle Modelle (Standard)»). Änderungen am Sender bleiben trotzdem pro Modell. Heisst ein Modell selbst «Standard», gilt die Datei als seine Modelldatei.
 
 - **Mit Datei** gilt ihre Ansicht für die Fenstergrösse, für die sie gemacht ist. Fehlt eine Ansicht für diese Grösse, rechnet Electric ab 0.7.0 die Ansicht mit dem ähnlichsten Seitenverhältnis um und zeigt 5 s lang «Studio: Ansicht 800x480 angepasst» in der Kopfzeile. Zu kleine Kästchen werden als Zahl gezeigt oder weggelassen. Bleibt trotz Datei die eingebaute Anzeige, steht in der Kopfzeile der Grund, z. B. «Studio: Datei fehlerhaft (…)» oder «Studio: keine passende Ansicht».
 

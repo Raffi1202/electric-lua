@@ -437,16 +437,27 @@ function M.schritt(w, F)
     else
       J.wahl = "auto"
       J.oi = (J.oi or 0) + 1
+      local n = #M.ORTE
       local ort = M.ORTE[J.oi]
       if ort then
         d, grund = studioLaden(ort .. J.datei, M.FORMAT)
         if grund == "fehlt" then return nil end           -- nächster Ort im nächsten Aufruf
         J.quelle = ort .. J.datei
-      else                                                -- Übergang 0.6.0: Datei noch unter dem alten Namen (Elektro)
+      elseif J.oi == n + 1 then                           -- Übergang 0.6.0: Datei noch unter dem alten Namen (Elektro)
         local alt = J.k .. "." .. M.LUA_ALT .. ".lua"
         d, grund = studioLaden(M.ORDNER .. alt, M.FORMAT)
         if d then print("Electric: old studio file found (" .. alt .. "), please re-transfer from Lua-Studio") end
-        if grund ~= "fehlt" then J.datei, J.quelle = alt, M.ORDNER .. alt end
+        if grund == "fehlt" then return nil end
+        J.datei, J.quelle = alt, M.ORDNER .. alt
+      else                                                -- 0.9.0: Standard.electric.lua für alle Modelle
+        ort = M.ORTE[J.oi - n - 1]
+        if ort == nil then grund = "fehlt"
+        else
+          local std = "Standard." .. M.LUA .. ".lua"
+          d, grund = studioLaden(ort .. std, M.FORMAT)
+          if grund == "fehlt" then return nil end
+          J.datei, J.quelle, J.wahl = std, ort .. std, "standard"
+        end
       end
     end
     if not d then

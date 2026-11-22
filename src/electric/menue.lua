@@ -46,10 +46,13 @@ return function(w, F, fertig, suche, aktion)
   if form.addChoiceField and w.studioListe then
     local okL, l = pcall(w.studioListe)
     l = okL and l or {}
-    local werte, pfade = { { T.mLayoutAuto or "automatisch", 1 } }, { "" }
+    local auto = (w.studioWahl == "standard" and T.mLayoutAutoStd) or T.mLayoutAuto or "automatisch"
+    local werte, pfade = { { auto, 1 } }, { "" }
     local akt = 1
     for i, e in ipairs(l) do
-      werte[#werte + 1] = { e[2] .. " (" .. e[3] .. ")", i + 1 }
+      local text = e[2] .. " (" .. e[3] .. ")"
+      if e[2]:match("^Standard%.") then text = (T.mLayoutStd or "Standard") .. " (" .. e[3] .. ")" end   -- 0.9.0
+      werte[#werte + 1] = { text, i + 1 }
       pfade[i + 1] = e[1]
       if e[1] == w.lay then akt = i + 1 end
     end

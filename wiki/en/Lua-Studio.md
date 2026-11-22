@@ -8,7 +8,7 @@ With the PC program **Lua-Studio** you design the display freely for each model:
 
 - **Without this file** Electric works exactly as before, without any message.
 
-- **Where and which file (from 0.7.0):** Electric looks for the file in `scripts/studio` in the set script location, then on the SD card, then in the internal memory. If the file name does not match the model name, choose the file in the widget menu under **Studio layout** (the list shows every file with its location; «automatic (model name)» is the previous way). The choice in the menu wins over the model name.
+- **Where and which file (from 0.7.0):** Electric looks for the file in `scripts/studio` in the set script location, then on the SD card, then in the internal memory. If the file name does not match the model name, choose the file in the widget menu under **Studio layout** (the list shows every file with its location; «automatic (model name)» is the previous way). The choice in the menu wins over the model name. Without a file for the model, `Standard.electric.lua` applies (from 0.9.0, one layout for all models; Lua-Studio: «For all models (Standard)»). Changes made on the radio still stay per model. If a model itself is named «Standard», the file counts as its model file.
 
 - **With the file** its layout applies to the window size it was made for. If there is no layout for this size, Electric 0.7.0 adapts the layout with the most similar aspect ratio and shows «Studio: view 800x480 adapted» in the header for 5 s. Boxes that get too small are shown as a number or left out. If the built-in display stays although there is a file, the header gives the reason, e.g. «Studio: file broken (…)» or «Studio: no matching view».
 

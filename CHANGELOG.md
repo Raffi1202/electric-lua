@@ -3,6 +3,14 @@
 The version number is in `src/electric/main.lua` (`local VERSION`). It is the same in the manual, the Suite package and here.
 The top section appears in the FrSky Suite as version note. From 0.5.0 on in English; older entries in German.
 
+## 0.9.0 (22 Nov 2026, pre-release)
+
+- One layout for all models: `Standard.electric.lua` (same three locations). Order: choice in the menu, then the
+  model's own file, then `Standard.electric.lua`, otherwise the built-in display. Changes made on the radio stay per
+  model (`<model>.electric.funke.lua`). Info file: `studioWahl` = `"standard"`.
+- Menu «Studio layout»: entry «Default (all models)»; «automatic» shows whether the model file or the default applies.
+- No new storage field, update without loss.
+
 ## 0.8.1 (22 Nov 2026, pre-release)
 
 - Leftovers of the symbols removed: unused hint «Studio: n symbols missing», comments.

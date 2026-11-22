@@ -3,6 +3,13 @@
 The version number is in `src/electric/main.lua` (`local VERSION`). It is the same in the manual, the Suite package and here.
 The top section appears in the FrSky Suite as version note. From 0.5.0 on in English; older entries in German.
 
+## 0.7.5 (22 Nov 2026, pre-release)
+
+- Symbols in the box header are as high as the title text: new symbol sizes 12 and 16 px, loaded by file name
+  (`name_12.png`, `name_16.png`, sent by Lua-Studio 0.10.6). Older files without them keep 24 px (top left).
+  The title has its normal size again.
+- New menu line «Show symbols» / «Symbole anzeigen» (default on), stored in the model's data file.
+
 ## 0.7.4 (22 Nov 2026, pre-release)
 
 - A layout whose boxes reach into the widget's own header is moved below it (all boxes, proportionally), so the

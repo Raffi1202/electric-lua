@@ -4,6 +4,7 @@
 
 Alle Änderungen stehen in [CHANGELOG.md](../../CHANGELOG.md). Versionen:
 
+- 0.7.5 (22.11.2026): symbols as high as the title, menu Show symbols / Symbole so hoch wie der Titel, Menü Symbole anzeigen
 - 0.7.4 (22.11.2026): boxes below the header, unit check per word / Plätze unter der Kopfzeile, Einheit als Wort
 - 0.7.3 (22.11.2026): box header without bold unit, Flights button covers no box / Platzkopf ohne fette Einheit, Flüge-Taste überdeckt keinen Platz
 - 0.7.2 (22.11.2026): info file hint fixed / Hinweis in der Info-Datei korrigiert

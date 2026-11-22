@@ -4,6 +4,7 @@
 
 Alle Änderungen stehen in [CHANGELOG.md](../../CHANGELOG.md). Versionen:
 
+- 0.7.6 (22.11.2026): symbols no longer disappear without small files / Symbole verschwinden ohne kleine Dateien nicht mehr
 - 0.7.5 (22.11.2026): symbols as high as the title, menu Show symbols / Symbole so hoch wie der Titel, Menü Symbole anzeigen
 - 0.7.4 (22.11.2026): boxes below the header, unit check per word / Plätze unter der Kopfzeile, Einheit als Wort
 - 0.7.3 (22.11.2026): box header without bold unit, Flights button covers no box / Platzkopf ohne fette Einheit, Flüge-Taste überdeckt keinen Platz

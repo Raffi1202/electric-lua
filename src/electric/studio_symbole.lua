@@ -369,7 +369,7 @@ local function platzInfo(p, hoch)
     local gut = schluessel(p.symbol, 24) ~= nil         -- Name einmal prüfen, dann nur noch nachschlagen
     for _, s in ipairs(STUFEN) do
       local m = gut and masken[p.symbol .. "_" .. s]
-      if m then
+      if m and m.m then                           -- nur geladene Masken (eine fehlende _12/_16 fällt später weg)
         klein = klein or m
         if m.k <= hoch then best = m end
       end
@@ -377,7 +377,8 @@ local function platzInfo(p, hoch)
     e = best or klein or e
   end
   local info = { e = e, z = zeigen, h = hoch }
-  if phase ~= 1 then plaetze[p] = info end   -- erst merken, wenn die Liste symbole geprüft ist
+  -- merken erst, wenn alles geladen ist (phase 0); vorher kann eine gewählte Stufe noch wegfallen (Befund Jet 22.11.)
+  if phase == 0 or (phase ~= 1 and not hoch) then plaetze[p] = info end   -- erst merken, wenn die Liste symbole geprüft ist
   return info
 end
 

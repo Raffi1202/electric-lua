@@ -3,7 +3,7 @@
 -- Für ein neues Lua ändern sich hier nur die vier Zeilen NAME, KEY, VERSION und INFO.
 local NAME = "Electric"     -- Anzeigename in Ethos und Vorsatz aller Meldungen
 local KEY = "elec"          -- Schlüssel des Widgets: a–z/0–9, höchstens 7 Zeichen (Ethos); seit 0.6.0 «elec» (vorher «elektro»)
-local VERSION = "0.7.5"    -- die Versionsnummer steht nur hier (x.y.z); das Suite-Paket liest sie von hier
+local VERSION = "0.7.6"    -- die Versionsnummer steht nur hier (x.y.z); das Suite-Paket liest sie von hier
 local INFO = "Electric: display for electric planes (full screen or compact with bars) with battery, cells, current, RPM, ESC temperature, throttle, altitude, speed, signal, alarms, announcements, flight list and a settings file from Lua-Studio."   -- ein Satz für die FrSky Suite
 -- Speicher (Auftrag 21.11.2026): Den Kern halten nur die Widget-Instanzen fest (w.kern). Hier steht er nur in einer
 -- schwachen Tabelle. Verwirft Ethos beim Modellwechsel alle Electric-Instanzen, gibt die Müllabfuhr den ganzen Kern samt

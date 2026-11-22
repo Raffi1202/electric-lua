@@ -10,7 +10,7 @@
 
 - A computer with FrSky Suite and a USB cable.
 
-- The file `Electric-0.8.0.zip`. It is inside `Electric-0.8.0-share.zip`. Unzip only the outer ZIP, not the inner one.
+- The file `Electric-0.8.1.zip`. It is inside `Electric-0.8.1-share.zip`. Unzip only the outer ZIP, not the inner one.
 
 ## 2. Install
 
@@ -18,7 +18,7 @@
 2. The radio shows a choice. Select **Ethos Suite**.
 3. Open **FrSky Suite** on the computer. The radio appears at the top.
 4. Click **Lua library**, then **Install from local ZIP**.
-5. Select `Electric-0.8.0.zip`. The Suite copies everything to the right place.
+5. Select `Electric-0.8.1.zip`. The Suite copies everything to the right place.
 6. Unplug the cable and restart the radio.
 
 Without the Suite: connect the radio as «USB storage» and copy the folder `electric` from the ZIP into `scripts`. If your radio loads scripts from the SD card (System › General › Storage location), it belongs in `scripts` on the SD card. Overwrite an existing folder, do not delete it.
@@ -32,12 +32,12 @@ Without the Suite: connect the radio as «USB storage» and copy the folder `ele
 | 480 × 320, touch | X18, X18S, X18SE, Twin X Lite, Twin X Lite S | simulated |
 | 480 × 272, no touch | X10, X10S, X10 Express, X12S with Ethos | simulated |
 
-Electric version 0.8.0 · 22 Nov 2026
+Electric version 0.8.1 · 22 Nov 2026
 
 ## Upgrading from the German version (Elektro)
 
 Electric was called **Elektro** up to version 0.5.0. From 0.6.0 everything has English names: widget **Electric**, folder `scripts/electric`, Studio file `<model>.electric.lua`. This is a breaking change:
-- Install `Electric-0.8.0.zip`, then **add the widget again** in every model (Model › Screens › tap the field › widget **Electric**). Sensors and switches are in the widget memory and are only kept if the model is converted to the new widget key; settings, counters and the flight list from `scripts/elektro/daten/` are taken over automatically on the first start (the old folder is never deleted by Electric).
+- Install `Electric-0.8.1.zip`, then **add the widget again** in every model (Model › Screens › tap the field › widget **Electric**). Sensors and switches are in the widget memory and are only kept if the model is converted to the new widget key; settings, counters and the flight list from `scripts/elektro/daten/` are taken over automatically on the first start (the old folder is never deleted by Electric).
 - Studio files: re-transfer them from Lua-Studio (they are then named `….electric.lua`). Until then Electric still reads an old `….elektro.lua` and writes «old studio file found, please re-transfer» to the log.
 - The old folder `scripts/elektro` can be deleted after the change.
 

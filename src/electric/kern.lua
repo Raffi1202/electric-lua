@@ -835,7 +835,7 @@ local function testStart(w)
 end
 
 -- Studio-Hinweis: Band unten (8 s), danach «!» oben rechts bis zum nächsten Modellwechsel; Text auch ins Log
--- Format 2: Symbole der Studio-Datei (Referenz studio_symbole.lua, nur geladen bei format = 2) freigeben
+-- Format 2: Schmuck der Studio-Datei (Referenz studio_symbole.lua, nur geladen bei format = 2) freigeben
 local function symFrei(w)
   if w.sym then pcall(w.sym.freigeben) end
   w.sym, w.symOffen = nil, false
@@ -905,7 +905,7 @@ local function studioWecke(w, now, nurLaden)
     if J.zustand == "geladen" then
       STUDIO.anwenden(w, J, F)
       w.schwer = true                                   -- in diesem Aufruf keine Sensorsuche (A2)
-      if J.roh then                                     -- Format 2: Symbole in eigenen wakeup prüfen und laden
+      if J.roh then                                     -- Format 2: Schmuck in eigenen wakeup prüfen
         local okS, SY = pcall(lade, "studio_symbole.lua")
         if okS and type(SY) == "table" then
           w.sym = SY
@@ -960,12 +960,10 @@ local function studioWecke(w, now, nurLaden)
     end
     w.infoOffen = true
   end
-  if w.symOffen and w.sym then                          -- Symbole: Prüfen und Laden in Stücken (nie in paint)
+  if w.symOffen and w.sym then                          -- Schmuck: Prüfen in Stücken (nie in paint)
     local ok, fertig = pcall(w.sym.schritt)
     if not ok or fertig then
       w.symOffen = false
-      local okZ, _, fehlend = pcall(w.sym.zaehler)
-      if okZ and type(fehlend) == "number" and fehlend > 0 then studioHinweis(w, string.format(T.symFehlen, tostring(fehlend)), now) end
     end
   end
   if nurLaden then return end
@@ -1061,7 +1059,7 @@ function K.wecke(w)
       w.suche = "auto"
     end
   elseif (not w.studioFertig and w.studioJob) or w.symOffen then
-    -- Studio-Datei und Symbole laden: in jedem wakeup ein Schritt, nicht nur alle 0,2 s. Am Sender zeigte das
+    -- Studio-Datei und Schmuck laden: in jedem wakeup ein Schritt, nicht nur alle 0,2 s. Am Sender zeigte das
     -- Vollbild nach dem Modellwechsel noch das Standardlayout (Sendertest Lua-Studio 0.4.0, 21.11.2026; Dauer am
     -- Sender noch ungeklärt, die Log-Zeile «Studio-Datei geladen in … s» misst sie).
     studioWecke(w, now, true)

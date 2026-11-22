@@ -2,7 +2,7 @@
 
 🇬🇧 English · 🇩🇪 Deutsch
 
-> **Configure on your PC with [Lua-Studio](https://github.com/Raffi1202/lua-studio)** – arrange the screen, choose values, alarms and symbols, then transfer to the radio. Download: [latest release](https://github.com/Raffi1202/lua-studio/releases/latest) · [Wiki](https://github.com/Raffi1202/lua-studio/tree/main/wiki)
+> **Configure on your PC with [Lua-Studio](https://github.com/Raffi1202/lua-studio)** – arrange the screen, choose values and alarms, then transfer to the radio. Download: [latest release](https://github.com/Raffi1202/lua-studio/releases/latest) · [Wiki](https://github.com/Raffi1202/lua-studio/tree/main/wiki)
 
 ## English
 **Electric** is a display (a «widget») for FrSky radios running Ethos. On a full screen it shows the flight battery, cells, current, RPM, ESC temperature, power, altitude, speed and signal of your electric plane. It watches the values in two stages, announces alarms and the battery level and keeps a list of your flights. The pictures in this manual show the German display except where noted; the English display uses the same layout.

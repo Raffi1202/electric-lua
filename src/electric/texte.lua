@@ -58,7 +58,6 @@ local TEXT = {
   studioKaputt = { "Studio-Datei kaputt - Standard", "Studio file broken - default" },
   studioZuNeu = { "Studio-Datei zu neu - Lua aktualisieren", "Studio file too new - update the Lua" },
   studioFehler = { "Studio-Datei: %s Fehler", "Studio file: %s errors" },
-  symFehlen = { "Studio: %s Symbole fehlen", "Studio: %s symbols missing" },
   studioLaedt = { "Studio-Datei wird geladen ...", "Loading Studio file ..." },
   sGrundKaputt = { "Studio: Datei fehlerhaft (%s)", "Studio: file broken (%s)" },
   sGrundKeine = { "Studio: keine passende Ansicht", "Studio: no matching view" },

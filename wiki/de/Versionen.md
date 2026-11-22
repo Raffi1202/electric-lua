@@ -4,6 +4,7 @@
 
 Alle Änderungen stehen in [CHANGELOG.md](../../CHANGELOG.md). Versionen:
 
+- 0.8.1 (22.11.2026): leftovers removed, decoration text t0 / Reste entfernt, Schmucktext t0
 - 0.8.0 (22.11.2026): symbols removed / Symbole entfernt
 - 0.7.7 (22.11.2026): header symbol 16 px with normal title / Kopfsymbol 16 px bei normalem Titel
 - 0.7.6 (22.11.2026): symbols no longer disappear without small files / Symbole verschwinden ohne kleine Dateien nicht mehr

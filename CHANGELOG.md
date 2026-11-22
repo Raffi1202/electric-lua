@@ -3,6 +3,13 @@
 The version number is in `src/electric/main.lua` (`local VERSION`). It is the same in the manual, the Suite package and here.
 The top section appears in the FrSky Suite as version note. From 0.5.0 on in English; older entries in German.
 
+## 0.8.1 (22 Nov 2026, pre-release)
+
+- Leftovers of the symbols removed: unused hint «Studio: n symbols missing», comments.
+- Decoration texts: the original text is kept (`t0`), so measuring again (e.g. for another window size) shortens from
+  the original, not from an already shortened text. Same reference in all Luas.
+- Docs: version notes in the manual and README corrected («new in 0.7.0»).
+
 ## 0.8.0 (22 Nov 2026, pre-release)
 
 - Symbols removed completely (decision of the user: less memory, less drawing, fewer errors, same for all Luas).

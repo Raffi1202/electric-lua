@@ -239,7 +239,7 @@ function A.zeichne(w, L, Z, ans, ST)
     Z.text(L, x + b / 2, y + fh / 2, t, 16, C.weiss, CENTERED, b - 12, true)
     Z.ziel(w, "seite2", x, y, b, fh)
   end
-  if SY and SY.nochZuZeichnen() and lcd.invalidate then lcd.invalidate() end   -- Masken/Texte für das nächste Bild
+  if SY and SY.nochZuZeichnen() and lcd.invalidate then lcd.invalidate() end   -- Schmuck-Texte für das nächste Bild
 end
 
 return A

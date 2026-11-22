@@ -48,7 +48,7 @@
 <body>
 
 <h1>Electric</h1>
-<div class="unter">Anzeige für Elektroflieger · Anleitung · Version 0.8.0 · Stand 22.11.2026</div>
+<div class="unter">Anzeige für Elektroflieger · Anleitung · Version 0.8.1 · Stand 22.11.2026</div>
 
 <div class="bild schmal">
   <img src="../bilder-simulator/Electric - Sim 800x480 04 Normal.png" alt="Electric auf dem Sender">
@@ -71,7 +71,7 @@ Elektrofliegers. Sie überwacht die Werte in zwei Stufen, sagt Alarme und den Ak
   <li>Ein Elektromodell mit Telemetrie, die Sensoren schon gesucht (Modell › Telemetrie › Sensoren suchen).
       Nötig ist mindestens die Akkuspannung; Strom, Verbrauch, Drehzahl, Temperatur, Höhe, Speed und Zellensensor sind freiwillig.</li>
   <li>Einen Computer mit der FrSky Suite und ein USB-Kabel.</li>
-  <li>Die Datei <code>Electric-0.8.0.zip</code>. Sie liegt neben dieser Anleitung in <code>Electric-0.8.0-share.zip</code>. Entpacke nur die äussere ZIP, die innere nicht.</li>
+  <li>Die Datei <code>Electric-0.8.1.zip</code>. Sie liegt neben dieser Anleitung in <code>Electric-0.8.1-share.zip</code>. Entpacke nur die äussere ZIP, die innere nicht.</li>
 </ul>
 
 <h2>2. Installieren</h2>
@@ -80,7 +80,7 @@ Elektrofliegers. Sie überwacht die Werte in zwei Stufen, sagt Alarme und den Ak
   <li>Am Sender erscheint eine Auswahl. Wähle <b>Ethos Suite</b>.</li>
   <li>Öffne am Computer die <b>FrSky Suite</b>. Der Sender wird oben angezeigt.</li>
   <li>Klicke auf <b>Lua-Bibliothek</b>, dann auf <b>Von lokaler ZIP installieren</b>.</li>
-  <li>Wähle die Datei <code>Electric-0.8.0.zip</code>. Die Suite kopiert alles an den richtigen Ort.</li>
+  <li>Wähle die Datei <code>Electric-0.8.1.zip</code>. Die Suite kopiert alles an den richtigen Ort.</li>
   <li>Ziehe das Kabel ab und starte den Sender neu.</li>
 </ol>
 <p class="klein">Ohne Suite: Sender als «USB-Speicher» anschliessen und den Ordner <code>electric</code> aus der ZIP in den
@@ -296,8 +296,8 @@ dafür auf der SD-Karte die Datei <code>scripts/studio/Modellname.electric.lua</
 beim Laden des Modells.</p>
 <ul>
   <li><b>Ohne diese Datei</b> arbeitet Electric genau wie bisher, ohne Hinweis.</li>
-  <li><b>Wo und welche Datei (ab 0.8.0):</b> Electric sucht die Datei in <code>scripts/studio</code> unter dem eingestellten Skript-Speicherort, dann auf der SD-Karte, dann im internen Speicher. Passt der Dateiname nicht zum Modellnamen, wähle die Datei im Widget-Menü unter <b>Studio-Layout</b> (die Liste zeigt jede Datei mit Ort; «automatisch (Modellname)» ist der bisherige Weg). Die Wahl im Menü gilt vor dem Modellnamen.</li>
-  <li><b>Mit Datei</b> gilt ihre Ansicht für die Fenstergrösse, für die sie gemacht ist. Fehlt eine Ansicht für diese Grösse, rechnet Electric ab 0.8.0 die Ansicht mit dem ähnlichsten Seitenverhältnis um und zeigt 5 s lang «Studio: Ansicht 800x480 angepasst» in der Kopfzeile. Zu kleine Kästchen werden als Zahl gezeigt oder weggelassen. Bleibt trotz Datei die eingebaute Anzeige, steht in der Kopfzeile der Grund, z. B. «Studio: Datei fehlerhaft (…)» oder «Studio: keine passende Ansicht».</li>
+  <li><b>Wo und welche Datei (ab 0.7.0):</b> Electric sucht die Datei in <code>scripts/studio</code> unter dem eingestellten Skript-Speicherort, dann auf der SD-Karte, dann im internen Speicher. Passt der Dateiname nicht zum Modellnamen, wähle die Datei im Widget-Menü unter <b>Studio-Layout</b> (die Liste zeigt jede Datei mit Ort; «automatisch (Modellname)» ist der bisherige Weg). Die Wahl im Menü gilt vor dem Modellnamen.</li>
+  <li><b>Mit Datei</b> gilt ihre Ansicht für die Fenstergrösse, für die sie gemacht ist. Fehlt eine Ansicht für diese Grösse, rechnet Electric ab 0.7.0 die Ansicht mit dem ähnlichsten Seitenverhältnis um und zeigt 5 s lang «Studio: Ansicht 800x480 angepasst» in der Kopfzeile. Zu kleine Kästchen werden als Zahl gezeigt oder weggelassen. Bleibt trotz Datei die eingebaute Anzeige, steht in der Kopfzeile der Grund, z. B. «Studio: Datei fehlerhaft (…)» oder «Studio: keine passende Ansicht».</li>
   <li><b>Nach dem Wechsel des Modells</b> liest Electric die Datei in kleinen Schritten, das kann einen Moment dauern.
   Hat die Datei eine Ansicht für diese Fenstergrösse, steht solange «Studio-Datei wird geladen ...» statt der
   eingebauten Anzeige; sonst zeigt Electric gleich seine eingebaute Anzeige.</li>
@@ -353,7 +353,7 @@ beim Laden des Modells.</p>
   <div><img src="../bilder-simulator/Electric - Sim 480x320 06 Alarm.png" alt="480x320"><div class="t">480 × 320 (X18): gekürzte Titel</div></div>
   <div><img src="../bilder-simulator/Electric - Sim 800x480 12 Englisch.png" alt="Englisch"><div class="t">Englisch: Sprache im Menü oder wie der Sender</div></div>
 </div>
-<p class="klein">Electric Version 0.8.0 · 22.11.2026</p>
+<p class="klein">Electric Version 0.8.1 · 22.11.2026</p>
 
 </body>
 </html>

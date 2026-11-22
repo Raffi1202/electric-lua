@@ -26,7 +26,7 @@ mit Sprachansagen sowie eine Flugliste. Anzeige, Menü und Ansagen gibt es auf D
   Grenzwerte. Ohne diese Datei läuft alles wie bisher.
 - **Schmuck (neu in 0.4.0, Lua-Studio-Format 2):** frei platzierte Texte, Linien und Rahmen. Symbole sind ab 0.8.0
   entfernt (ältere Dateien mit Symbolen laufen weiter, die Symbole werden still überlesen). Format-1-Dateien laufen unverändert.
-- **Neu in 0.8.0:** Die Studio-Datei wird auch auf der SD-Karte und im internen Speicher gefunden, lässt sich im Widget-Menü wählen («Studio-Layout») und wird auf andere Fenstergrössen umgerechnet; unten steht, warum sie nicht gilt.
+- **Neu in 0.7.0:** Die Studio-Datei wird auch auf der SD-Karte und im internen Speicher gefunden, lässt sich im Widget-Menü wählen («Studio-Layout») und wird auf andere Fenstergrössen umgerechnet; unten steht, warum sie nicht gilt.
 - **Neu in 0.6.0 (Bruch):** umbenannt von «Elektro» in **Electric** (Widget, Ordner `scripts/electric`, Studio-Datei `….electric.lua`). Das Widget in jedem Modell neu wählen, siehe [Umstieg](wiki/de/Installation.md#umstieg-von-der-deutschen-version-elektro).
 - **Neu in 0.5.0:** «Alarm auch bei Motor aus» je Wert (Menü und Lua-Studio, ab Werk ein), Speicher wird beim
   Modellwechsel freigegeben (es bleiben rund 5 KB statt über 100 KB), Studio-Datei lädt schneller und zeigt
@@ -36,7 +36,7 @@ mit Sprachansagen sowie eine Flugliste. Anzeige, Menü und Ansagen gibt es auf D
 
 ## Schnellstart in 5 Schritten
 
-1. `Electric-0.8.0.zip` aus dem neusten **Release** herunterladen (rechts auf der Repo-Seite unter «Releases»).
+1. `Electric-0.8.1.zip` aus dem neusten **Release** herunterladen (rechts auf der Repo-Seite unter «Releases»).
 2. Sender per USB anschliessen, am Sender **Ethos Suite** wählen, am Computer die **FrSky Suite** öffnen.
 3. Suite › **Lua-Bibliothek** › **Von lokaler ZIP installieren** › die ZIP wählen. Danach den Sender neu starten.
 4. Modell › Bildschirme › **+** › Layout **Vollbild** (oder mit Leisten) › ins Feld tippen › Widget **Electric**.
@@ -56,7 +56,7 @@ Einstellungen, Flüge und Zähler erhalten.
 | Versionen | [`CHANGELOG.md`](CHANGELOG.md) |
 | Texte der Sprachansagen | [`docs/Sprachansagen.md`](docs/Sprachansagen.md) |
 
-## Sender und Stand der Erprobung (Version 0.8.0, 22.11.2026)
+## Sender und Stand der Erprobung (Version 0.8.1, 22.11.2026)
 
 | Display | Sender | Stand |
 |---|---|---|

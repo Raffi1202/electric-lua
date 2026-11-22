@@ -1,6 +1,6 @@
 {
  "lua": "electric",
- "luaVersion": "0.8.0",
+ "luaVersion": "0.8.1",
  "formate": [
   1,
   2

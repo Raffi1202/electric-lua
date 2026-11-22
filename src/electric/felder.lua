@@ -133,6 +133,7 @@ M.gruppen = {
   { { "Anzeige", "Display" }, {
     { "sprache", "w", "Sprache / Language", 0,
       { { { "wie der Sender", "as the radio" }, 0 }, { "Deutsch", 1 }, { "English", 2 } } },
+    { "symbole", "b", { "Symbole anzeigen", "Show symbols" }, true },   -- 0.7.5: Symbole im Platzkopf (Studio-Datei)
   } },
 }
 
@@ -173,7 +174,7 @@ M.folge = {
   "ansage", "warnAnsage", "wdh", "schritt", "motorAus", "sgProz", "sgZeit", "sgHoehe", "sgMah", "ton", "vibration",
   "t1", "t2", "t3", "t4", "f1", "f2", "f3", "f4", "f5", "f6", "maxStrom", "maxRpm", "maxTemp",
   "sprache", "fGross",
-  "akkuMot", "zelleMot", "diffMot", "tempMot", "stromMot", "kapMot", "becMot", "hoeheMot", "rssiMot", "lqMot",
+  "akkuMot", "zelleMot", "diffMot", "tempMot", "stromMot", "kapMot", "becMot", "hoeheMot", "rssiMot", "lqMot", "symbole",
 }
 
 -- Speicherformat der Quellen im Widget-Speicher: Nummer -> Zahl der Quellen in diesem Format.

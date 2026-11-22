@@ -94,6 +94,7 @@ local function zeichnePlatz(w, L, Z, q, ST, i)
   local ein, amWert = 0, true
   local SY = w.sym
   if SY and q.roh then
+    if SY.symbole then SY.symbole(w.cfg.symbole ~= false) end   -- Menü «Symbole anzeigen»
     local zeitOderStatus = q.s == "flugzeit" or q.darst == "status"
     -- 0.7.3 (Sendertest 22.11.): keine grosse, fette Einheit im Kopf. «fett» gilt wie «Einheit am Wert» (klein);
     -- steht die Einheit schon im Titel (z. B. «Akku %»), entfällt sie ganz.
@@ -107,10 +108,8 @@ local function zeichnePlatz(w, L, Z, q, ST, i)
     r._einheit = nil
     local sf = fg
     if q.darst == "status" then sf = (q.s == "motor" and x == 1) and C.gruen or C.grau end
-    ein, amWert = SY.platz(r, x0, y0, sf)
+    ein, amWert = SY.platz(r, x0, y0, sf, floor(th), y0 + pad)   -- Symbol höchstens so hoch wie die Titelschrift
     if not amWert or zeitOderStatus or (eh ~= "" and imTitel(titel, eh)) then eh = "" end
-    -- Symbol nie grösser als der Titeltext: Titel so hoch wie das Symbol (höchstens ein Drittel des Platzes)
-    if ein > 8 then th = min(ein - 8, max(th, h * 0.33)) end
   end
   local tx = max(pad, ein)                              -- Titel links: Abstand vom Rand des Platzes
   local tb = max(8, b - tx - pad)                       -- Titel links: verfügbare Breite (nie negativ)

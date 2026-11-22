@@ -147,6 +147,18 @@ local function pruefeListe()
         laden[#laden + 1] = k
       end
     end
+    -- 0.7.5: kleine Stufen 12 und 16 px stehen nicht in der Liste (Grenze 20, alte Luas lesen die Datei unverändert).
+    -- Lua-Studio überträgt name_12.png und name_16.png zu jedem Symbol: per Dateiname nachladen, je einmal; fehlt eine
+    -- oder ist sie ungültig, still weglassen (dann gilt die nächstgrössere Stufe).
+    if k then
+      for _, s in ipairs({ 12, 16 }) do
+        local kk = e.name .. "_" .. s
+        if not masken[kk] then
+          masken[kk] = { k = kanteVon(s), p = ORDNER .. kk .. ".png", klein = true }
+          laden[#laden + 1] = kk
+        end
+      end
+    end
   end
   pos = bis + 1
   return pos > #liste
@@ -276,7 +288,8 @@ local function ladeDateien()
       local ok, m = pcall(lcd.loadMask, e.p)
       if ok and m ~= nil then e.m = m geladen = geladen + 1 else grund = "loadMask fehlgeschlagen" end
     end
-    if grund then fehlend = fehlend + 1 meldung(e.p .. ": " .. grund .. ", kein Symbol") end
+    if grund and e.klein then masken[laden[pos]] = nil   -- kleine Stufe fehlt: still, nächstgrössere gilt
+    elseif grund then fehlend = fehlend + 1 meldung(e.p .. ": " .. grund .. ", kein Symbol") end
     pos, n = pos + 1, n + 1
   end
   return pos > #laden

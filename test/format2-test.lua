@@ -142,9 +142,11 @@ for _, fa in ipairs(faelle) do
     if fa[1] == "p07_namen.lua" and fe[1] == 800 then
       local gut = true
       for _, p in ipairs(geoeffnet) do
-        if p ~= "SCRIPTS:/studio/symbole/aaaaaaaaaaaaaaaaaaaaaaaa_48.png" and p ~= "SCRIPTS:/studio/symbole/akku_48.png" then gut = false print("  geöffnet: " .. p) end
+        -- 0.7.5: zu jedem gültigen Namen auch die kleinen Stufen _12 und _16 (per Dateiname, nicht in der Liste)
+        local n = p:match("^SCRIPTS:/studio/symbole/(.-)_%d+%.png$")
+        if n ~= "aaaaaaaaaaaaaaaaaaaaaaaa" and n ~= "akku" then gut = false print("  geöffnet: " .. p) end
       end
-      pruefe(gut, "p07: io.open nur für die zwei gültigen Namen")
+      pruefe(gut, "p07: io.open nur für die zwei gültigen Namen (mit ihren Stufen 12/16)")
     end
   end
 end

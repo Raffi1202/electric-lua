@@ -844,10 +844,12 @@ end
 function M.umrechnen(w, W, H, n)
   if n == nil then
     local S = w.studio
-    local a = S and M.besteAnsicht(S.ansichten, W, H)
+    local ex = w.skalUnterKopf and S and S.ansichten[W .. "x" .. H]   -- 0.7.4: genau passende Ansicht unter die Kopfzeile
+    local a = ex or (S and M.besteAnsicht(S.ansichten, W, H))
     if a == nil then return nil end
     local kq, kz = kopfH(a.breite, a.hoehe), kopfH(W, H)
-    n = { breite = W, hoehe = H, plaetze = {}, angepasst = true, von = a.breite .. "x" .. a.hoehe, weg = 0, quelle = a, i = 0,
+    if ex then kq = 0 end                                -- alle Plätze von 0..H auf Kopfzeile..H verschieben
+    n = { breite = W, hoehe = H, plaetze = {}, angepasst = not ex, unterKopf = ex and true or nil, von = a.breite .. "x" .. a.hoehe, weg = 0, quelle = a, i = 0,
       kz = kz, kq = kq, fx = W / a.breite, fy = (H - kz) / math.max(1, a.hoehe - kq) }
     return n, false                                      -- 0.7.1 (A2): Plätze in den nächsten Aufrufen, je 6
   end

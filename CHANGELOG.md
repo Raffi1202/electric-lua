@@ -3,6 +3,13 @@
 The version number is in `src/electric/main.lua` (`local VERSION`). It is the same in the manual, the Suite package and here.
 The top section appears in the FrSky Suite as version note. From 0.5.0 on in English; older entries in German.
 
+## 0.7.4 (22 Nov 2026, pre-release)
+
+- A layout whose boxes reach into the widget's own header is moved below it (all boxes, proportionally), so the
+  header never covers a value.
+- The unit is left out only if the title contains it as a word of its own (e.g. «Akku %», «Strom (A)»), not inside
+  another word («Höhe max», «Akku Strom»).
+
 ## 0.7.3 (22 Nov 2026, pre-release)
 
 - Box header (Lua-Studio format 2, transmitter test): no large bold unit next to the symbol any more. A unit marked

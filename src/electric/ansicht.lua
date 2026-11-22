@@ -51,6 +51,14 @@ local function zusatzText(w, q, Z, dez, eh)
   return vor .. zahlText(Z, x, dez, eh, q.s)
 end
 
+-- 0.7.4: steht die Einheit schon im Titel? Nur als eigenes Wort: davor Anfang, Leerzeichen oder Klammer, danach Ende,
+-- Leerzeichen, Klammer oder «%» («Akku %» ja, «Höhe max» bei «m» nein, «Akku Strom» bei «A» nein).
+local function imTitel(titel, eh)
+  if type(titel) ~= "string" or eh == "" then return false end
+  local e = eh:gsub("[%^%$%(%)%%%.%[%]%*%+%-%?]", "%%%0")
+  return (" " .. titel .. " "):find("[%s%(%[]" .. e .. "[%s%)%]%%]") ~= nil
+end
+
 local function zeichnePlatz(w, L, Z, q, ST, i)
   local C = Z.C
   -- 0.7.3: die reservierte Flüge-Taste im Vollbild 800 × 480 (x 8–240, y 432–472) überdeckt keinen Platz: Platz kürzen
@@ -100,7 +108,7 @@ local function zeichnePlatz(w, L, Z, q, ST, i)
     local sf = fg
     if q.darst == "status" then sf = (q.s == "motor" and x == 1) and C.gruen or C.grau end
     ein, amWert = SY.platz(r, x0, y0, sf)
-    if not amWert or zeitOderStatus or (eh ~= "" and type(titel) == "string" and titel:find(eh, 1, true)) then eh = "" end
+    if not amWert or zeitOderStatus or (eh ~= "" and imTitel(titel, eh)) then eh = "" end
     -- Symbol nie grösser als der Titeltext: Titel so hoch wie das Symbol (höchstens ein Drittel des Platzes)
     if ein > 8 then th = min(ein - 8, max(th, h * 0.33)) end
   end

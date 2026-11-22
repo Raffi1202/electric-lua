@@ -946,7 +946,8 @@ local function studioWecke(w, now, nurLaden)
       if n.dekoVon then w.skalDeko = n end
       local t = string.format(T.sAngepasst, n.von) .. (n.weg > 0 and string.format(T.sWeg, tostring(n.weg)) or "")
       local L = w.L
-      if L and L.W == sw[1] and L.H == sw[2] then         -- 0.7.2: nur, wenn diese Grösse noch gezeigt wird
+      if n.unterKopf then w.skalUnterKopf = nil
+      elseif L and L.W == sw[1] and L.H == sw[2] then     -- 0.7.2: nur, wenn diese Grösse noch gezeigt wird
         w.sAngepasst = t
         studioHinweis(w, t, now)
         w.sHinweisBis, w.sKurz = now + 5, true          -- 5 s, danach kein «!»
@@ -1122,6 +1123,15 @@ function K.zeichne(w)
   if w.studio and w.seite == 1 and not A and next(w.studio.ansichten) and not (w.studio.keine and w.studio.keine[W .. "x" .. H]) then
     if w.skalWunsch == nil then w.skalWunsch = { W, H } end   -- umrechnen im wakeup, nicht hier (Befehlsgrenze)
     warte = true
+  end
+  -- 0.7.4 (A1): ragt eine genau passende Ansicht in die eigene Kopfzeile, alle Plätze darunter schieben (einmal, im wakeup)
+  if A and not A.angepasst and not A.unterKopf and not A.kopfGeprueft then
+    A.kopfGeprueft = true
+    for _, q in ipairs(A.plaetze) do if q.y < L.kh then A.zuHoch = true end end
+  end
+  if A and A.zuHoch then
+    if w.skalWunsch == nil then w.skalWunsch, w.skalUnterKopf = { W, H }, true end
+    A, warte = nil, true
   end
   if A then
     local g = A.von or (W .. "x" .. H)

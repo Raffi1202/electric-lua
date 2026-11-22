@@ -2,7 +2,7 @@
 
 **English** · [Deutsch](README.de.md) · Documentation: [Wiki (English)](wiki/en/Installation.md) · [Wiki (Deutsch)](wiki/de/Installation.md)
 
-> **Configure on your PC with [Lua-Studio](https://github.com/Raffi1202/lua-studio)** – arrange the screen, choose values, alarms and symbols, then transfer to the radio. Download: [latest release](https://github.com/Raffi1202/lua-studio/releases/latest) · [Wiki](https://github.com/Raffi1202/lua-studio/tree/main/wiki)
+> **Configure on your PC with [Lua-Studio](https://github.com/Raffi1202/lua-studio)** – arrange the screen, choose values and alarms, then transfer to the radio. Download: [latest release](https://github.com/Raffi1202/lua-studio/releases/latest) · [Wiki](https://github.com/Raffi1202/lua-studio/tree/main/wiki)
 
 **Electric** is an Ethos widget (full screen or compact view with the Ethos bars) for electric planes on FrSky radios
 with a colour display. It shows battery %, cells (with or without a cell sensor), current, RPM, ESC temperature, used
@@ -21,7 +21,7 @@ Display, menu and voice are in German and English.
 - **Flight list:** the last 20 flights, each one can be deleted.
 - **Sensors** are assigned automatically on first start. What you choose by hand stays.
 - **Lua-Studio:** a settings file per model from the PC app Lua-Studio designs the display freely (boxes with number,
-  gauge, bar, graph or status, symbols, own colours) and sets settings and limits. Without this file everything works as before.
+  gauge, bar, graph or status, own colours; symbols removed from 0.8.0) and sets settings and limits. Without this file everything works as before.
 - **New in 0.8.0:** the Studio file is also found on the SD card or internal memory, can be chosen in the widget menu («Studio layout») and is adapted to other window sizes; a line at the bottom says why if it is not used.
 - **New in 0.6.0 (breaking):** renamed from «Elektro» to **Electric** (widget, folder `scripts/electric`, Studio file `….electric.lua`). Add the widget again in every model, see [Upgrading](wiki/en/Installation.md#upgrading-from-the-german-version-elektro).
 - **New in 0.5.0:** «alarm also with motor off» per value (menu and Lua-Studio, on by default), memory is freed on model
@@ -92,4 +92,4 @@ driver, the random test and the PDF/package scripts belong to the author's build
 
 ## License
 
-GPL-3.0, see [LICENSE](LICENSE). The module `src/electric/studio_symbole.lua` comes from Lua-Studio (same author, same license).
+GPL-3.0, see [LICENSE](LICENSE). The module `src/electric/studio_symbole.lua` (decoration only from 0.8.0) comes from Lua-Studio (same author, same license).

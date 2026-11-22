@@ -2,7 +2,7 @@
 
 [English](README.md) · **Deutsch** · Doku: [Wiki (Deutsch)](wiki/de/Installation.md) · [Wiki (English)](wiki/en/Installation.md)
 
-> **Am PC einrichten mit [Lua-Studio](https://github.com/Raffi1202/lua-studio)**: Bildschirm einteilen, Werte, Alarme und Symbole wählen, auf die Funke übertragen.
+> **Am PC einrichten mit [Lua-Studio](https://github.com/Raffi1202/lua-studio)**: Bildschirm einteilen, Werte und Alarme wählen, auf die Funke übertragen.
 
 Ethos-Widget für Elektroflieger auf FrSky-Sendern mit Farbdisplay. Es zeigt auf einem Bildschirm Akku, Zellen,
 Strom, Drehzahl, Reglertemperatur, Verbrauch, Leistung, Höhe, Speed und Empfang. Dazu kommen Warnungen und Alarme
@@ -24,8 +24,8 @@ mit Sprachansagen sowie eine Flugliste. Anzeige, Menü und Ansagen gibt es auf D
 - **Lua-Studio (neu in 0.3.0):** Eine Einstellungsdatei je Modell aus dem PC-Programm Lua-Studio gestaltet die
   Anzeige frei (Kästchen mit Zahl, Ring, Balken, Verlauf oder Status, eigene Farben) und setzt Einstellungen und
   Grenzwerte. Ohne diese Datei läuft alles wie bisher.
-- **Symbole und Schmuck (neu in 0.4.0, Lua-Studio-Format 2):** Kästchen mit Symbol und fetter Einheit, dazu frei
-  platzierte Symbole, Texte, Linien und Rahmen. Format-1-Dateien laufen unverändert.
+- **Schmuck (neu in 0.4.0, Lua-Studio-Format 2):** frei platzierte Texte, Linien und Rahmen. Symbole sind ab 0.8.0
+  entfernt (ältere Dateien mit Symbolen laufen weiter, die Symbole werden still überlesen). Format-1-Dateien laufen unverändert.
 - **Neu in 0.8.0:** Die Studio-Datei wird auch auf der SD-Karte und im internen Speicher gefunden, lässt sich im Widget-Menü wählen («Studio-Layout») und wird auf andere Fenstergrössen umgerechnet; unten steht, warum sie nicht gilt.
 - **Neu in 0.6.0 (Bruch):** umbenannt von «Elektro» in **Electric** (Widget, Ordner `scripts/electric`, Studio-Datei `….electric.lua`). Das Widget in jedem Modell neu wählen, siehe [Umstieg](wiki/de/Installation.md#umstieg-von-der-deutschen-version-elektro).
 - **Neu in 0.5.0:** «Alarm auch bei Motor aus» je Wert (Menü und Lua-Studio, ab Werk ein), Speicher wird beim
@@ -154,4 +154,4 @@ nicht Teil dieses Repos.
 
 ## Lizenz
 
-GPL-3.0, siehe [LICENSE](LICENSE). Der Baustein `src/electric/studio_symbole.lua` stammt aus Lua-Studio (gleicher Autor, gleiche Lizenz).
+GPL-3.0, siehe [LICENSE](LICENSE). Der Baustein `src/electric/studio_symbole.lua` (ab 0.8.0 nur noch Schmuck) stammt aus Lua-Studio (gleicher Autor, gleiche Lizenz).

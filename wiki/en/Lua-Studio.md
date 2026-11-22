@@ -14,7 +14,7 @@ With the PC program **Lua-Studio** you design the display freely for each model:
 
 - **After a model change** Electric reads the file in small steps, which can take a moment. If the file has a layout for this window size, it shows «Loading Studio file ...» meanwhile instead of the built-in display; otherwise Electric shows its built-in display right away.
 
-- **Symbols, bold unit and decoration** (from version 0.4.0, Lua-Studio 0.3.0 or newer): a box can show a symbol at the top left (e.g. battery, clock, altitude) and the unit in bold. Freely placed symbols, texts, lines and frames can sit under the boxes. Lua-Studio writes the images to `scripts/studio/symbole/`. If an image is missing or broken, Electric shows the box without the symbol and briefly «Studio: n symbols missing» at the bottom. Symbols and decoration never change a limit or an alarm.
+- **Decoration (lines, frames, texts; from version 0.4.0, Lua-Studio format 2):** freely placed texts, lines and frames under the boxes. Symbols are removed from version 0.8.0: Electric silently skips symbols and bold units in older files, the unit is shown small next to the value. Decoration never changes a limit or an alarm.
 
 - **Limits** apply per value, whether and however it is shown. If a value is missing in the file, the factory limit applies. An alarm is only switched off if the file says so explicitly. If an entry does not fit the value (e.g. wrong direction), the factory limit applies as well, with a message. «Also with motor off» can be set per limit in Lua-Studio too (from version 0.5.0, also for sensors and channels). The radio menu only lists Electric's own 10 values; limits for sensors and channels from the file are set in Lua-Studio.
 

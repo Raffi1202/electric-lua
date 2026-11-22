@@ -14,7 +14,7 @@ Mit dem PC-Programm **Lua-Studio** gestaltest du die Anzeige je Modell frei: Fü
 
 - **Nach dem Wechsel des Modells** liest Electric die Datei in kleinen Schritten, das kann einen Moment dauern. Hat die Datei eine Ansicht für diese Fenstergrösse, steht solange «Studio-Datei wird geladen ...» statt der eingebauten Anzeige; sonst zeigt Electric gleich seine eingebaute Anzeige.
 
-- **Symbole, fette Einheit und Schmuck** (ab Version 0.4.0, Lua-Studio ab 0.3.0): Ein Kästchen kann oben links ein Symbol tragen (z. B. Akku, Uhr, Höhe) und die Einheit fett zeigen. Dazu kommen frei platzierte Symbole, Texte, Linien und Rahmen unter den Kästchen. Die Bilder schreibt Lua-Studio nach `scripts/studio/symbole/`. Fehlt ein Bild oder ist es kaputt, zeigt Electric das Kästchen ohne Symbol und unten kurz «Studio: n Symbole fehlen». Symbole und Schmuck ändern nie einen Grenzwert oder Alarm.
+- **Schmuck (Linien, Rahmen, Texte; ab Version 0.4.0, Lua-Studio-Format 2):** frei platzierte Texte, Linien und Rahmen unter den Kästchen. Symbole sind ab Version 0.8.0 entfernt: Symbole und fette Einheiten in älteren Dateien überliest Electric still, die Einheit steht klein beim Wert. Schmuck ändert nie einen Grenzwert oder Alarm.
 
 - **Grenzwerte** gelten je Wert, egal ob und wie er angezeigt wird. Fehlt ein Wert in der Datei, gilt die Werkgrenze. Ein Alarm geht nur aus, wenn die Datei das ausdrücklich so will. Passt eine Angabe nicht zum Wert (z. B. falsche Richtung), gilt ebenfalls die Werkgrenze, mit Hinweis. Auch «auch bei Motor aus» lässt sich in Lua-Studio je Grenze einstellen (ab Version 0.5.0, auch für Sensoren und Kanäle). Im Menü der Funke stehen nur die 10 eigenen Werte von Electric; Grenzen für Sensoren und Kanäle aus der Datei stellst du in Lua-Studio ein.
 

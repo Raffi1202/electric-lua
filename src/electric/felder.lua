@@ -36,6 +36,10 @@ M.gruppen = {
     { "speed", "q", { "Geschwindigkeit", "Speed" } },
     { "rssi", "q", "RSSI" },
     { "lq", "q", "LQ" },
+    { "rssi2", "q", { "RSSI 900 (2. Band)", "RSSI 900 (2nd band)" } },   -- 0.10.0 (Issue #2): zweites Band, Speicher FORMAT 3
+    { "vfr", "q", "VFR 2.4" },
+    { "vfr2", "q", { "VFR 900 (2. Band)", "VFR 900 (2nd band)" } },
+    { "rxvfr", "q", "RX VFR" },
   } },
   { { "Akku", "Battery" }, {
     { "akkuart", "w", { "Akkuart", "Battery type" }, 1,
@@ -67,6 +71,8 @@ M.gruppen = {
     { "rssiA", "z", { "RSSI Alarm unter", "RSSI alarm below" }, 40, 0, 120, 0, " dB" },
     { "lqW", "z", { "LQ Warnung unter", "LQ warning below" }, 70, 0, 100, 0, " %" },
     { "lqA", "z", { "LQ Alarm unter", "LQ alarm below" }, 50, 0, 100, 0, " %" },
+    { "vfrW", "z", { "VFR Warnung unter (je Band)", "VFR warning below (per band)" }, 70, 0, 100, 0, " %" },
+    { "vfrA", "z", { "RX VFR Alarm unter", "RX VFR alarm below" }, 50, 0, 100, 0, " %" },
   } },
   -- Je Grenzwert-Alarm: kommt er auch, wenn der Schalter «Motor aus bei» aktiv ist? Standard ja (Regel «Alarme trotz
   -- Motor-aus-Schalter», Ergänzung 21.11.2026). Aus = dieser Alarm schweigt nur, solange der Motor aus ist.
@@ -175,6 +181,7 @@ M.folge = {
   "t1", "t2", "t3", "t4", "f1", "f2", "f3", "f4", "f5", "f6", "maxStrom", "maxRpm", "maxTemp",
   "sprache", "fGross",
   "akkuMot", "zelleMot", "diffMot", "tempMot", "stromMot", "kapMot", "becMot", "hoeheMot", "rssiMot", "lqMot", "phase",
+  "rssi2", "vfr", "vfr2", "rxvfr", "vfrW", "vfrA",   -- 0.10.0: Quellen ans Ende (FORMAT 3), Schwellen in der Datendatei
 }
 
 -- Speicherformat der Quellen im Widget-Speicher: Nummer -> Zahl der Quellen in diesem Format.
@@ -184,8 +191,9 @@ M.folge = {
 -- in der Datei daten/<Modell>.txt (bzw. mit Studio-Datei in der .funke.lua), nicht im Widget-Speicher: FORMAT bleibt 1.
 -- 0.7.0: FORMAT 2 = Format 1 und danach am Ende die Wahl «Studio-Layout» (Text: Pfad der Datei, "" = automatisch).
 -- Ein Speicher in Format 1 (bis 0.6.1) wird weiter gelesen, die Wahl steht dann auf automatisch.
-M.FORMAT = 2
-M.FORMATE = { [1] = 18, [2] = 18 }
+-- 0.10.0: FORMAT 3 = 22 Quellen (dazu rssi2, vfr, vfr2, rxvfr am Ende), danach die Wahl «Studio-Layout» wie FORMAT 2.
+M.FORMAT = 3
+M.FORMATE = { [1] = 18, [2] = 18, [3] = 22 }
 
 -- Feld zu einem Namen (Verzeichnis einmal aufbauen: Ethos begrenzt die Befehle je Aufruf).
 local INDEX = nil

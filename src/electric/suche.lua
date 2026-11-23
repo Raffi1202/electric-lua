@@ -33,8 +33,10 @@ local RANG = {
   speed = { "airspeed", "gps_speed" },
   rssi = { "rssi", "rx_rssi1", "d_rssi" },
   lq = { "rx_qualitaet" },
+  rssi2 = { "rssi_b2" }, vfr = { "vfr" }, vfr2 = { "vfr_b2" }, rxvfr = { "rx_vfr" },   -- 0.10.0: zwei Bänder
 }
-local FOLGE = { "uGes", "zellen", "strom", "mah", "proz", "rpm", "temp", "bec", "hoehe", "vario", "speed", "rssi", "lq" }
+local FOLGE = { "uGes", "zellen", "strom", "mah", "proz", "rpm", "temp", "bec", "hoehe", "vario", "speed", "rssi", "lq",
+  "rssi2", "vfr", "vfr2", "rxvfr" }
 
 -- Rückfall (Stufe 2): Namensteile, Ausschluss (gilt für Namensteil und Einheit), Einheit
 local REGELN = {
@@ -175,6 +177,14 @@ return function(w)
       s.key = schluessel(J, s)
       if s.key == "kraftstoff" then
         s.key = (s.einheit == UNIT_MILLIAMPERE_HOUR) and "kraftstoff_mah" or "kraftstoff_proz"
+      end
+      -- 0.10.0 (Issue #2): RSSI/VFR des zweiten Bands (TD 900 MHz = Band 1, LoRa = Band 2) über band() der Quelle
+      -- (gemessen 26.2). Ohne band(): Reihenfolge, der zweite Sensor derselben Art ist das zweite Band.
+      if s.key == "rssi" or s.key == "vfr" then
+        local b = rufe(q, "band")
+        J.zahl = J.zahl or {}
+        J.zahl[s.key] = (J.zahl[s.key] or 0) + 1
+        if (type(b) == "number" and b ~= 0) or (b == nil and J.zahl[s.key] > 1) then s.key = s.key .. "_b2" end
       end
       J.S[#J.S + 1] = s
       if s.key then

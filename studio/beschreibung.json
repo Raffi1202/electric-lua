@@ -485,6 +485,106 @@
     "de": "Nur mit Motorschalter.",
     "en": "Motor switch only."
    }
+  },
+  {
+   "s": "rssi_24",
+   "name": {
+    "de": "RSSI 2.4",
+    "en": "RSSI 2.4"
+   },
+   "einheit": "dB",
+   "stellen": 0,
+   "min": 0,
+   "max": 100,
+   "darstellungen": [
+    "zahl",
+    "ring",
+    "balken_w",
+    "balken_s",
+    "kurve"
+   ],
+   "grenzeRichtung": "unter",
+   "ansage": false
+  },
+  {
+   "s": "rssi_900",
+   "name": {
+    "de": "RSSI 900",
+    "en": "RSSI 900"
+   },
+   "einheit": "dB",
+   "stellen": 0,
+   "min": 0,
+   "max": 100,
+   "darstellungen": [
+    "zahl",
+    "ring",
+    "balken_w",
+    "balken_s",
+    "kurve"
+   ],
+   "grenzeRichtung": "unter",
+   "ansage": false
+  },
+  {
+   "s": "vfr_24",
+   "name": {
+    "de": "VFR 2.4",
+    "en": "VFR 2.4"
+   },
+   "einheit": "%",
+   "stellen": 0,
+   "min": 0,
+   "max": 100,
+   "darstellungen": [
+    "zahl",
+    "ring",
+    "balken_w",
+    "balken_s",
+    "kurve"
+   ],
+   "grenzeRichtung": "unter",
+   "ansage": false
+  },
+  {
+   "s": "vfr_900",
+   "name": {
+    "de": "VFR 900",
+    "en": "VFR 900"
+   },
+   "einheit": "%",
+   "stellen": 0,
+   "min": 0,
+   "max": 100,
+   "darstellungen": [
+    "zahl",
+    "ring",
+    "balken_w",
+    "balken_s",
+    "kurve"
+   ],
+   "grenzeRichtung": "unter",
+   "ansage": false
+  },
+  {
+   "s": "rx_vfr",
+   "name": {
+    "de": "RX VFR",
+    "en": "RX VFR"
+   },
+   "einheit": "%",
+   "stellen": 0,
+   "min": 0,
+   "max": 100,
+   "darstellungen": [
+    "zahl",
+    "ring",
+    "balken_w",
+    "balken_s",
+    "kurve"
+   ],
+   "grenzeRichtung": "unter",
+   "ansage": false
   }
  ],
  "einstellungen": [

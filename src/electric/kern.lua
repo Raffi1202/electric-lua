@@ -187,6 +187,12 @@ local function grenzen(w)
     g[e[1] .. "A"] = (al and al > 0) and al / e[2] or nil
   end
   g.wdh = gut(c.wdh) or 10
+  -- 0.10.0: Empfang je Band (nur Warnung) und RX VFR (nur Alarm)
+  local vw, va = gut(c.vfrW), gut(c.vfrA)
+  g.rssi24W, g.rssi900W = g.rssiW, g.rssiW
+  g.vfr24W = (vw and vw > 0) and vw or nil
+  g.vfr900W = g.vfr24W
+  g.rxvfrA = (va and va > 0) and va or nil
   sprache(w)
 end
 
@@ -328,7 +334,11 @@ local function lesen(w, now, dt)
     w.tPhase0 = w.tPhase0 or now
     for _, e in ipairs(TEST.phase) do if now - w.tPhase0 >= e[1] then nr, t = e[2], e[3] end end
   end
-  if type(nr) == "number" and nr ~= 0 then w.phaseMehr = true end
+  if type(nr) == "number" and nr ~= 0 and not w.phaseMehr then
+    w.phaseMehr = true
+    if (w.dauer.phasen or 0) < 1 then w.dauer.phasen, w.dateiOffen = 1, true end   -- pro Modell merken (Datendatei)
+  end
+  if w.dauer.phasen == 1 then w.phaseMehr = true end
   if c.phase ~= false and w.phaseMehr and type(t) == "string" and t ~= "" then v.phaseName = t end
   local function s(q) if tele then return zahl(q) end return nil end
   v.uGes, v.strom, v.mahRoh, v.prozS = s(c.uGes), s(c.strom), s(c.mah), s(c.proz)
@@ -361,6 +371,22 @@ local function lesen(w, now, dt)
   -- dBm (negativ, ELRS/Crossfire): intern +120 wie ein positiver Wert (Schwellen, Balken), angezeigt wird dBm
   v.dbm = nil
   if v.rssi and v.rssi < 0 then v.rssi, v.dbm = v.rssi + 120, true end
+  -- 0.10.0 (Issue #2): zwei Bänder. v.rssi wird das bessere Band (Anzeige, Tiefstwert, bisherige RSSI-Grenzen);
+  -- Warnung je Band (empfang_24 / empfang_900), Alarm nur auf RX VFR, ohne RX VFR auf das bessere VFR.
+  local r9 = s(c.rssi2)
+  if r9 and r9 < 0 then r9 = r9 + 120 end
+  v.vfr24, v.vfr900, v.rxvfr = s(c.vfr), s(c.vfr2), s(c.rxvfr)
+  v.rssi900 = r9
+  v.zweiBand = (r9 ~= nil or v.vfr900 ~= nil) or nil
+  v.rssi24 = v.zweiBand and v.rssi or nil
+  if r9 and (v.rssi == nil or r9 > v.rssi) then v.rssi = r9 end
+  if TEST and TEST.band then                       -- Testhaken: Werte beider Bänder vorgeben (Simulator ohne Telemetrie)
+    for k, x in pairs(TEST.band) do v[k] = x end
+    v.zweiBand = true
+    if TEST.band.rssi24 then v.rssi = TEST.band.rssi24 end
+    if v.rssi900 and (v.rssi == nil or v.rssi900 > v.rssi) then v.rssi = v.rssi900 end
+  end
+  v.vfrAlarm = v.rxvfr or ((v.vfr24 or v.vfr900) and max(v.vfr24 or -1, v.vfr900 or -1)) or nil
   if v.rssi then                                   -- Wechsel zwischen dBm und dB: Tiefstwert neu beginnen
     if w.dbmAlt ~= nil and w.dbmAlt ~= (v.dbm == true) then v.rssiTief = nil end
     w.dbmAlt = v.dbm == true
@@ -541,25 +567,40 @@ local UEBERWACHT = {
   { "hoehe", "hoehe", false, "hoehe", "UNIT_METER", 0 },
   { "rssi", "rssi", true, "empfang", "UNIT_DB", 0 },
   { "lq", "lq", true, "empfang", "UNIT_PERCENT", 0 },
+  { "rssi24", "rssi24", true, "empfang_24", "UNIT_DB", 0 },      -- 0.10.0: je Band nur Warnung
+  { "rssi900", "rssi900", true, "empfang_900", "UNIT_DB", 0 },
+  { "vfr24", "vfr24", true, "empfang_24", "UNIT_PERCENT", 0 },
+  { "vfr900", "vfr900", true, "empfang_900", "UNIT_PERCENT", 0 },
+  { "rxvfr", "vfrAlarm", true, "empfang", "UNIT_PERCENT", 0 },   -- Alarm: RX VFR, sonst besseres VFR
 }
+local MOT = { rssi24 = "rssi", rssi900 = "rssi", vfr24 = "rssi", vfr900 = "rssi", rxvfr = "rssi" }   -- «auch bei Motor aus»
 
 local function warnungen(w, now)
   local v, g, st = w.v, w.g, w.st
   w.nAktiv = 0
   local d = v.tele
   local hoechst = 0
+  local meld = w.meld
   for _, u in ipairs(UEBERWACHT) do
     local k, x = u[1], v[u[2]]
+    -- 0.10.0: Werte ohne Sensor (z. B. zweites Band) kosten fast nichts (Befehlsgrenze wakeup)
+    if x == nil and MOT[k] and not ((meld[k .. "A"] or {}).an or (meld[k .. "W"] or {}).an) then
+      st[k] = nil
+      goto weiter
+    end
+    do
     local gw, ga = g[k .. "W"], g[k .. "A"]
+    if k == "rssi" and v.vfrAlarm ~= nil then ga = nil end   -- mit VFR gilt der Alarm auf VFR (Issue #2)
     local function jenseits(gr) return gr ~= nil and x ~= nil and ((u[3] and x < gr) or ((not u[3]) and x > gr)) end
     -- «auch bei Motor aus» = nein: dieser Alarm schweigt ganz (Warnung, Alarm, Ton, Ansage, Vibration), solange der
     -- Motor-aus-Schalter aktiv ist. Ohne Schalter (v.motorAus = nil) gilt das nie.
-    local still = v.motorAus == true and w.cfg[k .. "Mot"] == false
+    local still = v.motorAus == true and w.cfg[(MOT[k] or k) .. "Mot"] == false
     local al = d and not still and jenseits(ga) or false
     local einh = _ENV[u[5]] or 0
     local xs = (k == "rssi" and v.dbm and x) and x - 120 or x   -- dBm-Empfänger: Zahl wie in der Anzeige ansagen
-    if w.studio and STUDIO and xs then                          -- Studio-Datei: angepassten Wert ansagen (6.4)
-      local a = w.studio.werte["lua:" .. STUDIO.UEBERWACHT[k][1]]
+    local su = STUDIO and STUDIO.UEBERWACHT[k]
+    if w.studio and su and xs then                              -- Studio-Datei: angepassten Wert ansagen (6.4)
+      local a = w.studio.werte["lua:" .. su[1]]
       if a then xs = xs * a.faktor + a.versatz end
     end
     local a = melde(w, now, k .. "A", 2, al, u[4], xs, einh, u[6])
@@ -573,6 +614,8 @@ local function warnungen(w, now)
       st[k] = a and 2 or ((wn or jenseits(gw)) and 1 or 0)
     end
     if st[k] and st[k] > hoechst then hoechst = st[k] end
+    end
+    ::weiter::
   end
   if w.studio and STUDIO then                    -- Grenzen der Studio-Datei für Sensoren, Kanäle, weitere Werte
     local h = STUDIO.grenzenExtra(w, now, melde, d, stumm)
@@ -887,6 +930,7 @@ local function studioWecke(w, now, nurLaden)
     local F = w.studioF
     if F == nil then                                -- 0.7.1 (A2): einmal je Ladevorgang, eigener Aufruf, danach frei
       w.studioF = lade("felder.lua")
+      w.schwer = true                               -- 0.10.0: Suche erst im nächsten Aufruf (Befehlsgrenze)
       return
     end
     if TEST and TEST.kennung then w.testKennung = TEST.kennung end   -- neutrale Kennung für Testbilder
@@ -894,6 +938,11 @@ local function studioWecke(w, now, nurLaden)
     if TEST and TEST.orte then STUDIO.ORTE = TEST.orte end   -- Suchorte nachstellen (Simulator: ein Ordner für alle)
     local okJ, J = true, w.studioWarte
     w.studioWarte = nil
+    if J and not J.werk and not J.vorbereitet then   -- 0.10.0: Werkwerte und Feldverzeichnis in einem eigenen Aufruf
+      local okV = pcall(function() F.studioEinstellung("") J.werkVor = F.standard() end)
+      J.vorbereitet = true
+      if okV then w.studioWarte, w.schwer = J, true return end
+    end
     if J and not J.werk then                         -- 0.7.1 (A2): Einstellungen anwenden, Rest im nächsten Aufruf
       local okA, e = pcall(STUDIO.anwenden1, w, J, F)
       if okA then w.studioWarte, w.schwer = J, true return end
@@ -1033,6 +1082,7 @@ function K.wecke(w)
       if w.sKurz then w.sAusruf, w.sKurz = false, nil end
     end
     if TEST and TEST.zustand then testZustand(w, now) end
+    if TEST and TEST.suche and not w.testSuche then w.testSuche, w.suche, w.suchJob = true, "menue", nil end
     if w.hinweis and now >= w.hinweisBis then w.hinweis = nil end
     -- Datei schreiben: sofort nach einer Rückfrage, sonst frühestens 2 s nach dem letzten Schreiben
     if w.dateiOffen and (w.dateiJetzt or now - (w.tDatei or -100) >= 2) then
@@ -1064,6 +1114,15 @@ function K.wecke(w)
         collectgarbage()
         if ok and type(n) == "number" then
           print(tostring(w.name) .. ": Suche fertig, " .. tostring(n) .. " Sensoren neu zugewiesen")
+          if TEST and TEST.suche then                  -- Testhaken: Zuordnung der Empfangsquellen ins Log
+            local t = {}
+            for _, f in ipairs({ "rssi", "rssi2", "vfr", "vfr2", "rxvfr", "lq", "bec" }) do
+              local q = w.cfg[f]
+              local function r(m) local o, x = pcall(q[m], q) return o and tostring(x) or "?" end
+              t[#t + 1] = f .. "=" .. (q and (r("name") .. "/0x" .. string.format("%X", tonumber(r("appId")) or 0) .. "/band " .. r("band")) or "-")
+            end
+            print("ZUSTAND SUCHE " .. table.concat(t, "  "))
+          end
           if n > 0 or not auto then
             grenzen(w)
             hinweis(w, string.format(auto and w.T.autoSuche or w.T.neuSuche, tostring(n)), now)

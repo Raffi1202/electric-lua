@@ -106,6 +106,11 @@ M.WERTE = {
   speed = { "speed", "km/h", 0, 0, 200, nil, "Speed", "Speed" },
   rssi = { "rssi", "dB", 0, 0, 100, "unter", "Empfang (RSSI)", "Signal (RSSI)", u = "rssi" },
   lq = { "lq", "%", 0, 0, 100, "unter", "Empfang (LQ)", "Link quality", u = "lq" },
+  rssi_24 = { "rssi24", "dB", 0, 0, 100, "unter", "RSSI 2.4", "RSSI 2.4", u = "rssi24" },      -- 0.10.0: zwei Bänder
+  rssi_900 = { "rssi900", "dB", 0, 0, 100, "unter", "RSSI 900", "RSSI 900", u = "rssi900" },
+  vfr_24 = { "vfr24", "%", 0, 0, 100, "unter", "VFR 2.4", "VFR 2.4", u = "vfr24" },
+  vfr_900 = { "vfr900", "%", 0, 0, 100, "unter", "VFR 900", "VFR 900", u = "vfr900" },
+  rx_vfr = { "vfrAlarm", "%", 0, 0, 100, "unter", "RX VFR", "RX VFR", u = "rxvfr" },
   bec = { "bec", "V", 1, 0, 8.4, "unter", "BEC", "BEC", u = "bec" },
   flugzeit = { "!flugzeit", "s", 0, 0, 600, nil, "Flugzeit", "Flight time" },
   gas_proz = { "gasP", "%", 0, 0, 100, nil, "Gas %", "Throttle %" },
@@ -762,7 +767,7 @@ end
 -- Ergebnis von M.schritt auf das Widget anwenden (nur bei Zustand «geladen»)
 -- 0.7.1 (A2): in zwei Aufrufen. Teil 1 (M.anwenden1) nur die Einstellungen, Teil 2 (M.anwenden) der Rest.
 function M.anwenden1(w, J, F)
-  local c, werk = w.cfg, F.standard()
+  local c, werk = w.cfg, J.werkVor or F.standard()
   local eb = {}
   for _, g in ipairs(F.gruppen) do
     for _, f in ipairs(g[2]) do

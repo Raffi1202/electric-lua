@@ -71,9 +71,16 @@ local function inhalt(w, Z, n, klein)
     local z = nil
     if v.lq then z = "LQ " .. string.format("%.0f", v.lq) .. "%" end
     local d0 = v.dbm and 120 or 0                    -- dBm-Sensor: so anzeigen, wie er im Sensormenü steht
-    if v.rssiTief and not (klein and z) then z = (z and (z .. "  ") or "") .. T.tief .. " " .. string.format("%.0f", v.rssiTief - d0) end
+    if v.zweiBand then                               -- 0.10.0: beide Bänder (VFR, sonst RSSI), gross steht das bessere
+      local function b(x, e) return x and (string.format("%.0f", x) .. e) or "--" end
+      if v.vfr24 or v.vfr900 then z = "2.4 " .. b(v.vfr24, "%") .. "  900 " .. b(v.vfr900, "%")
+      else z = "2.4 " .. b(v.rssi24, "") .. "  900 " .. b(v.rssi900, "") end
+    end
+    if v.rssiTief and not (klein and z) and not v.zweiBand then z = (z and (z .. "  ") or "") .. T.tief .. " " .. string.format("%.0f", v.rssiTief - d0) end
     local stx = st.rssi
-    if st.lq and (stx == nil or st.lq > stx) then stx = st.lq end
+    for _, k in ipairs({ "lq", "rssi24", "rssi900", "vfr24", "vfr900", "rxvfr" }) do   -- 0.10.0: auch die Bänder
+      if st[k] and (stx == nil or st[k] > stx) then stx = st[k] end
+    end
     local eh = v.dbm and "dBm" or "dB"
     local wert = v.rssi and (string.format("%.0f", v.rssi - d0) .. " " .. eh) or (v.lq and (string.format("%.0f", v.lq) .. "%"))
     return { titel = T.t12, wert = wert, einheit = eh, anteil = v.rssi and v.rssi / 100 or (v.lq and v.lq / 100),

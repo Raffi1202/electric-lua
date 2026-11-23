@@ -218,6 +218,7 @@ local w5 = neu() lauf(w5)
 local F = assert(loadfile("felder.lua"))()
 local alle = true
 for i, n in ipairs(F.quellen()) do
+  if i > 18 then break end                              -- 0.10.0: Quellen ab 19 gab es in der Vorversion nicht
   local v = w5.cfg[n]
   if i % 4 == 0 then alle = alle and v == nil else alle = alle and v and v:name() == "Q" .. i end
 end

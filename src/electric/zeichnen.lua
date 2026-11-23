@@ -281,11 +281,20 @@ function Z.kopf(w, L)
     local zb = Z.breite(L, "00:00", 34) + 16 * s
     Z.text(L, 12 * s, kh / 2, Z.zeit(a and a[2] or 0), 34, C.weiss, LEFT, zb, true)
     zx = 12 * s + zb - 60 * s
+    if v.phaseName and not (w.sHinweis or w.kopfGrund) then   -- 0.10.0: Flugphase rechts neben der Flugzeit
+      Z.text(L, 12 * s + zb + 10 * s, kh / 2, v.phaseName, 14, C.weiss, LEFT, W * 0.35)
+    end
     x = W - 12 * s
   else
     local name = tostring(w.modell or w.name)
     zx = W * 0.42
-    Z.text(L, 12 * s, kh / 2, name, 30, C.weiss, LEFT, zx - 60 * s - 12 * s, true)
+    local ph = v.phaseName                          -- 0.10.0 (Issue #1): Flugphase klein unter dem Modellnamen
+    if ph then
+      Z.text(L, 12 * s, kh * 0.36, name, 24, C.weiss, LEFT, zx - 60 * s - 12 * s, true)
+      Z.text(L, 12 * s, kh * 0.80, ph, 12, C.weiss, LEFT, zx - 60 * s - 12 * s)
+    else
+      Z.text(L, 12 * s, kh / 2, name, 30, C.weiss, LEFT, zx - 60 * s - 12 * s, true)
+    end
     Z.text(L, zx, kh / 2, Z.zeit(a and a[2] or 0), 34, C.weiss, CENTERED, 120 * s)
     x = W - 12 * s
   end

@@ -242,6 +242,13 @@ function K.neu()
     local ok, q = pcall(system.getSource, { category = CATEGORY_SYSTEM, member = MAIN_VOLTAGE })
     if ok then w.qSender = q end
   end
+  if CATEGORY_FLIGHT then                          -- 0.10.0 (Issue #1): aktive Flugphase des Modells, wie DLG
+    local m = FLIGHT_CURRENT_MODE or CURRENT_FLIGHT_MODE
+    if m ~= nil then
+      local ok, q = pcall(system.getSource, { category = CATEGORY_FLIGHT, member = m })
+      if ok then w.qPhase = q end
+    end
+  end
   return w
 end
 
@@ -307,6 +314,22 @@ local function lesen(w, now, dt)
     w.tTeleWeg = now
   end
   v.tele = tele
+  -- Flugphase (Issue #1): Ethos sagt einem Lua nicht, wie viele Phasen ein Modell hat (gemessen 26.2: nur member 0 =
+  -- aktuelle Phase). Darum gilt: Die Zeile erscheint erst, wenn das Modell einmal in einer anderen Phase als 0 war; danach
+  -- immer, auch in der Standardphase (Text von Ethos). Ein Modell mit nur einer Phase zeigt nie etwas. Ohne Namensvergleich.
+  v.phaseName = nil
+  local qp, nr, t = w.qPhase, nil, nil
+  if qp then
+    local ok1, x = pcall(qp.value, qp)
+    local ok2, y = pcall(qp.stringValue, qp)
+    nr, t = ok1 and x or nil, ok2 and y or nil
+  end
+  if TEST and TEST.phase then                      -- Testhaken: { { ab Sekunde, Nummer, Name }, … }
+    w.tPhase0 = w.tPhase0 or now
+    for _, e in ipairs(TEST.phase) do if now - w.tPhase0 >= e[1] then nr, t = e[2], e[3] end end
+  end
+  if type(nr) == "number" and nr ~= 0 then w.phaseMehr = true end
+  if c.phase ~= false and w.phaseMehr and type(t) == "string" and t ~= "" then v.phaseName = t end
   local function s(q) if tele then return zahl(q) end return nil end
   v.uGes, v.strom, v.mahRoh, v.prozS = s(c.uGes), s(c.strom), s(c.mah), s(c.proz)
   v.rpm, v.temp, v.bec = s(c.rpm), s(c.temp), s(c.bec)
@@ -1344,6 +1367,7 @@ function K.lies(w)
   if w.datenAlt then w.dateiOffen = true end      -- aus scripts/elektro übernommen: gleich in den neuen Ordner schreiben
   -- Die Studio-Datei gilt über den gelesenen Einstellungen: nach jedem Lesen neu anwenden
   w.studio, w.studioFertig, w.studioJob, w.studioWarte = nil, false, nil, nil
+  w.phaseMehr = nil                                -- Flugphase: neues Modell, neu beobachten
   symFrei(w)
   local d = w.dauer
   if not (gut(d.fluege) and d.fluege >= 0) then d.fluege = 0 end

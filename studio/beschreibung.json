@@ -898,6 +898,16 @@
      }
     }
    ]
+  },
+  {
+   "s": "phase",
+   "art": "b",
+   "gruppe": "Anzeige",
+   "name": {
+    "de": "Flugphase anzeigen",
+    "en": "Show flight mode"
+   },
+   "werk": true
   }
  ],
  "standard": {

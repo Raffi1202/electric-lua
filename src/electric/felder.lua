@@ -40,11 +40,16 @@ M.gruppen = {
     { "vfr", "q", "VFR 2.4" },
     { "vfr2", "q", { "VFR 900 (2. Band)", "VFR 900 (2nd band)" } },
     { "rxvfr", "q", "RX VFR" },
+    { "zellen2", "q", { "Zellen 2", "Cells 2" } },                    -- 0.10.0 (Issue #2): zweiter Zellensensor
+    { "bec2", "q", { "Empfänger-Akku 2", "Receiver battery 2" } },
   } },
   { { "Akku", "Battery" }, {
     { "akkuart", "w", { "Akkuart", "Battery type" }, 1,
       { { "LiPo", 1 }, { "LiHV", 2 }, { "LiFe", 3 }, { "Li-Ion", 4 }, { "NiMH", 5 } } },
     { "zellenzahl", "z", { "Zellenzahl (0 = auto)", "Cell count (0 = auto)" }, 0, 0, 14, 0, " S" },
+    { "z2modus", "w", { "Zellen 2", "Cells 2" }, 1,
+      { { { "in Serie", "in series" }, 1 }, { { "eigener Akku", "own battery" }, 2 } } },
+    { "zellenzahl2", "z", { "Zellenzahl Akku 2 (0 = Sensor)", "Cell count battery 2 (0 = sensor)" }, 0, 0, 14, 0, " S" },
     { "kapaz", "z", { "Kapazität", "Capacity" }, 4500, 0, 50000, 0, " mAh", 100 },
     { "prozQuelle", "w", { "Akku % kommt von", "Battery % from" }, 1,
       { { { "Regler, sonst gerechnet", "ESC, else calculated" }, 1 }, { { "immer gerechnet", "always calculated" }, 2 } } },
@@ -182,6 +187,7 @@ M.folge = {
   "sprache", "fGross",
   "akkuMot", "zelleMot", "diffMot", "tempMot", "stromMot", "kapMot", "becMot", "hoeheMot", "rssiMot", "lqMot", "phase",
   "rssi2", "vfr", "vfr2", "rxvfr", "vfrW", "vfrA",   -- 0.10.0: Quellen ans Ende (FORMAT 3), Schwellen in der Datendatei
+  "zellen2", "bec2", "z2modus", "zellenzahl2",
 }
 
 -- Speicherformat der Quellen im Widget-Speicher: Nummer -> Zahl der Quellen in diesem Format.
@@ -191,9 +197,9 @@ M.folge = {
 -- in der Datei daten/<Modell>.txt (bzw. mit Studio-Datei in der .funke.lua), nicht im Widget-Speicher: FORMAT bleibt 1.
 -- 0.7.0: FORMAT 2 = Format 1 und danach am Ende die Wahl «Studio-Layout» (Text: Pfad der Datei, "" = automatisch).
 -- Ein Speicher in Format 1 (bis 0.6.1) wird weiter gelesen, die Wahl steht dann auf automatisch.
--- 0.10.0: FORMAT 3 = 22 Quellen (dazu rssi2, vfr, vfr2, rxvfr am Ende), danach die Wahl «Studio-Layout» wie FORMAT 2.
+-- 0.10.0: FORMAT 3 = 24 Quellen (dazu rssi2, vfr, vfr2, rxvfr am Ende), danach die Wahl «Studio-Layout» wie FORMAT 2.
 M.FORMAT = 3
-M.FORMATE = { [1] = 18, [2] = 18, [3] = 22 }
+M.FORMATE = { [1] = 18, [2] = 18, [3] = 24 }   -- FORMAT 3: dazu rssi2, vfr, vfr2, rxvfr, zellen2, bec2
 
 -- Feld zu einem Namen (Verzeichnis einmal aufbauen: Ethos begrenzt die Befehle je Aufruf).
 local INDEX = nil

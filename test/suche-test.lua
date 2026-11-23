@@ -129,6 +129,24 @@ SENS = { neuU }
 local wd = { cfg = { uGes = neuU, bec = neuU } }
 schritte(wd)
 pruef(wd.cfg.uGes == neuU and wd.cfg.bec == neuU, "(h) Doppelbelegung von Hand bleibt")
+-- (i) 0.10.0 zwei Bänder: RSSI/VFR über band() (0 = 2,4 GHz, sonst zweites Band), RX VFR; ohne band() nach Reihenfolge
+local function mitBand(q, b) q.b = b q.band = function(x) return x.b end return q end
+local r24, r9 = mitBand(sensor("RSSI 2.4G", 0xF101, 0, 24, UNIT_DB, 70), 0), mitBand(sensor("RSSI 900M", 0xF101, 0, 24, UNIT_DB, 60), 1)
+local v24, v9 = mitBand(sensor("VFR 2.4G", 0xF010, 0, 24, UNIT_PERCENT, 99), 0), mitBand(sensor("VFR 900M", 0xF010, 0, 24, UNIT_PERCENT, 95), 1)
+local rx = mitBand(sensor("RX VFR", 0xF011, 0, 24, UNIT_PERCENT, 99), 0)
+w = lauf({ r9, v9, r24, v24, rx })                    -- zweites Band zuerst in der Liste: band() entscheidet
+pruef(ist(w, "rssi", r24) and ist(w, "rssi2", r9) and ist(w, "vfr", v24) and ist(w, "vfr2", v9) and ist(w, "rxvfr", rx),
+  "(i) zwei Bänder über band(), unabhängig von der Reihenfolge")
+local o24, o9 = sensor("RSSI A", 0xF101, 0, 24, UNIT_DB, 70), sensor("RSSI B", 0xF101, 0, 24, UNIT_DB, 60)
+w = lauf({ o24, o9 })
+pruef(ist(w, "rssi", o24) and ist(w, "rssi2", o9), "(i) ohne band(): erster RSSI = 2,4 GHz, zweiter = zweites Band")
+-- (j) 0.10.0 Zellen 2 über eine andere Physical ID, Empfänger-Akku 2 = 0xF108 Teilwert 1
+local z1, z2 = sensor("Cels", 0x0300, 0, 1, UNIT_VOLT, 22), sensor("Cels", 0x0300, 0, 2, UNIT_VOLT, 22)
+local rb1, rb2 = sensor("RxBatt 1", 0xF108, 0, 24, UNIT_VOLT, 7.4), sensor("RxBatt 2", 0xF108, 1, 24, UNIT_VOLT, 7.3)
+w = lauf({ z2, rb2, z1, rb1 })
+pruef(ist(w, "zellen", z1) and ist(w, "zellen2", z2) and ist(w, "bec2", rb2), "(j) Zellen 2 über Physical ID, Empfänger-Akku 2")
+w = lauf({ z1 })
+pruef(ist(w, "zellen", z1) and w.cfg.zellen2 == nil, "(j) nur ein Zellensensor: Zellen 2 bleibt leer")
 print(string.format("Befehle je Aufruf höchstens %d, Aufrufe je Suche höchstens %d", MAXBEF, AUFRUFE))
 pruef(MAXBEF < 10000, "zu viele Befehle in einem Aufruf: " .. MAXBEF)
 print(fehler == 0 and "ERGEBNIS: kein Fehler" or ("ERGEBNIS: " .. fehler .. " Fehler"))

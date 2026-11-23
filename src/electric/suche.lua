@@ -34,9 +34,10 @@ local RANG = {
   rssi = { "rssi", "rx_rssi1", "d_rssi" },
   lq = { "rx_qualitaet" },
   rssi2 = { "rssi_b2" }, vfr = { "vfr" }, vfr2 = { "vfr_b2" }, rxvfr = { "rx_vfr" },   -- 0.10.0: zwei Bänder
+  zellen2 = { "zellen" }, bec2 = { "rx_batt2" },     -- 0.10.0: zweiter Zellensensor (andere Physical ID), RxBatt 2
 }
 local FOLGE = { "uGes", "zellen", "strom", "mah", "proz", "rpm", "temp", "bec", "hoehe", "vario", "speed", "rssi", "lq",
-  "rssi2", "vfr", "vfr2", "rxvfr" }
+  "rssi2", "vfr", "vfr2", "rxvfr", "zellen2", "bec2" }
 
 -- Rückfall (Stufe 2): Namensteile, Ausschluss (gilt für Namensteil und Einheit), Einheit
 local REGELN = {
@@ -233,8 +234,9 @@ return function(w)
       if c[feld] == nil then
         for _, key in ipairs(RANG[feld]) do
           local beste, anz = nil, 0
+          local physZ = feld == "zellen2" and c.zellen and rufe(c.zellen, "physId") or nil
           for _, s in ipairs(J.nach[key] or {}) do
-            if not s.vergeben then
+            if not s.vergeben and not (feld == "zellen2" and (c.zellen == nil or s.phys == physZ)) then
               anz = anz + 1
               if beste == nil or vor(s, beste) then beste = s end
             end

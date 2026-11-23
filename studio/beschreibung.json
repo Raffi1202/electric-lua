@@ -1,6 +1,6 @@
 {
  "lua": "electric",
- "luaVersion": "0.9.0",
+ "luaVersion": "0.10.0",
  "formate": [
   1,
   2
@@ -585,6 +585,85 @@
    ],
    "grenzeRichtung": "unter",
    "ansage": false
+  },
+  {
+   "s": "zelle_2",
+   "name": {
+    "de": "Zelle Akku 2",
+    "en": "Cell battery 2"
+   },
+   "einheit": "V",
+   "stellen": 2,
+   "min": 3.0,
+   "max": 4.2,
+   "darstellungen": [
+    "zahl",
+    "ring",
+    "balken_w",
+    "balken_s",
+    "kurve"
+   ],
+   "grenzeRichtung": "unter",
+   "ansage": false
+  },
+  {
+   "s": "akku2_proz",
+   "name": {
+    "de": "Akku 2 %",
+    "en": "Battery 2 %"
+   },
+   "einheit": "%",
+   "stellen": 0,
+   "min": 0,
+   "max": 100,
+   "darstellungen": [
+    "zahl",
+    "ring",
+    "balken_w",
+    "balken_s",
+    "kurve"
+   ],
+   "grenzeRichtung": "unter",
+   "ansage": false
+  },
+  {
+   "s": "spannung_2",
+   "name": {
+    "de": "Spannung Akku 2",
+    "en": "Voltage battery 2"
+   },
+   "einheit": "V",
+   "stellen": 1,
+   "min": 0,
+   "max": 60,
+   "darstellungen": [
+    "zahl",
+    "ring",
+    "balken_w",
+    "balken_s",
+    "kurve"
+   ],
+   "ansage": false
+  },
+  {
+   "s": "bec_2",
+   "name": {
+    "de": "Empfänger-Akku 2",
+    "en": "Receiver battery 2"
+   },
+   "einheit": "V",
+   "stellen": 1,
+   "min": 0,
+   "max": 8.4,
+   "darstellungen": [
+    "zahl",
+    "ring",
+    "balken_w",
+    "balken_s",
+    "kurve"
+   ],
+   "grenzeRichtung": "unter",
+   "ansage": false
   }
  ],
  "einstellungen": [
@@ -1008,6 +1087,44 @@
     "en": "Show flight mode"
    },
    "werk": true
+  },
+  {
+   "s": "z2modus",
+   "art": "w",
+   "gruppe": "Akku",
+   "name": {
+    "de": "Zellen 2",
+    "en": "Cells 2"
+   },
+   "werk": 1,
+   "auswahl": [
+    {
+     "wert": 1,
+     "name": {
+      "de": "in Serie",
+      "en": "in series"
+     }
+    },
+    {
+     "wert": 2,
+     "name": {
+      "de": "eigener Akku",
+      "en": "own battery"
+     }
+    }
+   ]
+  },
+  {
+   "s": "zellenzahl2",
+   "art": "z",
+   "gruppe": "Akku",
+   "name": {
+    "de": "Zellenzahl Akku 2 (0 = Sensor)",
+    "en": "Cell count battery 2 (0 = sensor)"
+   },
+   "werk": 0,
+   "min": 0,
+   "max": 14
   }
  ],
  "standard": {

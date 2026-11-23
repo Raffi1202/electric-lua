@@ -35,7 +35,9 @@ local function inhalt(w, Z, n, klein)
       or (v.zelleTief and ((klein and "↓" or (T.tief .. " ")) .. Z.zahl(v.zelleTief, 2) .. "V"))
     local uf = C.titel
     if v.zellenFehlt then unten, uf = T.zellenKurz, C.orange end
+    if v.zelle2 then unten, uf = (klein and "2: " or "Akku 2 ") .. Z.zahl(v.zelle2, 2) .. "V", Z.stufenFarbe(st.zelle2, C.titel) end   -- 0.10.0
     local stz = st.zelle
+    if st.zelle2 and (stz == nil or st.zelle2 > stz) then stz = st.zelle2 end
     if st.diff and (stz == nil or st.diff > stz) then stz = st.diff end
     return { titel = titel, wert = v.zelle and (Z.zahl(v.zelle, 2) .. "V"), einheit = "V",
       anteil = v.zelle and (v.zelle - lv[1]) / (lv[2] - lv[1]), farbe = Z.stufenFarbe(stz, C.gruen),
@@ -72,9 +74,13 @@ local function inhalt(w, Z, n, klein)
     if v.lq then z = "LQ " .. string.format("%.0f", v.lq) .. "%" end
     local d0 = v.dbm and 120 or 0                    -- dBm-Sensor: so anzeigen, wie er im Sensormenü steht
     if v.zweiBand then                               -- 0.10.0: beide Bänder (VFR, sonst RSSI), gross steht das bessere
-      local function b(x, e) return x and (string.format("%.0f", x) .. e) or "--" end
-      if v.vfr24 or v.vfr900 then z = "2.4 " .. b(v.vfr24, "%") .. "  900 " .. b(v.vfr900, "%")
-      else z = "2.4 " .. b(v.rssi24, "") .. "  900 " .. b(v.rssi900, "") end
+      local function b(x, e) return x and (string.format("%.0f", x - (e == "dB" and d0 or 0)) .. e) or "--" end
+      local function k(x) return x and string.format("%.0f", x) or "--" end
+      if v.vfr24 or v.vfr900 then                  -- beschriftet: VFR in %, sonst RSSI in dB (Handler 23.11.)
+        z = klein and ("VFR " .. k(v.vfr24) .. "/" .. k(v.vfr900) .. "%") or ("VFR 2.4 " .. b(v.vfr24, "%") .. "  900 " .. b(v.vfr900, "%"))
+      else
+        z = klein and ("dB " .. k(v.rssi24) .. "/" .. k(v.rssi900)) or ("2.4 " .. b(v.rssi24, "dB") .. "  900 " .. b(v.rssi900, "dB"))
+      end
     end
     if v.rssiTief and not (klein and z) and not v.zweiBand then z = (z and (z .. "  ") or "") .. T.tief .. " " .. string.format("%.0f", v.rssiTief - d0) end
     local stx = st.rssi
@@ -87,8 +93,9 @@ local function inhalt(w, Z, n, klein)
       farbe = Z.stufenFarbe(stx, C.gruen), unten = z, st = stx, wertFarbe = C.gruen, akzent = C.gruen }
   elseif n == 13 then
     return { titel = T.t13, wert = v.bec and (Z.zahl(v.bec, 1) .. "V"), einheit = "V", anteil = v.bec and v.bec / 8.4,
-      farbe = Z.stufenFarbe(st.bec, C.gruen), unten = v.becTief and (T.tief .. " " .. Z.zahl(v.becTief, 1) .. "V"),
-      st = st.bec, akzent = C.akzent }
+      farbe = Z.stufenFarbe(math.max(st.bec or 0, st.bec2 or 0), C.gruen),
+      unten = (v.bec2 and ("2: " .. Z.zahl(v.bec2, 1) .. "V")) or (v.becTief and (T.tief .. " " .. Z.zahl(v.becTief, 1) .. "V")),
+      st = (st.bec or st.bec2) and math.max(st.bec or 0, st.bec2 or 0) or nil, akzent = C.akzent }
   elseif n == 14 then
     local a = w.akt
     return { titel = T.t14, wert = Z.zeit(a and a[2] or 0), einheit = "", anteil = a and a[2] and a[2] / 600,

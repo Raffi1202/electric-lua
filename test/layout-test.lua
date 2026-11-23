@@ -179,7 +179,13 @@ weg("RADIO:/scripts/studio/TEST.electric.lua")
 schreib("SCRIPTS:/studio/TEST.electric.lua", NUR800)
 for _, f in ipairs({ { 784, 316 }, { 640, 360 }, { 472, 210 } }) do
   local w3 = neu(f)
-  local mw, mp = lauf(w3, 26, f)
+  local mw, mp = lauf(w3, 20, f)
+  for _ = 1, 60 do                                     -- 0.10.0: bis umgerechnet ist (schwere Runden verschieben es)
+    if w3.studio and w3.studio.ansichten[f[1] .. "x" .. f[2]] and w3.sHinweis then break end
+    local a1, a2 = lauf(w3, 1, f)
+    if a1 > mw then mw = a1 end
+    if a2 > mp then mp = a2 end
+  end
   local key = f[1] .. "x" .. f[2]
   local A = w3.studio and w3.studio.ansichten[key]
   local kh = w3.L.kh

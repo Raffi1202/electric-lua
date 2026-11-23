@@ -111,6 +111,10 @@ M.WERTE = {
   vfr_24 = { "vfr24", "%", 0, 0, 100, "unter", "VFR 2.4", "VFR 2.4", u = "vfr24" },
   vfr_900 = { "vfr900", "%", 0, 0, 100, "unter", "VFR 900", "VFR 900", u = "vfr900" },
   rx_vfr = { "vfrAlarm", "%", 0, 0, 100, "unter", "RX VFR", "RX VFR", u = "rxvfr" },
+  zelle_2 = { "zelle2", "V", 2, 3.0, 4.2, "unter", "Zelle Akku 2", "Cell battery 2", u = "zelle2" },   -- 0.10.0
+  akku2_proz = { "proz2", "%", 0, 0, 100, "unter", "Akku 2 %", "Battery 2 %", u = "akku2" },
+  spannung_2 = { "u2", "V", 1, 0, 60, nil, "Spannung Akku 2", "Voltage battery 2" },
+  bec_2 = { "bec2", "V", 1, 0, 8.4, "unter", "Empfänger-Akku 2", "Receiver battery 2", u = "bec2" },
   bec = { "bec", "V", 1, 0, 8.4, "unter", "BEC", "BEC", u = "bec" },
   flugzeit = { "!flugzeit", "s", 0, 0, 600, nil, "Flugzeit", "Flight time" },
   gas_proz = { "gasP", "%", 0, 0, 100, nil, "Gas %", "Throttle %" },
@@ -693,7 +697,7 @@ function M.infoSchritt(w, version, formate)
     w.infoJob = I
     return nil
   end
-  local bis = math.min(#I.liste, I.i + 10, 100)
+  local bis = math.min(#I.liste, I.i + 5, 100)       -- 0.10.0: 5 je Aufruf (Befehlsgrenze bei voller Belegung)
   for i = I.i + 1, bis do
     local q = I.liste[i]
     local function r(f) local okf, v = pcall(q[f], q) if okf then return v end return nil end

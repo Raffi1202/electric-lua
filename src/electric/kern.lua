@@ -193,6 +193,7 @@ local function grenzen(w)
   g.vfr24W = (vw and vw > 0) and vw or nil
   g.vfr900W = g.vfr24W
   g.rxvfrA = (va and va > 0) and va or nil
+  g.zelle2W, g.zelle2A, g.akku2W, g.akku2A, g.bec2W, g.bec2A = g.zelleW, g.zelleA, g.akkuW, g.akkuA, g.becW, g.becA
   sprache(w)
 end
 
@@ -275,8 +276,8 @@ end
 
 -- Zellen eines Zellensensors lesen. Nur ein echter Zellensensor hat eine ganze Zellenzahl und Zellen bis 5 V;
 -- ein reiner Spannungssensor liefert auf jede Abfrage die Gesamtspannung (gemessen, Motoren Lua liesAkku).
-local function liesZellen(w, q)
-  local z = w.zn
+local function liesZellen(w, q, z)
+  z = z or w.zn
   local n0 = #z
   for i = 1, n0 do z[i] = nil end
   if q == nil or OPTION_CELL_COUNT == nil or OPTION_CELL_INDEX == nil then return 0 end
@@ -345,6 +346,7 @@ local function lesen(w, now, dt)
   v.rpm, v.temp, v.bec = s(c.rpm), s(c.temp), s(c.bec)
   v.hoehe, v.vario, v.speed, v.rssi, v.lq = s(c.hoehe), s(c.vario), s(c.speed), s(c.rssi), s(c.lq)
   local nz = tele and liesZellen(w, c.zellen) or 0
+  v.bec2 = s(c.bec2)                               -- 0.10.0 (Issue #2): Empfänger-Akku 2
   v.motorAus, v.ansageSw, v.sw1, v.sw2 = aktiv(c.swMotor), aktiv(c.swAnsage), aktiv(c.sw1), aktiv(c.sw2)
   v.gasP = prozent(c.gas)
   v.sender = zahl(w.qSender)
@@ -392,6 +394,26 @@ local function lesen(w, now, dt)
     w.dbmAlt = v.dbm == true
   end
 
+  -- 0.10.0 (Issue #2): zweiter Zellensensor. «in Serie» (1): Zellen gehören zum selben Akku (tiefste Zelle, Summe);
+  -- «eigener Akku» (2): eigene Zellenzahl, Grenzen und Ansage (zelle2, proz2).
+  w.zn2 = w.zn2 or {}
+  local nz2 = (tele and c.zellen2) and liesZellen(w, c.zellen2, w.zn2) or 0
+  if TEST and TEST.zellen2 then                    -- Testhaken: Zellen des zweiten Sensors
+    for i = 1, #w.zn2 do w.zn2[i] = nil end
+    for i, u in ipairs(TEST.zellen2) do w.zn2[i] = u end
+    nz2 = #TEST.zellen2
+  end
+  v.zelle2, v.u2, v.proz2, v.zellen2 = nil, nil, nil, nil
+  if nz2 > 0 and (c.z2modus or 1) == 1 then
+    for i = 1, nz2 do w.zn[nz + i] = w.zn2[i] end
+    nz = nz + nz2
+  elseif nz2 > 0 then
+    local lo, summe = nil, 0
+    for i = 1, nz2 do local u = w.zn2[i] summe = summe + u if lo == nil or u < lo then lo = u end end
+    local n2 = (c.zellenzahl2 or 0) > 0 and c.zellenzahl2 or nz2
+    v.zelle2, v.u2, v.zellen2 = lo, summe, n2
+    v.proz2 = zelleProzent(summe / n2, c.akkuart)
+  end
   -- Zellen: Fall 2 Zellensensor (tiefste Zelle, Differenz), Fall 1 nur Gesamtspannung ÷ Zellenzahl.
   -- Zellenzahl «automatisch» ohne Zellensensor wird nie geschätzt (bauplan.md Regel 14): Hinweis zum Einstellen.
   v.zFall, v.zDiff, v.zTiefI = nil, nil, nil
@@ -572,8 +594,12 @@ local UEBERWACHT = {
   { "vfr24", "vfr24", true, "empfang_24", "UNIT_PERCENT", 0 },
   { "vfr900", "vfr900", true, "empfang_900", "UNIT_PERCENT", 0 },
   { "rxvfr", "vfrAlarm", true, "empfang", "UNIT_PERCENT", 0 },   -- Alarm: RX VFR, sonst besseres VFR
+  { "zelle2", "zelle2", true, "zelle2_tief", "UNIT_VOLT", 2 },   -- 0.10.0: Akku 2 «eigener Akku», Grenzen wie Akku 1
+  { "akku2", "proz2", true, "akku2_tief", "UNIT_PERCENT", 0 },
+  { "bec2", "bec2", true, "bec2_tief", "UNIT_VOLT", 1 },          -- Empfänger-Akku 2, Grenzen wie BEC
 }
-local MOT = { rssi24 = "rssi", rssi900 = "rssi", vfr24 = "rssi", vfr900 = "rssi", rxvfr = "rssi" }   -- «auch bei Motor aus»
+local MOT = { rssi24 = "rssi", rssi900 = "rssi", vfr24 = "rssi", vfr900 = "rssi", rxvfr = "rssi",   -- «auch bei Motor aus»
+  zelle2 = "zelle", akku2 = "akku", bec2 = "bec" }
 
 local function warnungen(w, now)
   local v, g, st = w.v, w.g, w.st
@@ -591,11 +617,14 @@ local function warnungen(w, now)
     do
     local gw, ga = g[k .. "W"], g[k .. "A"]
     if k == "rssi" and v.vfrAlarm ~= nil then ga = nil end   -- mit VFR gilt der Alarm auf VFR (Issue #2)
-    local function jenseits(gr) return gr ~= nil and x ~= nil and ((u[3] and x < gr) or ((not u[3]) and x > gr)) end
+    -- jenseits der Grenze: einmal je Zeile rechnen (0.10.0, Befehlsgrenze bei voller Belegung)
+    local unter = u[3]
+    local jA = ga ~= nil and x ~= nil and ((unter and x < ga) or ((not unter) and x > ga))
+    local jW = gw ~= nil and x ~= nil and ((unter and x < gw) or ((not unter) and x > gw))
     -- «auch bei Motor aus» = nein: dieser Alarm schweigt ganz (Warnung, Alarm, Ton, Ansage, Vibration), solange der
     -- Motor-aus-Schalter aktiv ist. Ohne Schalter (v.motorAus = nil) gilt das nie.
     local still = v.motorAus == true and w.cfg[(MOT[k] or k) .. "Mot"] == false
-    local al = d and not still and jenseits(ga) or false
+    local al = d and not still and jA or false
     local einh = _ENV[u[5]] or 0
     local xs = (k == "rssi" and v.dbm and x) and x - 120 or x   -- dBm-Empfänger: Zahl wie in der Anzeige ansagen
     local su = STUDIO and STUDIO.UEBERWACHT[k]
@@ -604,14 +633,14 @@ local function warnungen(w, now)
       if a then xs = xs * a.faktor + a.versatz end
     end
     local a = melde(w, now, k .. "A", 2, al, u[4], xs, einh, u[6])
-    local wn = melde(w, now, k .. "W", 1, d and not still and not al and jenseits(gw) or false, u[4], xs, einh, u[6])
+    local wn = melde(w, now, k .. "W", 1, d and not still and not al and jW or false, u[4], xs, einh, u[6])
     if still then a, wn = stumm(w, k .. "A"), stumm(w, k .. "W") end
     if x == nil or (gw == nil and ga == nil) then
       st[k] = nil
     elseif still then                              -- Farbe zeigt den Wert weiter, nur die Meldung schweigt
-      st[k] = jenseits(ga) and 2 or (jenseits(gw) and 1 or 0)
+      st[k] = jA and 2 or (jW and 1 or 0)
     else
-      st[k] = a and 2 or ((wn or jenseits(gw)) and 1 or 0)
+      st[k] = a and 2 or ((wn or jW) and 1 or 0)
     end
     if st[k] and st[k] > hoechst then hoechst = st[k] end
     end
@@ -709,6 +738,7 @@ local function ansagen(w, now)
   if w.offenSG then
     w.offenSG, w.tAnsage = false, now
     if c.sgProz and v.proz then sage(w, "akku") zahlSagen(v.proz, UNIT_PERCENT, 0) end
+    if c.sgProz and v.proz2 then sage(w, "akku2") zahlSagen(v.proz2, UNIT_PERCENT, 0) end   -- 0.10.0: Akku 2
     if c.sgZeit then
       local sek = floor(w.akt and w.akt[2] or 0)
       sage(w, "flugzeit")
@@ -1061,6 +1091,12 @@ function K.wecke(w)
     local dt = now - w.tL
     if dt < 0 or dt > 5 then dt = 0 end
     w.tL = now
+    -- 0.10.0 (Befehlsgrenze bei voller Belegung): Datei schreiben und Suchschritt bekommen eine eigene Leserunde
+    -- («schwere Runde»), die nächste Runde ist wieder normal (lesen, warnen, ansagen). Während einer Suche wird so
+    -- alle 0,4 s statt alle 0,2 s gelesen.
+    local schwerRunde = w.schwerDran == true
+    w.schwerDran = nil
+    if not schwerRunde then
     testStart(w)
     -- Erster Start ohne gespeicherte Einstellungen: Schalter nach Standard vorgeben (Ethos ruft read nicht immer auf)
     local erst = not w.vorgabe                      -- 0.7.1 (A2): im ersten Aufruf noch keine Studio-Datei laden
@@ -1084,12 +1120,19 @@ function K.wecke(w)
     if TEST and TEST.zustand then testZustand(w, now) end
     if TEST and TEST.suche and not w.testSuche then w.testSuche, w.suche, w.suchJob = true, "menue", nil end
     if w.hinweis and now >= w.hinweisBis then w.hinweis = nil end
+    end
+    local faellig = w.dateiOffen and (w.dateiJetzt or now - (w.tDatei or -100) >= 2)
+    if not schwerRunde and (faellig or w.suche) then w.schwerDran = true end
     -- Datei schreiben: sofort nach einer Rückfrage, sonst frühestens 2 s nach dem letzten Schreiben
-    if w.dateiOffen and (w.dateiJetzt or now - (w.tDatei or -100) >= 2) then
-      w.dateiOffen, w.dateiJetzt, w.tDatei = false, false, now
+    if schwerRunde and faellig and w.dateiF == nil then   -- 0.10.0: erst laden, schreiben in der nächsten schweren Runde
       local ok, F = pcall(lade, "felder.lua")
+      w.dateiF = ok and F or false
+    elseif schwerRunde and faellig then
+      w.dateiOffen, w.dateiJetzt, w.tDatei = false, false, now
+      local F = w.dateiF
+      w.dateiF = nil
       local okS, erfolg = false, false
-      if ok then okS, erfolg = pcall(F.schreibeDatei, w) end
+      if F then okS, erfolg = pcall(F.schreibeDatei, w) end
       if not (okS and erfolg) then
         if not w.dateiFehler then print(tostring(w.name) .. ": Fehler: Datei konnte nicht geschrieben werden") end
         w.dateiFehler = true
@@ -1098,9 +1141,9 @@ function K.wecke(w)
     end
     -- Sensorsuche in Schritten (Ethos begrenzt die Befehle je Aufruf): ein Schritt je wakeup, bis sie fertig ist.
     -- Erster Start ohne gespeicherte Einstellungen: automatisch, sobald Telemetrie da ist (alle 5 s, höchstens 10-mal).
-    if w.suche and w.schwer then
+    if schwerRunde and not faellig and w.suche and w.schwer then
       w.schwer = nil                                    -- 0.7.1 (A2): Suche erst im nächsten Aufruf
-    elseif w.suche then
+    elseif schwerRunde and not faellig and w.suche then
       w.schwer = nil
       if SUCHE == nil then
         local okL, f = pcall(lade, "suche.lua")

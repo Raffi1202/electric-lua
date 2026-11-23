@@ -38,7 +38,7 @@ mit Sprachansagen sowie eine Flugliste. Anzeige, Menü und Ansagen gibt es auf D
 
 ## Schnellstart in 5 Schritten
 
-1. `Electric-0.10.0.zip` aus dem neusten **Release** herunterladen (rechts auf der Repo-Seite unter «Releases»).
+1. `Electric-0.10.1.zip` aus dem neusten **Release** herunterladen (rechts auf der Repo-Seite unter «Releases»).
 2. Sender per USB anschliessen, am Sender **Ethos Suite** wählen, am Computer die **FrSky Suite** öffnen.
 3. Suite › **Lua-Bibliothek** › **Von lokaler ZIP installieren** › die ZIP wählen. Danach den Sender neu starten.
 4. Modell › Bildschirme › **+** › Layout **Vollbild** (oder mit Leisten) › ins Feld tippen › Widget **Electric**.
@@ -58,7 +58,7 @@ Einstellungen, Flüge und Zähler erhalten.
 | Versionen | [`CHANGELOG.md`](CHANGELOG.md) |
 | Texte der Sprachansagen | [`docs/Sprachansagen.md`](docs/Sprachansagen.md) |
 
-## Sender und Stand der Erprobung (Version 0.10.0, 23.11.2026)
+## Sender und Stand der Erprobung (Version 0.10.1, 23.11.2026)
 
 | Display | Sender | Stand |
 |---|---|---|

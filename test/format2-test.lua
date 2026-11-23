@@ -114,7 +114,7 @@ local function gleich(z, e) return z[1] == e[1] and z[2] == e[2] and z[3] == e[3
 local function txt(z) return z[1] .. " / " .. z[2] .. " / " .. z[3] end
 
 local faelle = {
-  -- 0.8.0: Symbole ganz entfernt (Entscheid User 22.11.2026): nichts geladen, nichts fehlt; verworfen zählt nur
+  -- 0.8.0: Symbole ganz entfernt (Entscheid des Autors 22.11.2026): nichts geladen, nichts fehlt; verworfen zählt nur
   -- ungültigen Schmuck ohne Symbole (p09: 15 von früher 18, die 3 Symbol-Elemente werden still überlesen)
   { "p00_bild.lua", { 0, 0, 0 } },
   { "p01_kaputte_png.lua", { 0, 0, 0 } },

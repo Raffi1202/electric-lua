@@ -181,6 +181,8 @@ local function grenzen(w)
   if TEST and TEST.cfg then
     for k, x in pairs(TEST.cfg) do c[k] = x end
   end
+  local F0 = c.akku2W == nil and lade("felder.lua") or nil   -- 0.10.1: fehlende Akku-2-Werte = Akku 1
+  if F0 then F0.akku2Werk(c) end
   for _, e in ipairs(GRENZEN) do
     local wn, al = gut(c[e[1] .. "W"]), gut(c[e[1] .. "A"])
     g[e[1] .. "W"] = (wn and wn > 0) and wn / e[2] or nil
@@ -193,7 +195,15 @@ local function grenzen(w)
   g.vfr24W = (vw and vw > 0) and vw or nil
   g.vfr900W = g.vfr24W
   g.rxvfrA = (va and va > 0) and va or nil
-  g.zelle2W, g.zelle2A, g.akku2W, g.akku2A, g.bec2W, g.bec2A = g.zelleW, g.zelleA, g.akkuW, g.akkuA, g.becW, g.becA
+  -- 0.10.1: Akku 2 hat eigene Grenzen (Datendatei); fehlt ein Wert (Update), gilt der von Akku 1
+  local function eigen(k2, k1, teil)
+    local x = gut(c[k2])
+    if x == nil then return g[k1] end
+    return x > 0 and x / teil or nil
+  end
+  g.zelle2W, g.zelle2A = eigen("zelle2W", "zelleW", 100), eigen("zelle2A", "zelleA", 100)
+  g.akku2W, g.akku2A = eigen("akku2W", "akkuW", 1), eigen("akku2A", "akkuA", 1)
+  g.bec2W, g.bec2A = g.becW, g.becA
   sprache(w)
 end
 
@@ -347,6 +357,7 @@ local function lesen(w, now, dt)
   v.hoehe, v.vario, v.speed, v.rssi, v.lq = s(c.hoehe), s(c.vario), s(c.speed), s(c.rssi), s(c.lq)
   local nz = tele and liesZellen(w, c.zellen) or 0
   v.bec2 = s(c.bec2)                               -- 0.10.0 (Issue #2): Empfänger-Akku 2
+  if v.bec2 and v.bec2 < 0.5 then v.bec2 = nil end -- 0.10.1: unter 0,5 V = kein zweiter Empfänger-Akku (kein Daueralarm)
   v.motorAus, v.ansageSw, v.sw1, v.sw2 = aktiv(c.swMotor), aktiv(c.swAnsage), aktiv(c.sw1), aktiv(c.sw2)
   v.gasP = prozent(c.gas)
   v.sender = zahl(w.qSender)
@@ -376,8 +387,10 @@ local function lesen(w, now, dt)
   -- 0.10.0 (Issue #2): zwei Bänder. v.rssi wird das bessere Band (Anzeige, Tiefstwert, bisherige RSSI-Grenzen);
   -- Warnung je Band (empfang_24 / empfang_900), Alarm nur auf RX VFR, ohne RX VFR auf das bessere VFR.
   local r9 = s(c.rssi2)
+  if r9 == 0 then r9 = nil end                     -- 0.10.1: 0 = zweites Band nicht vorhanden (kein Daueralarm)
   if r9 and r9 < 0 then r9 = r9 + 120 end
   v.vfr24, v.vfr900, v.rxvfr = s(c.vfr), s(c.vfr2), s(c.rxvfr)
+  if v.vfr900 == 0 and r9 == nil then v.vfr900 = nil end
   v.rssi900 = r9
   v.zweiBand = (r9 ~= nil or v.vfr900 ~= nil) or nil
   v.rssi24 = v.zweiBand and v.rssi or nil
@@ -404,6 +417,11 @@ local function lesen(w, now, dt)
     nz2 = #TEST.zellen2
   end
   v.zelle2, v.u2, v.proz2, v.zellen2 = nil, nil, nil, nil
+  if nz2 > 0 then                                  -- 0.10.1: Sensor ohne Akku (alle Zellen ~0 V) = kein Akku 2
+    local sum2 = 0
+    for i = 1, nz2 do sum2 = sum2 + w.zn2[i] end
+    if sum2 < 0.5 then nz2 = 0 end
+  end
   if nz2 > 0 and (c.z2modus or 1) == 1 then
     for i = 1, nz2 do w.zn[nz + i] = w.zn2[i] end
     nz = nz + nz2
@@ -412,7 +430,7 @@ local function lesen(w, now, dt)
     for i = 1, nz2 do local u = w.zn2[i] summe = summe + u if lo == nil or u < lo then lo = u end end
     local n2 = (c.zellenzahl2 or 0) > 0 and c.zellenzahl2 or nz2
     v.zelle2, v.u2, v.zellen2 = lo, summe, n2
-    v.proz2 = zelleProzent(summe / n2, c.akkuart)
+    v.proz2 = zelleProzent(summe / n2, c.akkuart2 or c.akkuart)
   end
   -- Zellen: Fall 2 Zellensensor (tiefste Zelle, Differenz), Fall 1 nur Gesamtspannung ÷ Zellenzahl.
   -- Zellenzahl «automatisch» ohne Zellensensor wird nie geschätzt (bauplan.md Regel 14): Hinweis zum Einstellen.
@@ -598,6 +616,7 @@ local UEBERWACHT = {
   { "akku2", "proz2", true, "akku2_tief", "UNIT_PERCENT", 0 },
   { "bec2", "bec2", true, "bec2_tief", "UNIT_VOLT", 1 },          -- Empfänger-Akku 2, Grenzen wie BEC
 }
+local BAND_W = { rssi24 = true, rssi900 = true, vfr24 = true, vfr900 = true }
 local MOT = { rssi24 = "rssi", rssi900 = "rssi", vfr24 = "rssi", vfr900 = "rssi", rxvfr = "rssi",   -- «auch bei Motor aus»
   zelle2 = "zelle", akku2 = "akku", bec2 = "bec" }
 
@@ -617,6 +636,11 @@ local function warnungen(w, now)
     do
     local gw, ga = g[k .. "W"], g[k .. "A"]
     if k == "rssi" and v.vfrAlarm ~= nil then ga = nil end   -- mit VFR gilt der Alarm auf VFR (Issue #2)
+    -- 0.10.1: bei zwei Bändern nicht alle Empfangsmeldungen gleichzeitig. Die Warnung je Band ersetzt die RSSI-Warnung,
+    -- RSSI je Band nur ohne VFR, und solange ein Empfangsalarm läuft, schweigen die Warnungen je Band.
+    if k == "rssi" and v.zweiBand then gw = nil end
+    if (k == "rssi24" or k == "rssi900") and (v.vfr24 or v.vfr900) then gw = nil end
+    if BAND_W[k] and ((meld.rxvfrA or {}).an or (meld.rssiA or {}).an or (meld.lqA or {}).an) then gw = nil end
     -- jenseits der Grenze: einmal je Zeile rechnen (0.10.0, Befehlsgrenze bei voller Belegung)
     local unter = u[3]
     local jA = ga ~= nil and x ~= nil and ((unter and x < ga) or ((not unter) and x > ga))

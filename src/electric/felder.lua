@@ -50,6 +50,8 @@ M.gruppen = {
     { "z2modus", "w", { "Zellen 2", "Cells 2" }, 1,
       { { { "in Serie", "in series" }, 1 }, { { "eigener Akku", "own battery" }, 2 } } },
     { "zellenzahl2", "z", { "Zellenzahl Akku 2 (0 = Sensor)", "Cell count battery 2 (0 = sensor)" }, 0, 0, 14, 0, " S" },
+    { "akkuart2", "w", { "Akkuart Akku 2", "Battery type battery 2" }, nil,
+      { { "LiPo", 1 }, { "LiHV", 2 }, { "LiFe", 3 }, { "Li-Ion", 4 }, { "NiMH", 5 } } },   -- 0.10.1, Werk = Akku 1
     { "kapaz", "z", { "Kapazität", "Capacity" }, 4500, 0, 50000, 0, " mAh", 100 },
     { "prozQuelle", "w", { "Akku % kommt von", "Battery % from" }, 1,
       { { { "Regler, sonst gerechnet", "ESC, else calculated" }, 1 }, { { "immer gerechnet", "always calculated" }, 2 } } },
@@ -78,6 +80,11 @@ M.gruppen = {
     { "lqA", "z", { "LQ Alarm unter", "LQ alarm below" }, 50, 0, 100, 0, " %" },
     { "vfrW", "z", { "VFR Warnung unter (je Band)", "VFR warning below (per band)" }, 70, 0, 100, 0, " %" },
     { "vfrA", "z", { "RX VFR Alarm unter", "RX VFR alarm below" }, 50, 0, 100, 0, " %" },
+    -- 0.10.1: eigene Grenzen für Akku 2 («eigener Akku»), Werk = Wert von Akku 1 (in M.lies übernommen)
+    { "akku2W", "z", { "Akku 2 Warnung unter", "Battery 2 warning below" }, nil, 0, 100, 0, " %" },
+    { "akku2A", "z", { "Akku 2 Alarm unter", "Battery 2 alarm below" }, nil, 0, 100, 0, " %" },
+    { "zelle2W", "z", { "Zelle Akku 2 Warnung unter", "Cell battery 2 warning below" }, nil, 0, 450, 2, " V" },
+    { "zelle2A", "z", { "Zelle Akku 2 Alarm unter", "Cell battery 2 alarm below" }, nil, 0, 450, 2, " V" },
   } },
   -- Je Grenzwert-Alarm: kommt er auch, wenn der Schalter «Motor aus bei» aktiv ist? Standard ja (Regel «Alarme trotz
   -- Motor-aus-Schalter», Ergänzung 21.11.2026). Aus = dieser Alarm schweigt nur, solange der Motor aus ist.
@@ -188,6 +195,7 @@ M.folge = {
   "akkuMot", "zelleMot", "diffMot", "tempMot", "stromMot", "kapMot", "becMot", "hoeheMot", "rssiMot", "lqMot", "phase",
   "rssi2", "vfr", "vfr2", "rxvfr", "vfrW", "vfrA",   -- 0.10.0: Quellen ans Ende (FORMAT 3), Schwellen in der Datendatei
   "zellen2", "bec2", "z2modus", "zellenzahl2",
+  "akkuart2", "akku2W", "akku2A", "zelle2W", "zelle2A",   -- 0.10.1: Akku 2, Datendatei (Werk = Akku 1)
 }
 
 -- Speicherformat der Quellen im Widget-Speicher: Nummer -> Zahl der Quellen in diesem Format.
@@ -197,7 +205,7 @@ M.folge = {
 -- in der Datei daten/<Modell>.txt (bzw. mit Studio-Datei in der .funke.lua), nicht im Widget-Speicher: FORMAT bleibt 1.
 -- 0.7.0: FORMAT 2 = Format 1 und danach am Ende die Wahl «Studio-Layout» (Text: Pfad der Datei, "" = automatisch).
 -- Ein Speicher in Format 1 (bis 0.6.1) wird weiter gelesen, die Wahl steht dann auf automatisch.
--- 0.10.0: FORMAT 3 = 24 Quellen (dazu rssi2, vfr, vfr2, rxvfr am Ende), danach die Wahl «Studio-Layout» wie FORMAT 2.
+-- 0.10.0: FORMAT 3 = 24 Quellen (dazu rssi2, vfr, vfr2, rxvfr, zellen2, bec2 am Ende), danach die Wahl «Studio-Layout» wie FORMAT 2.
 M.FORMAT = 3
 M.FORMATE = { [1] = 18, [2] = 18, [3] = 24 }   -- FORMAT 3: dazu rssi2, vfr, vfr2, rxvfr, zellen2, bec2
 
@@ -417,7 +425,15 @@ function M.lies(w)
       if f then c.fGross = pruefe(f, alt7) end
     end
   end
+  M.akku2Werk(c)
   return gefunden
+end
+
+-- 0.10.1: Einstellungen von Akku 2 ohne eigenen Wert (Update von 0.9.0/0.10.0, «Zurück auf Standard») = Wert von Akku 1
+function M.akku2Werk(c)
+  for k2, k1 in pairs({ akkuart2 = "akkuart", akku2W = "akkuW", akku2A = "akkuA", zelle2W = "zelleW", zelle2A = "zelleA" }) do
+    if c[k2] == nil then c[k2] = c[k1] end
+  end
 end
 
 -- Quellen in den Widget-Speicher (Ethos ruft das beim Speichern des Modells auf).

@@ -35,7 +35,7 @@ A warning appears when the value is beyond the limit for 1 second and disappears
 **Alarm also with motor off** (from version 0.5.0): by default all warnings and alarms also come when the motor switch is set to «off». In the menu group **Alarm also with motor off** you can turn this off per value. That value then stays silent while the motor switch is set to «off»: no message, no tone, no announcement, no vibration. The colour of the value still shows the limit. As soon as you arm the motor, the alarm comes back. Without a motor switch set, this setting never applies.
 
 ### What can never be silenced
-- A Lua-Studio file can switch a monitored alarm off completely **only with `aus = true`** (user decision 20 Nov 2026). An entry without levels (only announcement, vibration or «also with motor off») or with warning and alarm both `false` keeps the factory limit.
+- A Lua-Studio file can switch a monitored alarm off completely **only with `aus = true`** (author's decision 20 Nov 2026). An entry without levels (only announcement, vibration or «also with motor off») or with warning and alarm both `false` keeps the factory limit.
 - «Alarm also with motor off» = off silences that value only while the motor switch is set to off; without a motor switch set it never applies.
 - Electric has no error codes or shutdown reasons from an ESC; all its alarms are limit alarms as listed above.
 

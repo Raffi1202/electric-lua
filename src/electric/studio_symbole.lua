@@ -1,5 +1,5 @@
 -- Referenz: Schmuck (Lua-Studio-Format 2, Abschnitte 3.4 und 9). Alle Luas übernehmen das wörtlich.
--- 0.8.0 (Entscheid User 22.11.2026): Symbole ganz entfernt. symbole, symbol, symbolPx und Schmuck-Elemente der Art
+-- 0.8.0 (Entscheid des Autors 22.11.2026): Symbole ganz entfernt. symbole, symbol, symbolPx und Schmuck-Elemente der Art
 -- «symbol» werden still überlesen (kein Zähler, keine Meldung); einheitZeigen = "fett" gilt wie true (Einheit am Wert).
 -- Die Beschreibung unten gilt für deko, S.platz und S.zaehler (geladen und fehlend bleiben 0).
 -- Einbinden: local S = <diese Datei laden>()   (z. B. assert(loadfile("studio_symbole.lua"))())
@@ -171,7 +171,7 @@ function S.schritt()
   return fertig
 end
 
--- 0.8.0 (Entscheid User 22.11.2026: Symbole ganz entfernt): kein Symbol und keine fette Einheit im Platzkopf.
+-- 0.8.0 (Entscheid des Autors 22.11.2026: Symbole ganz entfernt): kein Symbol und keine fette Einheit im Platzkopf.
 -- Rückgabe wie bisher: Einrückung 0, true = Einheit neben dem Wert (ausser einheitZeigen = false).
 function S.platz(p)
   if type(p) ~= "table" then return 0, true end

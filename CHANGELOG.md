@@ -3,6 +3,26 @@
 The version number is in `src/electric/main.lua` (`local VERSION`). It is the same in the manual, the Suite package and here.
 The top section appears in the FrSky Suite as version note. From 0.5.0 on in English; older entries in German.
 
+## 0.10.1 (23 Nov 2026, pre-release)
+
+- Receiver battery 2 below 0.5 V, cells 2 below 0.5 V in total and a missing second band (RSSI/VFR 900 = 0) count as
+  «not present»: no permanent alarm any more.
+- Battery 2 («own battery») has its own settings: battery type, battery % warning/alarm, cell warning/alarm. Stored in
+  the data file; missing values (update from 0.9.0/0.10.0) take the value of battery 1. No storage format change.
+- Two bands: not all receiver messages at once. The per-band warning replaces the RSSI warning, RSSI per band only
+  without VFR, and while a receiver alarm is on, the per-band warnings are silent.
+- «In series»: total voltage is the sum of the cells only if no voltage sensor is assigned (docs corrected).
+- Instruction limit, honest note (Mac count, full load with alarms): drawing 10,173–10,385, search step 5,111, operation
+  wakeup 4,963; with the Lua-Studio test files (format2-test) drawing up to 12,085 and wakeup 4,352 (0.9.0 in the same
+  tests: 10,098–10,310 / 5,105 / 7,691; format2 12,083 / 4,515). Slightly above the own limits of 10,000 / 5,000; the
+  transmitter test with full load is still pending.
+- Internal names removed from comments.
+
+Deutsch: Empfänger-Akku 2 unter 0,5 V, Zellen 2 unter 0,5 V und ein fehlendes zweites Band gelten als «nicht vorhanden»
+(kein Daueralarm). Akku 2 hat eigene Einstellungen (Akkuart, Akku % und Zelle je Warnung/Alarm, ab Werk wie Akku 1).
+Bei zwei Bändern kommen nicht mehr alle Empfangsmeldungen gleichzeitig. «In Serie»: Gesamtspannung = Summe der Zellen
+nur ohne Spannungssensor. Befehlsgrenzen nach Mac-Zählung knapp über der eigenen Grenze (Werte oben), Sendertest offen.
+
 ## 0.10.0 (23 Nov 2026, pre-release)
 
 - Flight mode in the header (issue #1): name of the active flight mode under the model name (compact: next to the
@@ -18,8 +38,9 @@ The top section appears in the FrSky Suite as version note. From 0.5.0 on in Eng
 - Widget storage FORMAT 3 (6 new sources at the end); update from 0.9.0 without loss (tested).
 - Instruction limit: writing the data file, search steps and the info file get their own read rounds. Wakeup with full
   load 4,992 (0.9.0: 7,691). Honest note: by Mac count, drawing with full load and alarms is 10,188–10,400 and a search
-  step 5,044 instructions, slightly above the own limit (0.9.0: 10,098–10,310 / 5,105). The transmitter test with this
-  load (test/voll-test.lua) is still pending.
+  step 5,044 instructions, slightly above the own limit (0.9.0: 10,098–10,310 / 5,105); with the Lua-Studio test files
+  (format2-test) drawing reaches 12,085 (0.9.0: 12,083). The transmitter test with this load (test/voll-test.lua) is
+  still pending.
 - Issue templates with fields for radio, Ethos version and receiver.
 
 ## 0.9.0 (22 Nov 2026, pre-release)

@@ -76,7 +76,7 @@ local function inhalt(w, Z, n, klein)
     if v.zweiBand then                               -- 0.10.0: beide Bänder (VFR, sonst RSSI), gross steht das bessere
       local function b(x, e) return x and (string.format("%.0f", x - (e == "dB" and d0 or 0)) .. e) or "--" end
       local function k(x) return x and string.format("%.0f", x) or "--" end
-      if v.vfr24 or v.vfr900 then                  -- beschriftet: VFR in %, sonst RSSI in dB (Handler 23.11.)
+      if v.vfr24 or v.vfr900 then                  -- beschriftet: VFR in %, sonst RSSI in dB
         z = klein and ("VFR " .. k(v.vfr24) .. "/" .. k(v.vfr900) .. "%") or ("VFR 2.4 " .. b(v.vfr24, "%") .. "  900 " .. b(v.vfr900, "%"))
       else
         z = klein and ("dB " .. k(v.rssi24) .. "/" .. k(v.rssi900)) or ("2.4 " .. b(v.rssi24, "dB") .. "  900 " .. b(v.rssi900, "dB"))

@@ -71,7 +71,7 @@ local function messe(f, ...)
   return n, ok
 end
 
--- Electric 0.7.0: Studio-Layout wird immer gefunden (Auftrag 22.11.2026, R1–R4). Mac-Test ohne Simulator.
+-- Electric 0.7.0: Studio-Layout wird immer gefunden (22.11.2026, R1–R4). Mac-Test ohne Simulator.
 -- Aufruf aus dem Repo-Ordner:  /opt/homebrew/opt/lua@5.4/bin/lua test/layout-test.lua
 assert(os.execute("mkdir -p '" .. tmp .. "/SD/scripts/studio' '" .. tmp .. "/RADIO/scripts/studio'"))
 system.listFiles = function(ort)

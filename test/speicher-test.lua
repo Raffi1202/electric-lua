@@ -1,4 +1,4 @@
--- Electric: Speicher beim Modellwechsel freigeben (Auftrag 21.11.2026). Läuft über main.lua wie in Ethos.
+-- Electric: Speicher beim Modellwechsel freigeben (21.11.2026). Läuft über main.lua wie in Ethos.
 -- Aufruf aus dem Repo-Ordner:  /opt/homebrew/opt/lua@5.4/bin/lua test/speicher-test.lua
 -- Prüft: zwei Instanzen teilen denselben Kern; fällt eine weg, läuft die andere weiter; fallen alle weg, sammelt die
 -- Müllabfuhr den Kern ein (es bleiben höchstens 20 KB); eine neue Instanz danach lädt den Kern neu und läuft.

@@ -4,6 +4,7 @@
 
 Alle Änderungen stehen in [CHANGELOG.md](../../CHANGELOG.md). Versionen:
 
+- 0.10.1 (23.11.2026): battery 2 own limits, no alarm without 2nd battery/band, fewer receiver messages / Akku 2 eigene Grenzen, kein Alarm ohne 2. Akku/Band, weniger Empfangsmeldungen
 - 0.10.0 (23.11.2026): flight mode, two receiver bands, cells 2, receiver battery 2 / Flugphase, zwei Empfangsbänder, Zellen 2, Empfänger-Akku 2
 - 0.9.0 (22.11.2026): one layout for all models (Standard) / ein Layout für alle Modelle (Standard)
 - 0.8.1 (22.11.2026): leftovers removed, decoration text t0 / Reste entfernt, Schmucktext t0

@@ -77,6 +77,17 @@ pruef(w.cfg.akkuA == 20, "fehlender Wert bekommt nicht den Werkwert")
 pruef(w.dauer.fluege == 4 and w.dauer.mahNull == 120, "Zähler verloren")
 pruef(#w.liste == 2 and w.liste[1][3] == 800 and w.liste[2][4] == nil, "Flugliste falsch gelesen")
 pruef(w.offen and w.offen[1] == 3 and w.offen[8] == 3.8, "offener Flug verloren")
+-- 0.10.1: Datei von 0.9.0/0.10.0 ohne Werte für Akku 2: Akku 2 übernimmt Akkuart und Grenzen von Akku 1
+SPEICHER, LESE = {}, 0
+DATEI = "akkuart=3\nakkuW=40\nakkuA=20\nzelleW=310\nzelleA=290\nz2modus=2\n"
+local wa = { name = "Electric" }
+F.lies(wa)
+pruef(wa.cfg.akkuart2 == 3 and wa.cfg.akku2W == 40 and wa.cfg.akku2A == 20 and wa.cfg.zelle2W == 310 and wa.cfg.zelle2A == 290
+  and wa.cfg.z2modus == 2, "Update ohne Akku-2-Werte: Werte von Akku 1 übernommen")
+DATEI = "akkuart=3\nakkuW=40\nakku2W=25\nakkuart2=1\n"
+local wb = { name = "Electric" }
+F.lies(wb)
+pruef(wb.cfg.akku2W == 25 and wb.cfg.akkuart2 == 1 and wb.cfg.akku2A == wb.cfg.akkuA, "eigene Akku-2-Werte bleiben, fehlende = Akku 1")
 
 -- 3. Schreiben und wieder lesen ergibt dasselbe
 w.akt = w.offen

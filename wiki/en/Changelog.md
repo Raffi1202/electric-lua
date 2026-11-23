@@ -4,6 +4,7 @@
 
 All changes are listed in [CHANGELOG.md](../../CHANGELOG.md). Versions:
 
+- 0.10.0 (23.11.2026): flight mode, two receiver bands, cells 2, receiver battery 2 / Flugphase, zwei Empfangsbänder, Zellen 2, Empfänger-Akku 2
 - 0.9.0 (22.11.2026): one layout for all models (Standard) / ein Layout für alle Modelle (Standard)
 - 0.8.1 (22.11.2026): leftovers removed, decoration text t0 / Reste entfernt, Schmucktext t0
 - 0.8.0 (22.11.2026): symbols removed / Symbole entfernt

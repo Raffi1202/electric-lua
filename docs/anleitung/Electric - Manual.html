@@ -48,7 +48,7 @@
 <body>
 
 <h1>Electric</h1>
-<div class="unter">Display for electric planes · Manual · Version 0.9.0 · 22 Nov 2026</div>
+<div class="unter">Display for electric planes · Manual · Version 0.10.0 · 23 Nov 2026</div>
 
 <div class="bild schmal"><img src="../bilder-simulator/Electric - Sim 800x480 12 Englisch.png" alt="Electric on the radio"></div>
 
@@ -69,7 +69,7 @@ display except where noted; the English display uses the same layout.</p>
   <li>An electric model with telemetry, sensors already discovered (Model › Telemetry › Discover sensors). At least the pack
       voltage is needed; current, consumption, RPM, temperature, altitude, speed and a cell sensor are optional.</li>
   <li>A computer with FrSky Suite and a USB cable.</li>
-  <li>The file <code>Electric-0.9.0.zip</code>. It is inside <code>Electric-0.9.0-share.zip</code>. Unzip only the outer ZIP, not the inner one.</li>
+  <li>The file <code>Electric-0.10.0.zip</code>. It is inside <code>Electric-0.10.0-share.zip</code>. Unzip only the outer ZIP, not the inner one.</li>
 </ul>
 
 <h2>2. Install</h2>
@@ -78,7 +78,7 @@ display except where noted; the English display uses the same layout.</p>
   <li>The radio shows a choice. Select <b>Ethos Suite</b>.</li>
   <li>Open <b>FrSky Suite</b> on the computer. The radio appears at the top.</li>
   <li>Click <b>Lua library</b>, then <b>Install from local ZIP</b>.</li>
-  <li>Select <code>Electric-0.9.0.zip</code>. The Suite copies everything to the right place.</li>
+  <li>Select <code>Electric-0.10.0.zip</code>. The Suite copies everything to the right place.</li>
   <li>Unplug the cable and restart the radio.</li>
 </ol>
 <p class="klein">Without the Suite: connect the radio as «USB storage» and copy the folder <code>electric</code> from the ZIP into
@@ -283,6 +283,14 @@ flights; turning back before the first flight returns to the display.</p>
   <tr><td>Display</td><td>Sprache / Language</td><td>as the radio</td><td>German or English for display, menu and announcements. The menu changes the next time it is opened.</td></tr>
 </table>
 
+<h3>Flight mode, two receiver bands, second battery (from 0.10.0)</h3>
+<ul>
+  <li><b>Flight mode:</b> If the model has several flight modes, the active one is shown small under the model name (compact view: right of the flight time). Ethos does not tell a Lua how many modes exist, so the line appears once the model has been in a mode other than the first one, and this is remembered per model. Menu: «Show flight mode».</li>
+  <li><b>Two receiver bands:</b> With dual-band receivers (TD 2.4 GHz + 900 MHz, LoRa) the search finds RSSI and VFR per band by itself (Ethos reports the band of each sensor). The receiver box shows the better band large and «VFR 2.4 x% 900 y%» below (without VFR: RSSI in dB). Warning per band («Warning! 2.4 gigahertz signal» / «900 megahertz signal», limit «VFR warning below»), alarm only on RX VFR (limit «RX VFR alarm below»), without RX VFR on the better band.</li>
+  <li><b>Cells 2 and receiver battery 2:</b> A second cell sensor (different physical ID) is found as «Cells 2». «in series»: both belong to the same pack (lowest cell of both, sum of voltage). «own battery»: own cell count, warning «Cell voltage battery 2», «Battery 2» in percent with announcement. «Receiver battery 2» (RxBatt 2) uses the BEC limits and «Warning! Receiver battery 2».</li>
+  <li><b>Instruction limit:</b> With full load (40 sensors, both bands, battery 2, active alarms) drawing counts 10,188–10,400 and a search step 5,044 instructions on the Mac, slightly above the own limit (0.9.0 similar). The transmitter test with this load is still pending.</li>
+</ul>
+
 <h3>Settings file from Lua-Studio</h3>
 <p>With the PC program <b>Lua-Studio</b> you design the display freely for each model: for every box you choose the
 value, the display type (number, gauge, horizontal or vertical bar, graph, status), title, range, colours and an
@@ -341,7 +349,7 @@ extra line (MIN, MAX or Ø over the flight). Settings and limits per model come 
   <tr><td>480 × 320, touch</td><td>X18, X18S, X18SE, Twin X Lite, Twin X Lite S</td><td>simulated</td></tr>
   <tr><td>480 × 272, no touch</td><td>X10, X10S, X10 Express, X12S with Ethos</td><td>simulated</td></tr>
 </table>
-<p class="klein">Electric version 0.9.0 · 22 Nov 2026</p>
+<p class="klein">Electric version 0.10.0 · 23 Nov 2026</p>
 
 </body>
 </html>

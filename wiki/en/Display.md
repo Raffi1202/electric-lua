@@ -38,6 +38,16 @@ If you choose the layout with top and bottom bars (chapter 3), Electric notices 
 
 ![compact view](../../docs/bilder-simulator/Electric%20-%20Sim%20784x316%2030%20Kompakt%20Normal%20mit%20Gas.png) Compact view on X20 and X18RS (784 × 316). On X14 and X18 / Twin X Lite it is smaller accordingly.
 
+### Flight mode, two receiver bands, second battery (from 0.10.0)
+
+- **Flight mode:** If the model has several flight modes, the active one is shown small under the model name (compact view: right of the flight time). Ethos does not tell a Lua how many modes exist, so the line appears once the model has been in a mode other than the first one, and this is remembered per model. Menu: «Show flight mode».
+
+- **Two receiver bands:** With dual-band receivers (TD 2.4 GHz + 900 MHz, LoRa) the search finds RSSI and VFR per band by itself (Ethos reports the band of each sensor). The receiver box shows the better band large and «VFR 2.4 x% 900 y%» below (without VFR: RSSI in dB). Warning per band («Warning! 2.4 gigahertz signal» / «900 megahertz signal», limit «VFR warning below»), alarm only on RX VFR (limit «RX VFR alarm below»), without RX VFR on the better band.
+
+- **Cells 2 and receiver battery 2:** A second cell sensor (different physical ID) is found as «Cells 2». «in series»: both belong to the same pack (lowest cell of both, sum of voltage). «own battery»: own cell count, warning «Cell voltage battery 2», «Battery 2» in percent with announcement. «Receiver battery 2» (RxBatt 2) uses the BEC limits and «Warning! Receiver battery 2».
+
+- **Instruction limit:** With full load (40 sensors, both bands, battery 2, active alarms) drawing counts 10,188–10,400 and a search step 5,044 instructions on the Mac, slightly above the own limit (0.9.0 similar). The transmitter test with this load is still pending.
+
 ## 7. Operation
 
 ### Detecting flights

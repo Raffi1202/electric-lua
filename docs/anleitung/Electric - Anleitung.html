@@ -48,7 +48,7 @@
 <body>
 
 <h1>Electric</h1>
-<div class="unter">Anzeige für Elektroflieger · Anleitung · Version 0.9.0 · Stand 22.11.2026</div>
+<div class="unter">Anzeige für Elektroflieger · Anleitung · Version 0.10.0 · Stand 23.11.2026</div>
 
 <div class="bild schmal">
   <img src="../bilder-simulator/Electric - Sim 800x480 04 Normal.png" alt="Electric auf dem Sender">
@@ -71,7 +71,7 @@ Elektrofliegers. Sie überwacht die Werte in zwei Stufen, sagt Alarme und den Ak
   <li>Ein Elektromodell mit Telemetrie, die Sensoren schon gesucht (Modell › Telemetrie › Sensoren suchen).
       Nötig ist mindestens die Akkuspannung; Strom, Verbrauch, Drehzahl, Temperatur, Höhe, Speed und Zellensensor sind freiwillig.</li>
   <li>Einen Computer mit der FrSky Suite und ein USB-Kabel.</li>
-  <li>Die Datei <code>Electric-0.9.0.zip</code>. Sie liegt neben dieser Anleitung in <code>Electric-0.9.0-share.zip</code>. Entpacke nur die äussere ZIP, die innere nicht.</li>
+  <li>Die Datei <code>Electric-0.10.0.zip</code>. Sie liegt neben dieser Anleitung in <code>Electric-0.10.0-share.zip</code>. Entpacke nur die äussere ZIP, die innere nicht.</li>
 </ul>
 
 <h2>2. Installieren</h2>
@@ -80,7 +80,7 @@ Elektrofliegers. Sie überwacht die Werte in zwei Stufen, sagt Alarme und den Ak
   <li>Am Sender erscheint eine Auswahl. Wähle <b>Ethos Suite</b>.</li>
   <li>Öffne am Computer die <b>FrSky Suite</b>. Der Sender wird oben angezeigt.</li>
   <li>Klicke auf <b>Lua-Bibliothek</b>, dann auf <b>Von lokaler ZIP installieren</b>.</li>
-  <li>Wähle die Datei <code>Electric-0.9.0.zip</code>. Die Suite kopiert alles an den richtigen Ort.</li>
+  <li>Wähle die Datei <code>Electric-0.10.0.zip</code>. Die Suite kopiert alles an den richtigen Ort.</li>
   <li>Ziehe das Kabel ab und starte den Sender neu.</li>
 </ol>
 <p class="klein">Ohne Suite: Sender als «USB-Speicher» anschliessen und den Ordner <code>electric</code> aus der ZIP in den
@@ -288,6 +288,14 @@ ersten Flug zurückdrehen führt wieder zur Anzeige.</p>
   <tr><td>Anzeige</td><td>Sprache / Language</td><td>wie der Sender</td><td>Deutsch oder Englisch für Anzeige, Menü und Ansagen. Das Menü wechselt beim nächsten Öffnen.</td></tr>
 </table>
 
+<h3>Flugphase, zwei Empfangsbänder, zweiter Akku (ab 0.10.0)</h3>
+<ul>
+  <li><b>Flugphase:</b> Hat das Modell mehrere Flugphasen, steht der Name der aktiven Phase klein unter dem Modellnamen (Kompaktansicht: rechts neben der Flugzeit). Ethos sagt einem Lua nicht, wie viele Phasen es gibt; die Zeile erscheint darum, sobald das Modell einmal in einer anderen als der ersten Phase war, und wird pro Modell gemerkt. Menü: «Flugphase anzeigen».</li>
+  <li><b>Zwei Empfangsbänder:</b> Bei Empfängern mit zwei Bändern (TD 2,4 GHz + 900 MHz, LoRa) erkennt die Suche RSSI und VFR je Band selbst (Ethos meldet das Band jedes Sensors). Die Empfangskachel zeigt gross das bessere Band, darunter «VFR 2.4 x% 900 y%» (ohne VFR: RSSI in dB). Warnung je Band («Achtung! Empfang 2,4 Gigahertz» bzw. «900 Megahertz», Grenze «VFR Warnung unter»), Alarm nur auf RX VFR (Grenze «RX VFR Alarm unter»), ohne RX VFR auf das bessere Band.</li>
+  <li><b>Zellen 2 und Empfänger-Akku 2:</b> Ein zweiter Zellensensor (andere Physical ID) wird als «Zellen 2» gefunden. «in Serie»: beide gehören zum selben Akku (tiefste Zelle aus beiden, Summe der Spannung). «eigener Akku»: eigene Zellenzahl, Warnung «Zellenspannung Akku 2», «Akku 2» in Prozent mit Ansage. «Empfänger-Akku 2» (RxBatt 2) hat die Grenzen des BEC und die Ansage «Achtung! Empfängerakku 2».</li>
+  <li><b>Befehlsgrenze:</b> Mit voller Belegung (40 Sensoren, beide Bänder, Akku 2, aktive Alarme) liegt das Zeichnen nach Mac-Zählung bei 10 188–10 400 und ein Suchschritt bei 5 044 Befehlen, knapp über der eigenen Grenze (0.9.0 ähnlich). Der Sendertest mit dieser Belegung steht noch aus.</li>
+</ul>
+
 <h3>Einstellungsdatei aus Lua-Studio</h3>
 <p>Mit dem PC-Programm <b>Lua-Studio</b> gestaltest du die Anzeige je Modell frei: Für jedes Kästchen wählst du
 Wert, Darstellung (Zahl, Ring, Balken waagrecht oder senkrecht, Verlauf, Status), Titel, Bereich, Farben und
@@ -353,7 +361,7 @@ beim Laden des Modells.</p>
   <div><img src="../bilder-simulator/Electric - Sim 480x320 06 Alarm.png" alt="480x320"><div class="t">480 × 320 (X18): gekürzte Titel</div></div>
   <div><img src="../bilder-simulator/Electric - Sim 800x480 12 Englisch.png" alt="Englisch"><div class="t">Englisch: Sprache im Menü oder wie der Sender</div></div>
 </div>
-<p class="klein">Electric Version 0.9.0 · 22.11.2026</p>
+<p class="klein">Electric Version 0.10.0 · 23.11.2026</p>
 
 </body>
 </html>

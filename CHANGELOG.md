@@ -3,6 +3,25 @@
 The version number is in `src/electric/main.lua` (`local VERSION`). It is the same in the manual, the Suite package and here.
 The top section appears in the FrSky Suite as version note. From 0.5.0 on in English; older entries in German.
 
+## 0.10.0 (23 Nov 2026, pre-release)
+
+- Flight mode in the header (issue #1): name of the active flight mode under the model name (compact: next to the
+  flight time). Ethos gives a Lua no number of flight modes, so the line appears once the model has been in a mode
+  other than the first; this is remembered per model. Menu «Show flight mode».
+- Two receiver bands (issue #2): RSSI and VFR per band found via the sensor's band (2.4 GHz / 900 MHz / LoRa). New values
+  RSSI 2.4, RSSI 900, VFR 2.4, VFR 900, RX VFR. Warning per band, alarm only on RX VFR (without RX VFR on the better
+  band). New limits «VFR warning below», «RX VFR alarm below». Receiver box: better band large, both bands below.
+- Cells 2 (issue #2): second cell sensor (other physical ID), «in series» or «own battery» (own cell count, limits,
+  announcement). Receiver battery 2 (RxBatt 2, 0xF108 sub 1).
+- New announcements: «2.4 gigahertz signal», «900 megahertz signal», «Battery 2», «Cell voltage battery 2»,
+  «Receiver battery 2».
+- Widget storage FORMAT 3 (6 new sources at the end); update from 0.9.0 without loss (tested).
+- Instruction limit: writing the data file, search steps and the info file get their own read rounds. Wakeup with full
+  load 4,992 (0.9.0: 7,691). Honest note: by Mac count, drawing with full load and alarms is 10,188–10,400 and a search
+  step 5,044 instructions, slightly above the own limit (0.9.0: 10,098–10,310 / 5,105). The transmitter test with this
+  load (test/voll-test.lua) is still pending.
+- Issue templates with fields for radio, Ethos version and receiver.
+
 ## 0.9.0 (22 Nov 2026, pre-release)
 
 - One layout for all models: `Standard.electric.lua` (same three locations). Order: choice in the menu, then the

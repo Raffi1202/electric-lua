@@ -36,6 +36,16 @@ Wählst du das Layout mit Kopf- und Fussleiste (Kapitel 3), merkt Electric das s
 
 ![Kompaktansicht](../../docs/bilder-simulator/Electric%20-%20Sim%20784x316%2030%20Kompakt%20Normal%20mit%20Gas.png) Kompaktansicht auf X20 und X18RS (784 × 316). Auf X14 und X18 / Twin X Lite ist sie entsprechend kleiner.
 
+### Flugphase, zwei Empfangsbänder, zweiter Akku (ab 0.10.0)
+
+- **Flugphase:** Hat das Modell mehrere Flugphasen, steht der Name der aktiven Phase klein unter dem Modellnamen (Kompaktansicht: rechts neben der Flugzeit). Ethos sagt einem Lua nicht, wie viele Phasen es gibt; die Zeile erscheint darum, sobald das Modell einmal in einer anderen als der ersten Phase war, und wird pro Modell gemerkt. Menü: «Flugphase anzeigen».
+
+- **Zwei Empfangsbänder:** Bei Empfängern mit zwei Bändern (TD 2,4 GHz + 900 MHz, LoRa) erkennt die Suche RSSI und VFR je Band selbst (Ethos meldet das Band jedes Sensors). Die Empfangskachel zeigt gross das bessere Band, darunter «VFR 2.4 x% 900 y%» (ohne VFR: RSSI in dB). Warnung je Band («Achtung! Empfang 2,4 Gigahertz» bzw. «900 Megahertz», Grenze «VFR Warnung unter»), Alarm nur auf RX VFR (Grenze «RX VFR Alarm unter»), ohne RX VFR auf das bessere Band.
+
+- **Zellen 2 und Empfänger-Akku 2:** Ein zweiter Zellensensor (andere Physical ID) wird als «Zellen 2» gefunden. «in Serie»: beide gehören zum selben Akku (tiefste Zelle aus beiden, Summe der Spannung). «eigener Akku»: eigene Zellenzahl, Warnung «Zellenspannung Akku 2», «Akku 2» in Prozent mit Ansage. «Empfänger-Akku 2» (RxBatt 2) hat die Grenzen des BEC und die Ansage «Achtung! Empfängerakku 2».
+
+- **Befehlsgrenze:** Mit voller Belegung (40 Sensoren, beide Bänder, Akku 2, aktive Alarme) liegt das Zeichnen nach Mac-Zählung bei 10 188–10 400 und ein Suchschritt bei 5 044 Befehlen, knapp über der eigenen Grenze (0.9.0 ähnlich). Der Sendertest mit dieser Belegung steht noch aus.
+
 ## 7. Bedienen
 
 ### Flüge erkennen

@@ -155,6 +155,10 @@ nicht Teil dieses Repos.
 | [Gas Engine ECU / Carb](https://github.com/Raffi1202/gas-engine-lua) | Ethos-Widgets für Verbrennungsmotoren |
 | [Lua-Studio](https://github.com/Raffi1202/lua-studio) | PC-Programm zum Einrichten der Widgets (Mac/Windows) |
 
+## Unterstützen
+
+Dieses Projekt ist kostenlos. Wer die Arbeit unterstützen möchte, kann das über PayPal tun: https://paypal.me/Raffi1202. Vielen Dank!
+
 ## Lizenz
 
 GPL-3.0, siehe [LICENSE](LICENSE). Der Baustein `src/electric/studio_symbole.lua` (ab 0.8.0 nur noch Schmuck) stammt aus Lua-Studio (gleicher Autor, gleiche Lizenz).

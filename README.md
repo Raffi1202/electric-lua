@@ -93,6 +93,10 @@ driver, the random test and the PDF/package scripts belong to the author's build
 | [Gas Engine ECU / Carb](https://github.com/Raffi1202/gas-engine-lua) | Ethos widgets for gas engines |
 | [Lua-Studio](https://github.com/Raffi1202/lua-studio) | PC app to set up the widgets (Mac/Windows) |
 
+## Support
+
+This project is free. If you would like to support the work, you can do so via PayPal: https://paypal.me/Raffi1202. Thank you!
+
 ## License
 
 GPL-3.0, see [LICENSE](LICENSE). The module `src/electric/studio_symbole.lua` (decoration only from 0.8.0) comes from Lua-Studio (same author, same license).

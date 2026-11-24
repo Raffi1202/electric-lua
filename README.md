@@ -2,6 +2,10 @@
 
 **English** · [Deutsch](README.de.md) · Documentation: [Wiki (English)](wiki/en/Installation.md) · [Wiki (Deutsch)](wiki/de/Installation.md)
 
+This project is open source and free. If you like it, you can support it with a donation:
+
+<a href="https://paypal.me/RaphaelHunziker"><img src=".github/paypal-donate.png" alt="Donate with PayPal" width="200"></a>
+
 > **Configure on your PC with [Lua-Studio](https://github.com/Raffi1202/lua-studio)** – arrange the screen, choose values and alarms, then transfer to the radio. Download: [latest release](https://github.com/Raffi1202/lua-studio/releases/latest) · [Wiki](https://github.com/Raffi1202/lua-studio/tree/main/wiki)
 
 **Electric** is an Ethos widget (full screen or compact view with the Ethos bars) for electric planes on FrSky radios
@@ -92,12 +96,6 @@ driver, the random test and the PDF/package scripts belong to the author's build
 | [Glider](https://github.com/Raffi1202/glider-lua) | Ethos widget for gliders (vario, thermals) |
 | [Gas Engine ECU / Carb](https://github.com/Raffi1202/gas-engine-lua) | Ethos widgets for gas engines |
 | [Lua-Studio](https://github.com/Raffi1202/lua-studio) | PC app to set up the widgets (Mac/Windows) |
-
-## Support
-
-This project is free. If you would like to support the work, you can do so via PayPal: https://paypal.me/RaphaelHunziker. Thank you!
-
-[![Donate with PayPal](https://img.shields.io/badge/PayPal-Donate-003087?logo=paypal&logoColor=white)](https://paypal.me/RaphaelHunziker)
 
 ## License
 

@@ -1,4 +1,4 @@
-# Testleitfaden Electric 0.10.1
+# Testleitfaden Electric 0.10.2
 
 Danke, dass du Electric testest! Arbeite die Testfälle der Reihe nach durch und hake ab, was so klappt wie beschrieben.
 Klappt etwas nicht, melde es (ganz unten steht wie). Ein Testfall dauert meistens nur ein bis zwei Minuten.
@@ -15,7 +15,7 @@ order as the manual. Report problems with the issue template «Fehler / Bug».*
   Drehzahl, Reglertemperatur, Höhe, Speed oder Zellensensor sind willkommen, aber freiwillig.
 - Am Modell: die Sensoren schon gesucht (Modell › Telemetrie › Sensoren suchen).
 - Computer mit der FrSky Suite und ein USB-Kabel.
-- Die Datei `Electric-0.10.1.zip` aus dem GitHub-Release (Seite «Releases» rechts im Repo).
+- Die Datei `Electric-0.10.2.zip` aus dem GitHub-Release (Seite «Releases» rechts im Repo).
 - Die Anleitung `docs/Electric - Anleitung.pdf`. Die Testfälle verweisen auf ihre Kapitel.
 
 **Sicherheit:** Teste mit abgenommenem Propeller, solange du am Tisch arbeitest. Der Flugtest (Testfall 11)
@@ -29,7 +29,7 @@ es legt nur Dateien im Ordner `scripts/electric` an.
 Notiere dir für die Meldung: Sender, Ethos-Version (System › Info) und welche Sensoren dein Modell hat.
 
 ### 1. Installieren (Anleitung Kapitel 2)
-- [ ] Mit der FrSky Suite: Lua-Bibliothek › Von lokaler ZIP installieren › `Electric-0.10.1.zip`. Sender neu starten.
+- [ ] Mit der FrSky Suite: Lua-Bibliothek › Von lokaler ZIP installieren › `Electric-0.10.2.zip`. Sender neu starten.
 - **Erwartet:** Die Suite meldet keinen Fehler. Nach dem Neustart erscheint keine Fehlermeldung.
 
 ### 2. Bildschirm einrichten (Kapitel 3)
@@ -39,6 +39,7 @@ Notiere dir für die Meldung: Sender, Ethos-Version (System › Info) und welche
 ### 2b. Gas % und Kompaktansicht (neu in 0.2.0)
 - [ ] Menü › Flug › **Gaskanal** wählen (dein Gas-Kanal, z. B. CH3). Gasknüppel langsam von ganz unten nach ganz oben (Propeller ab, Motorschalter aus oder Akku ab).
 - **Erwartet:** Das grosse Feld GAS links unten zeigt 0 % bis 100 % mit Balken. Ohne Gaskanal steht dort orange «Gaskanal wählen».
+- [ ] Nur wer Gas Reverse fliegt (Vollgas = Knüppel hinten): Menü › Flug › **Gas umkehren** auf Ja. **Erwartet:** Vollgas zeigt 100 %, Leerlauf 0 %; mit «Flug erkennen über: Strom oder Gas» startet die Flugzeit im Leerlauf nicht.
 - [ ] Einen zweiten Bildschirm mit dem Layout **mit Kopf- und Fussleiste** (ein Feld, im Auswahlraster unten Mitte) anlegen und Electric wählen.
 - **Erwartet:** Kompaktansicht: oben Flugzeit und Empfang, darunter vier Tachos und acht Felder (GAS, Zelle, Verbraucht, Leistung, Höhe, Speed, Empfang, Flüge). Nichts ragt über den Rand, kein roter Text. FLÜGE antippen öffnet die Flugliste.
 
@@ -142,7 +143,7 @@ Notiere dir für die Meldung: Sender, Ethos-Version (System › Info) und welche
 
 Ideen und Wünsche bitte mit der Vorlage **«Wunsch / Idee»**.
 
-## Bekannte Grenzen von 0.10.1
+## Bekannte Grenzen von 0.10.2
 
 - Am echten Sender getestet nur auf der **X18RS** (Ethos 26.2.0). Die anderen Sender nur im Simulator.
 - Nicht am echten Sender geprüft: jeder Menüpunkt einzeln, Flugerkennung und Flugliste mit einem echten Flug.

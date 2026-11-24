@@ -48,7 +48,7 @@
 <body>
 
 <h1>Electric</h1>
-<div class="unter">Display for electric planes · Manual · Version 0.10.1 · 23 Nov 2026</div>
+<div class="unter">Display for electric planes · Manual · Version 0.10.2 · 24 Nov 2026</div>
 
 <div class="bild schmal"><img src="../bilder-simulator/Electric - Sim 800x480 12 Englisch.png" alt="Electric on the radio"></div>
 
@@ -69,7 +69,7 @@ display except where noted; the English display uses the same layout.</p>
   <li>An electric model with telemetry, sensors already discovered (Model › Telemetry › Discover sensors). At least the pack
       voltage is needed; current, consumption, RPM, temperature, altitude, speed and a cell sensor are optional.</li>
   <li>A computer with FrSky Suite and a USB cable.</li>
-  <li>The file <code>Electric-0.10.1.zip</code>. It is inside <code>Electric-0.10.1-share.zip</code>. Unzip only the outer ZIP, not the inner one.</li>
+  <li>The file <code>Electric-0.10.2.zip</code>. It is inside <code>Electric-0.10.2-share.zip</code>. Unzip only the outer ZIP, not the inner one.</li>
 </ul>
 
 <h2>2. Install</h2>
@@ -78,7 +78,7 @@ display except where noted; the English display uses the same layout.</p>
   <li>The radio shows a choice. Select <b>Ethos Suite</b>.</li>
   <li>Open <b>FrSky Suite</b> on the computer. The radio appears at the top.</li>
   <li>Click <b>Lua library</b>, then <b>Install from local ZIP</b>.</li>
-  <li>Select <code>Electric-0.10.1.zip</code>. The Suite copies everything to the right place.</li>
+  <li>Select <code>Electric-0.10.2.zip</code>. The Suite copies everything to the right place.</li>
   <li>Unplug the cable and restart the radio.</li>
 </ol>
 <p class="klein">Without the Suite: connect the radio as «USB storage» and copy the folder <code>electric</code> from the ZIP into
@@ -259,8 +259,9 @@ flights; turning back before the first flight returns to the display.</p>
   <tr><td>Announce at</td><td>SG↓</td><td>Switch position for the announcement.</td></tr>
   <tr><td>Switch 1 and 2</td><td>empty</td><td>Own switches shown in the top bar while switched on.</td></tr>
   <tr><td>Switch 1 and 2 name</td><td>SCHALTER 1 / 2</td><td>Your own name, up to 12 characters, e.g. STABI or GEAR.</td></tr>
-  <tr><td rowspan="7">Flight</td><td>Detect flight by</td><td>Motor switch</td><td>Or «Current or throttle».</td></tr>
+  <tr><td rowspan="8">Flight</td><td>Detect flight by</td><td>Motor switch</td><td>Or «Current or throttle».</td></tr>
   <tr><td>Throttle channel</td><td>empty</td><td>Throttle channel: for the THROTTLE field and for detection by throttle.</td></tr>
+  <tr><td>Reverse throttle</td><td>off</td><td>For throttle reversed (full throttle = stick back): throttle % = 100 − stick position, for the THROTTLE field and detection by throttle.</td></tr>
   <tr><td>Flight from current</td><td>3 A</td><td>From this current the flight runs.</td></tr>
   <tr><td>Flight from throttle</td><td>10 %</td><td>From this throttle position the flight runs.</td></tr>
   <tr><td>Pause after</td><td>20 s</td><td>Time without current and throttle until «Flight ended?» appears.</td></tr>
@@ -331,6 +332,7 @@ extra line (MIN, MAX or Ø over the flight). Settings and limits per model come 
   <tr><td>On alarm only a beep and the number</td><td>Voice files missing on the radio (folder <code>audio</code>)</td><td>Repeat chapter 2.</td></tr>
   <tr><td>A single value shows a dash</td><td>Sensor not assigned or sends nothing</td><td>Menu › Sensors: check the line (chapter 4).</td></tr>
   <tr><td>THROTTLE shows a dash and «Select throttle»</td><td>No throttle channel set</td><td>Menu › Flight › Throttle channel (chapter 8).</td></tr>
+  <tr><td>THROTTLE shows 0 % at full throttle and 100 % at idle</td><td>Throttle reversed (full throttle = stick back)</td><td>Menu › Flight › Reverse throttle on (chapter 8).</td></tr>
   <tr><td>Red text at the bottom left</td><td>Script error. The radio keeps working.</td><td>Take a photo of the text and report it: on GitHub under Issues, template «Fehler / Bug» (see TESTLEITFADEN.md in the repository).</td></tr>
   <tr><td>At the bottom «Studio file broken - default», «too new» or «n errors», then «!» at the top right</td><td>The Lua-Studio file is broken, made for a newer Electric version or contains invalid entries</td><td>Transfer it again from Lua-Studio or update Electric. What exactly is wrong is in the log (one line per error).</td></tr>
   <tr><td>The widget is missing from the list</td><td>Not installed or radio not restarted</td><td>Repeat chapter 2, restart the radio.</td></tr>
@@ -349,7 +351,7 @@ extra line (MIN, MAX or Ø over the flight). Settings and limits per model come 
   <tr><td>480 × 320, touch</td><td>X18, X18S, X18SE, Twin X Lite, Twin X Lite S</td><td>simulated</td></tr>
   <tr><td>480 × 272, no touch</td><td>X10, X10S, X10 Express, X12S with Ethos</td><td>simulated</td></tr>
 </table>
-<p class="klein">Electric version 0.10.1 · 23 Nov 2026</p>
+<p class="klein">Electric version 0.10.2 · 24 Nov 2026</p>
 
 </body>
 </html>

@@ -89,6 +89,42 @@ local wb = { name = "Electric" }
 F.lies(wb)
 pruef(wb.cfg.akku2W == 25 and wb.cfg.akkuart2 == 1 and wb.cfg.akku2A == wb.cfg.akkuA, "eigene Akku-2-Werte bleiben, fehlende = Akku 1")
 
+-- 0.10.2: Datei, geschrieben von der Vorversion (felder.lua als 2. Argument, z. B. aus git show v0.10.1): alle
+-- Einstellungen bleiben, «Gas umkehren» (gasInv) ist danach aus. Dann gasInv an: Schreiben/Lesen behält es.
+if arg[2] then
+  local FA = assert(loadfile(arg[2]))()
+  local wv = { name = "Electric" }
+  DATEI = nil
+  FA.lies(wv)
+  local n = 0
+  for _, name in ipairs(FA.folge) do              -- jede Einstellung der Vorversion vom Werkwert weg
+    local f = FA.feld(name)
+    if f and f[2] == "b" then wv.cfg[name] = not wv.cfg[name] n = n + 1
+    elseif f and f[2] == "z" then wv.cfg[name] = (wv.cfg[name] == f[5]) and f[6] or f[5] n = n + 1
+    elseif f and f[2] == "w" then wv.cfg[name] = f[5][#f[5]][2] n = n + 1
+    elseif f and f[2] == "t" then wv.cfg[name] = "ALT " .. name:upper():sub(1, 6) n = n + 1 end
+  end
+  pruef(FA.schreibeDatei(wv), "Vorversion: Datei nicht geschrieben")
+  local wn = { name = "Electric" }
+  F.lies(wn)
+  local falsch = 0
+  for _, name in ipairs(FA.folge) do
+    local f = FA.feld(name)
+    if f and f[2] ~= "q" and wn.cfg[name] ~= wv.cfg[name] then
+      falsch = falsch + 1 print("  anders: " .. name .. " alt=" .. tostring(wv.cfg[name]) .. " neu=" .. tostring(wn.cfg[name]))
+    end
+  end
+  pruef(falsch == 0, "Update von der Vorversion: " .. falsch .. " Einstellungen anders")
+  pruef(wn.cfg.gasInv == false, "Update von der Vorversion: Gas umkehren nicht aus")
+  print("Update von der Vorversion: " .. n .. " Einstellungen geändert geschrieben, " .. falsch .. " anders gelesen, gasInv=" .. tostring(wn.cfg.gasInv))
+  wn.cfg.gasInv = true
+  pruef(F.schreibeDatei(wn), "Datei mit gasInv nicht geschrieben")
+  pruef(DATEI:find("\ngasInv=1\n") ~= nil, "gasInv=1 fehlt in der Datei")
+  local wg = { name = "Electric" }
+  F.lies(wg)
+  pruef(wg.cfg.gasInv == true, "Gas umkehren geht beim Lesen verloren")
+end
+
 -- 3. Schreiben und wieder lesen ergibt dasselbe
 w.akt = w.offen
 pruef(F.schreibeDatei(w), "Datei nicht geschrieben")

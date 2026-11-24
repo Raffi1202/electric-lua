@@ -3,6 +3,20 @@
 The version number is in `src/electric/main.lua` (`local VERSION`). It is the same in the manual, the Suite package and here.
 The top section appears in the FrSky Suite as version note. From 0.5.0 on in English; older entries in German.
 
+## 0.10.2 (24 Nov 2026, pre-release)
+
+- New setting **Reverse throttle** (menu › Flight, below «Throttle channel»; Lua-Studio key `gas_inv`), yes/no, off by
+  default. For pilots who fly throttle reversed (full throttle = stick back): Electric then shows 100 % minus the
+  throttle position. This applies everywhere the throttle is used: THROTTLE field and bar, flight detection «current or
+  throttle» (idle no longer starts the flight time), and the Lua-Studio value «Throttle %».
+- Stored in the data file. Update from 0.10.1 keeps all settings, «Reverse throttle» is then off. Widget memory
+  unchanged (format 3).
+
+Deutsch: Neue Einstellung **Gas umkehren** (Menü › Flug, unter «Gaskanal»; Lua-Studio-Schlüssel `gas_inv`), Ja/Nein,
+ab Werk aus. Für Gas Reverse (Vollgas = Knüppel hinten): Electric zeigt dann 100 % minus Gasstellung. Das gilt überall:
+Feld GAS mit Balken, Flugerkennung «Strom oder Gas» (Leerlauf startet keine Flugzeit mehr) und Lua-Studio-Wert «Gas %».
+Steht in der Datendatei; ein Update von 0.10.1 behält alle Einstellungen, «Gas umkehren» ist danach aus.
+
 ## 0.10.1 (23 Nov 2026, pre-release)
 
 - Receiver battery 2 below 0.5 V, cells 2 below 0.5 V in total and a missing second band (RSSI/VFR 900 = 0) count as

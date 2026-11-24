@@ -48,7 +48,7 @@
 <body>
 
 <h1>Electric</h1>
-<div class="unter">Anzeige für Elektroflieger · Anleitung · Version 0.10.1 · Stand 23.11.2026</div>
+<div class="unter">Anzeige für Elektroflieger · Anleitung · Version 0.10.2 · Stand 24.11.2026</div>
 
 <div class="bild schmal">
   <img src="../bilder-simulator/Electric - Sim 800x480 04 Normal.png" alt="Electric auf dem Sender">
@@ -71,7 +71,7 @@ Elektrofliegers. Sie überwacht die Werte in zwei Stufen, sagt Alarme und den Ak
   <li>Ein Elektromodell mit Telemetrie, die Sensoren schon gesucht (Modell › Telemetrie › Sensoren suchen).
       Nötig ist mindestens die Akkuspannung; Strom, Verbrauch, Drehzahl, Temperatur, Höhe, Speed und Zellensensor sind freiwillig.</li>
   <li>Einen Computer mit der FrSky Suite und ein USB-Kabel.</li>
-  <li>Die Datei <code>Electric-0.10.1.zip</code>. Sie liegt neben dieser Anleitung in <code>Electric-0.10.1-share.zip</code>. Entpacke nur die äussere ZIP, die innere nicht.</li>
+  <li>Die Datei <code>Electric-0.10.2.zip</code>. Sie liegt neben dieser Anleitung in <code>Electric-0.10.2-share.zip</code>. Entpacke nur die äussere ZIP, die innere nicht.</li>
 </ul>
 
 <h2>2. Installieren</h2>
@@ -80,7 +80,7 @@ Elektrofliegers. Sie überwacht die Werte in zwei Stufen, sagt Alarme und den Ak
   <li>Am Sender erscheint eine Auswahl. Wähle <b>Ethos Suite</b>.</li>
   <li>Öffne am Computer die <b>FrSky Suite</b>. Der Sender wird oben angezeigt.</li>
   <li>Klicke auf <b>Lua-Bibliothek</b>, dann auf <b>Von lokaler ZIP installieren</b>.</li>
-  <li>Wähle die Datei <code>Electric-0.10.1.zip</code>. Die Suite kopiert alles an den richtigen Ort.</li>
+  <li>Wähle die Datei <code>Electric-0.10.2.zip</code>. Die Suite kopiert alles an den richtigen Ort.</li>
   <li>Ziehe das Kabel ab und starte den Sender neu.</li>
 </ol>
 <p class="klein">Ohne Suite: Sender als «USB-Speicher» anschliessen und den Ordner <code>electric</code> aus der ZIP in den
@@ -264,8 +264,9 @@ ersten Flug zurückdrehen führt wieder zur Anzeige.</p>
   <tr><td>Ansage bei</td><td>SG↓</td><td>Schalterstellung für die Ansage.</td></tr>
   <tr><td>Schalter 1 und 2</td><td>leer</td><td>Eigene Schalter, die in der Kopfzeile erscheinen, solange sie eingeschaltet sind.</td></tr>
   <tr><td>Schalter 1 und 2 Name</td><td>SCHALTER 1 / 2</td><td>Eigener Name, höchstens 12 Zeichen, z. B. STABI oder FAHRWERK.</td></tr>
-  <tr><td rowspan="7">Flug</td><td>Flug erkennen über</td><td>Motorschalter</td><td>Oder «Strom oder Gas».</td></tr>
+  <tr><td rowspan="8">Flug</td><td>Flug erkennen über</td><td>Motorschalter</td><td>Oder «Strom oder Gas».</td></tr>
   <tr><td>Gaskanal</td><td>leer</td><td>Kanal des Gases: für das Feld GAS und für die Erkennung über Gas.</td></tr>
+  <tr><td>Gas umkehren</td><td>aus</td><td>Für Gas Reverse (Vollgas = Knüppel hinten): Gas % = 100 − Gasstellung, für das Feld GAS und die Erkennung über Gas.</td></tr>
   <tr><td>Flug ab Strom</td><td>3 A</td><td>Ab diesem Strom läuft der Flug (Erkennung über Strom oder Gas).</td></tr>
   <tr><td>Flug ab Gas</td><td>10 %</td><td>Ab dieser Gasstellung läuft der Flug.</td></tr>
   <tr><td>Pause nach</td><td>20 s</td><td>So lange ohne Strom und Gas, bis die Frage «Flug beendet?» kommt.</td></tr>
@@ -339,6 +340,7 @@ beim Laden des Modells.</p>
   <tr><td>Bei Alarm nur ein Piepton und die Zahl</td><td>Die Sprachdateien fehlen auf dem Sender (Ordner <code>audio</code>)</td><td>Kapitel 2 wiederholen.</td></tr>
   <tr><td>Ein einzelner Wert zeigt einen Strich</td><td>Sensor nicht zugewiesen oder liefert nichts</td><td>Menü › Sensoren: Zeile kontrollieren (Kapitel 4).</td></tr>
   <tr><td>GAS zeigt einen Strich und «Gaskanal wählen»</td><td>Kein Gaskanal eingestellt</td><td>Menü › Flug › Gaskanal wählen (Kapitel 8).</td></tr>
+  <tr><td>GAS zeigt bei Vollgas 0 % und im Leerlauf 100 %</td><td>Gas Reverse (Vollgas = Knüppel hinten)</td><td>Menü › Flug › Gas umkehren auf Ja (Kapitel 8).</td></tr>
   <tr><td>Unten links steht roter Text</td><td>Fehler im Skript. Der Sender läuft normal weiter.</td><td>Text abfotografieren und als Fehler melden: auf GitHub unter Issues, Vorlage «Fehler / Bug» (siehe TESTLEITFADEN.md im Repo).</td></tr>
   <tr><td>Unten «Studio-Datei kaputt - Standard», «zu neu» oder «n Fehler», danach oben rechts «!»</td><td>Die Datei von Lua-Studio ist kaputt, für eine neuere Electric-Version oder enthält ungültige Angaben</td><td>In Lua-Studio neu übertragen bzw. Electric aktualisieren. Was genau falsch ist, steht im Log (je Fehler eine Zeile).</td></tr>
   <tr><td>Das Widget fehlt in der Liste</td><td>Nicht installiert oder Sender nicht neu gestartet</td><td>Kapitel 2 wiederholen, Sender neu starten.</td></tr>
@@ -361,7 +363,7 @@ beim Laden des Modells.</p>
   <div><img src="../bilder-simulator/Electric - Sim 480x320 06 Alarm.png" alt="480x320"><div class="t">480 × 320 (X18): gekürzte Titel</div></div>
   <div><img src="../bilder-simulator/Electric - Sim 800x480 12 Englisch.png" alt="Englisch"><div class="t">Englisch: Sprache im Menü oder wie der Sender</div></div>
 </div>
-<p class="klein">Electric Version 0.10.1 · 23.11.2026</p>
+<p class="klein">Electric Version 0.10.2 · 24.11.2026</p>
 
 </body>
 </html>

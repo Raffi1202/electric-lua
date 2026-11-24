@@ -360,6 +360,7 @@ local function lesen(w, now, dt)
   if v.bec2 and v.bec2 < 0.5 then v.bec2 = nil end -- 0.10.1: unter 0,5 V = kein zweiter Empfänger-Akku (kein Daueralarm)
   v.motorAus, v.ansageSw, v.sw1, v.sw2 = aktiv(c.swMotor), aktiv(c.swAnsage), aktiv(c.sw1), aktiv(c.sw2)
   v.gasP = prozent(c.gas)
+  if v.gasP and c.gasInv then v.gasP = 100 - v.gasP end   -- 0.10.2: Gas Reverse, gilt für Anzeige, Flugerkennung und Studio
   v.sender = zahl(w.qSender)
   if testWerte then
     for k, x in pairs(TEST.v or {}) do

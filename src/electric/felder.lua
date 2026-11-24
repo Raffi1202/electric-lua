@@ -112,6 +112,7 @@ M.gruppen = {
     { "erkennung", "w", { "Flug erkennen über", "Detect flight by" }, 1,
       { { { "Motorschalter", "Motor switch" }, 1 }, { { "Strom oder Gas", "Current or throttle" }, 2 } } },
     { "gas", "q", { "Gaskanal", "Throttle channel" } },
+    { "gasInv", "b", { "Gas umkehren", "Reverse throttle" }, false },   -- 0.10.2: Gas Reverse (Vollgas = Knüppel hinten), Datendatei
     { "flugStrom", "z", { "Flug ab Strom", "Flight from current" }, 3, 1, 200, 0, " A" },
     { "gasSchwelle", "z", { "Flug ab Gas", "Flight from throttle" }, 10, 1, 100, 0, " %" },
     { "pauseS", "z", { "Pause nach", "Pause after" }, 20, 5, 300, 0, " s", 5 },
@@ -196,6 +197,7 @@ M.folge = {
   "rssi2", "vfr", "vfr2", "rxvfr", "vfrW", "vfrA",   -- 0.10.0: Quellen ans Ende (FORMAT 3), Schwellen in der Datendatei
   "zellen2", "bec2", "z2modus", "zellenzahl2",
   "akkuart2", "akku2W", "akku2A", "zelle2W", "zelle2A",   -- 0.10.1: Akku 2, Datendatei (Werk = Akku 1)
+  "gasInv",   -- 0.10.2: Gas umkehren, Datendatei (Werk aus)
 }
 
 -- Speicherformat der Quellen im Widget-Speicher: Nummer -> Zahl der Quellen in diesem Format.

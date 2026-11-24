@@ -15,6 +15,7 @@
 | Bei Alarm nur ein Piepton und die Zahl | Die Sprachdateien fehlen auf dem Sender (Ordner audio) | Kapitel 2 wiederholen. |
 | Ein einzelner Wert zeigt einen Strich | Sensor nicht zugewiesen oder liefert nichts | Menü › Sensoren: Zeile kontrollieren (Kapitel 4). |
 | GAS zeigt einen Strich und «Gaskanal wählen» | Kein Gaskanal eingestellt | Menü › Flug › Gaskanal wählen (Kapitel 8). |
+| GAS zeigt bei Vollgas 0 % und im Leerlauf 100 % | Gas Reverse (Vollgas = Knüppel hinten) | Menü › Flug › Gas umkehren auf Ja (Kapitel 8). |
 | Unten links steht roter Text | Fehler im Skript. Der Sender läuft normal weiter. | Text abfotografieren und als Fehler melden: auf GitHub unter Issues, Vorlage «Fehler / Bug» (siehe TESTLEITFADEN.md im Repo). |
 | Unten «Studio-Datei kaputt - Standard», «zu neu» oder «n Fehler», danach oben rechts «!» | Die Datei von Lua-Studio ist kaputt, für eine neuere Electric-Version oder enthält ungültige Angaben | In Lua-Studio neu übertragen bzw. Electric aktualisieren. Was genau falsch ist, steht im Log (je Fehler eine Zeile). |
 | Das Widget fehlt in der Liste | Nicht installiert oder Sender nicht neu gestartet | Kapitel 2 wiederholen, Sender neu starten. |

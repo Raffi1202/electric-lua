@@ -60,6 +60,7 @@ Menü öffnen: Modell › Bildschirme › den Bildschirm wählen › Widget anti
 | Schalter 1 und 2 Name | SCHALTER 1 / 2 | Eigener Name, höchstens 12 Zeichen, z. B. STABI oder FAHRWERK. |
 | Flug | Flug erkennen über | Motorschalter | Oder «Strom oder Gas». |
 | Gaskanal | leer | Kanal des Gases: für das Feld GAS und für die Erkennung über Gas. |
+| Gas umkehren | aus | Für Gas Reverse (Vollgas = Knüppel hinten): Gas % = 100 − Gasstellung, für das Feld GAS und die Erkennung über Gas. |
 | Flug ab Strom | 3 A | Ab diesem Strom läuft der Flug (Erkennung über Strom oder Gas). |
 | Flug ab Gas | 10 % | Ab dieser Gasstellung läuft der Flug. |
 | Pause nach | 20 s | So lange ohne Strom und Gas, bis die Frage «Flug beendet?» kommt. |

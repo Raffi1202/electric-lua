@@ -61,6 +61,7 @@ Open the menu: Model › Screens › select the screen › tap the widget. Every
 | Switch 1 and 2 name | SCHALTER 1 / 2 | Your own name, up to 12 characters, e.g. STABI or GEAR. |
 | Flight | Detect flight by | Motor switch | Or «Current or throttle». |
 | Throttle channel | empty | Throttle channel: for the THROTTLE field and for detection by throttle. |
+| Reverse throttle | off | For throttle reversed (full throttle = stick back): throttle % = 100 − stick position, for the THROTTLE field and detection by throttle. |
 | Flight from current | 3 A | From this current the flight runs. |
 | Flight from throttle | 10 % | From this throttle position the flight runs. |
 | Pause after | 20 s | Time without current and throttle until «Flight ended?» appears. |
